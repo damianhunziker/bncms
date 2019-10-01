@@ -1,0 +1,120 @@
+td {
+	padding: 0px 5px 5px 0px;
+	vertical-align:top;
+}
+
+p {
+	padding: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+}
+
+body {
+	font-family: Arial;
+	font-size: 12px;
+	color:#000000;
+}
+
+.text {
+	padding: 10px 0px 5px 0px;
+	margin: 10px 0px 5px 0px;
+	font-family: Arial;
+	font-size: 12px;
+	color:#000000;
+}
+
+.titel {
+	padding: 10px 0px 5px 0px;
+	margin: 10px 0px 5px 0px;
+	font-family: Arial;
+	font-weight: bold;
+	font-size: 14px;
+	color:#acd701;
+}
+.unter_titel {
+	padding: 10px 0px 5px 0px;
+	margin: 10px 0px 5px 0px;
+	font-family: Arial;
+	font-weight: bold;
+	font-size: 13px;
+	color:#000000;
+}
+.link, .link:link, .link:visited {
+	padding: 10px 0px 5px 0px;
+	margin: 10px 0px 5px 0px;
+	font-weight: bold;
+	font-family: Arial;
+	font-size: 12px;
+	color:#000000;
+}
+.link:hover {
+	padding: 10px 0px 5px 0px;
+	margin: 10px 0px 5px 0px;
+	font-weight: bold;
+	font-family: Arial;
+	font-size: 12px;
+	color:#FF0000;
+}
+
+.nav, .nav:link, .nav:visited {
+	padding: 10px 0px 5px 0px;
+	margin: 10px 0px 5px 0px;
+	font-weight: bold;
+	font-family: Arial;
+	font-size: 14px;
+	color:#000000;
+}
+.nav:hover {
+	padding: 10px 0px 5px 0px;
+	margin: 10px 0px 5px 0px;
+	font-weight: bold;
+	font-family: Arial;
+	font-size: 14px;
+	color:#FF0000;
+}
+.siteNav:link, .siteNav:visited, .siteNav:active {
+text-decoration: none;
+font-family: helvetica, arial, geneva, sans-serif;
+font-weight:bold;
+font-size:10pt;
+vertical-align:middle;
+color:#acd701; 
+display:block;
+width:90px;
+background-color:#FFFFFF; 
+padding-top: 3px;
+padding-bottom: 3px;
+padding-left:10px;
+padding-right:20px;
+border-bottom-style: solid;
+border-bottom-width: 1px;
+border-bottom-color: #acd701;
+
+}
+.siteNav:hover {
+color:#ffff00; 
+border-bottom-color: #ffff00;
+text-decoration: none;
+}
+.siteNavHorizontal:link, .siteNavHorizontal:visited, .siteNavHorizontal:active {
+text-decoration: none;
+font-family: helvetica, arial, geneva, sans-serif;
+font-weight:bold;
+font-size:10pt;
+vertical-align:middle;
+color:#FFFFFF; 
+background-color:#000000; 
+padding-top: 3px;
+padding-bottom: 3px;
+padding-left:10px;
+padding-right:20px;
+line-height: 30px;
+border-style: solid;
+border-width: 1px;
+border-color: #FFFFFF;
+}
+.siteNavHorizontal:hover {
+color:#000000; 
+background-color:#FFFFFF; 
+border-color: #000000;
+text-decoration: none;
+}

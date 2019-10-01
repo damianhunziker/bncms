@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Untitled Document</title>
+<style type="text/css">
+body{
+	font-family:"Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif; font-size:12px; color:#333333;
+	background-color:#999999;
+	border:0; 
+	paddigg:0; 
+	margin:0;
+}
+#container{
+	width: 780px;
+	height: 440px;
+	border: 8px solid #FFF;
+	overflow: auto;
+	margin: 0 auto;
+	overflow-x:hidden;
+	overflow-y:hidden;
+	margin-top:30px;
+}
+ 
+.main-content {
+	width: 2000px;
+	height: 400px;
+	padding:20px;
+	background:#CCCCCC;
+}
+
+.section{
+	margin:0 0 0 0;
+	width:220px;
+	float:left;
+	margin-right:50px;
+}
+h1{font-family:Georgia, "Times New Roman", Times, serif; font-size:28px;}
+ 
+</style>
+<script type="text/javascript" src="mootools.svn.js"></script>
+<script type="text/javascript">
+		window.addEvent('domready', function(){
+			var scroll2 = new Scroller('container', {area: 100, velocity: 1});
+			
+			// container
+			$('container').addEvent('mouseover', scroll2.start.bind(scroll2));
+			$('container').addEvent('mouseout', scroll2.stop.bind(scroll2));
+		}); 
+	</script>
+</head>
+
+<body>
+<div id="container">
+	<div class="main-content">
+		<div class="section">
+        <h1>Horizontal Scroller</h1>
+        <strong>Note:
+        Move your mouse to the right and to the left to scroll  to the right and to the left the
+        content hidden in the main layer.</strong><br /><br />
+        
+        Move your mouse to the right ----><br /><br />
+        Take a look at my site
+        <a href="http://woork.blogspot.com">http://woork.blogspot.com</a>
+        </div>
+        
+        <div class="section">
+        <h1>Am I using Flash to do it?</h1>
+       	No! Just pure CSS and HTML code...
+        </div>
+        
+        <div class="section">
+        <h1>How do it?</h1>
+       	You can implement this effect using Mootools and just some lines of code...<br /><br />
+        <strong>Move your mouse to the right of the main stage...--></strong>
+        </div>
+        
+        <div class="section">
+        <h1>About Me</h1>
+        Add your content here...
+        </div>
+        <div class="section">
+        <h1>Bookmarks</h1>
+        Add your content here...
+        </div>
+        
+        <div class="section">
+        <h1>Social Network</h1>
+        Add your content here...
+        </div>
+        
+        <div class="section">
+        <h1>The end</h1>
+       <strong> Move your mouse to the left!
+        &lt;---move!</strong>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

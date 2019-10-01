@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="content-language" content="en" />
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<meta name="copyright" content="R. Schoo" />
+	
+	<link rel="stylesheet" media="screen" href="styles/vlaCal-v2.1.css" type="text/css" />
+	<link rel="stylesheet" media="screen" href="styles/vlaCal-v2.1-adobe_cs3.css" type="text/css" />
+	<link rel="stylesheet" media="screen" href="styles/vlaCal-v2.1-apple_widget.css" type="text/css" />
+	
+	<script type="text/javascript" src="jslib/mootools-1.2-core-compressed.js"></script>
+	<script type="text/javascript" src="jslib/vlaCal-v2.1-compressed.js"></script>
+	
+	<!-- You could also include the uncompressed versions for developing purposes:
+	<script type="text/javascript" src="jslib/mootools-1.2-core.js"></script>
+	<script type="text/javascript" src="jslib/vlaCal-v2.1.js"></script>-->
+	
+	<title>Vista-Like Ajax Calendar version 2.1.1 - Examples</title>
+	
+	<style>
+	body {
+		cursor: default;
+		text-align: left;
+		font-family: calibri, arial, sans-serif;
+		font-size: 13px;
+		margin: 0;
+		padding: 5px;
+	}
+	
+	table th {
+		vertical-align: top;
+	}
+
+	input {
+		text-align: center;
+		font-family: calibri, arial, sans-serif;
+		font-size: 13px;
+		background-color: white;
+		border: 1px solid;
+		border-color: #abadb3 #dbdfe6 #e3e9ef #e2e3ea;
+		padding: 2px;
+	}
+	input:focus, input:hover  {
+		border-color: #5794bf #b7d5ea #c7e2f1 #c5daed;
+	}
+
+	.pickerImg {
+		position: absolute;
+		margin-left: -16px;
+		margin-top: 5px;
+		cursor: pointer;
+	}
+	.infoBox {
+		background-color: #fefdec;
+		border: 1px solid #edebcd;
+		padding: 6px;
+		margin-bottom: 20px;
+	}
+	</style>
+	
+	<script type="text/javascript">
+		window.addEvent('domready', function() { 
+			new vlaDatePicker('exampleI');
+			new vlaDatePicker('exampleII', { separator: '-', leadingZero: false, twoDigitYear: true, offset: { y: 3 }, alignX: 'center', alignY: 'bottom' });
+			new vlaDatePicker('exampleIII', { openWith: 'togglePicker', offset: { y: -2, x: 2 }, separateInput: { day: 'day', month: 'month', year: 'year' } });
+			new vlaDatePicker('exampleIV-A', { style: 'adobe_cs3', offset: { y: 1 }, format: 'm/d/y', ieTransitionColor: '' }); 
+			new vlaDatePicker('exampleIV-B', { style: 'apple_widget', offset: { x: 3, y: 1 } });
+			new vlaCalendar('exampleV', { startMonday: true });
+			new vlaDatePicker('exampleVI', { defaultView: 'year' });
+			new vlaDatePicker('exampleVII', { prefillDate: { day: 12, month: 12, year: 2012 } });			
+		});	
+	</script>
+</head>
+<body>
+	<div class="infoBox">
+		<b>This example page will only work on a webserver - AJAX requests are made to PHP files.</b><br />
+		For documentation and more examples visit <a href="http://dev.base86.com/scripts/vista-like_ajax_calendar_version_2.html">http://dev.base86.com/scripts/vista-like_ajax_calendar_version_2.html</a>.
+	</div>
+	
+	<table cellpadding="0">
+		<tr>
+			<th style="width: 100px">Example I</th>
+			<td><input id="exampleI" name="date" type="text" style="width: 80px;" maxlength="10" /></td>
+		</tr>
+		<tr><td></td><td>Standard datepicker.<br /><br /></td></tr>
+		
+		<tr>
+			<th>Example II</th>
+			<td><input id="exampleII" name="date" type="text" style="width: 60px;" maxlength="10" /></td>
+		</tr>
+		<tr><td></td><td>Datepicker with a different seperator, two digit year and without a leading zero. Datepicker is positioned center-bottom.<br /><br /></td></tr>
+		
+		<tr>
+			<th>Example III</th>
+			<td>
+				<span id="exampleIII">
+					<input name="day" type="text" style="width: 18px; border-width: 1px 0 1px 1px;" maxlength="2" /><input value="/" type="text" style="width: 5px; border-width: 1px 0 1px 0;" disabled="disabled" /><input name="month" class="textbox" type="text" style="width: 16px; border-width: 1px 0 1px 0;" maxlength="2" /><input value="/" type="text" style="width: 5px; border-width: 1px 0 1px 0;" disabled="disabled" /><input name="year" type="text" style="width: 28px; border-width: 1px 0 1px 0;" maxlength="4" /><input type="text" style="width: 15px; border-width: 1px 1px 1px 0;" disabled="disabled" /><img src="images/calendar.gif" id="togglePicker" class="pickerImg" width="13px" height="12px" alt="" />
+				</span>
+			</td>
+		</tr>
+		<tr><td></td><td>Datepicker with seperate day, month and year input. The calendar icon toggles the datepicker.<br /><br /></td></tr>
+		
+		<tr>
+			<th>Example IV</th>
+			<td><input id="exampleIV-A" name="date" type="text" style="width: 80px;" maxlength="10" /></td>
+		</tr>
+		<tr><td></td><td>Datepicker with Adobe CS3 GUI style. Date format is month-day-year.<br /><br /></td></tr>
+		
+		<tr>
+			<td></td>
+			<td><input id="exampleIV-B" name="date" type="text" style="width: 80px;" maxlength="10" /></td>
+		</tr>
+		<tr><td></td><td>Datepicker with Apple OSX Tiger calendar widget style.<br /><br /></td></tr>
+		
+		<tr>
+			<th>Example V</th>
+			<td><div id="exampleV" style="height: 140px"></div></td>
+		</tr>
+		<tr><td></td><td>The normal calender. Calendar week starts on monday.<br /><br /></td></tr>
+		
+		<tr>
+			<th>Example VI</th>
+			<td><input id="exampleVI" name="date" type="text" style="width: 80px;" maxlength="10" /></td>
+		</tr>
+		<tr><td></td><td>Datepicker with the current year as a default view.<br /><br /></td></tr>
+		
+		<tr>
+			<th>Example VII</th>
+			<td><input id="exampleVII" name="date" type="text" style="width: 80px;" maxlength="10" /></td>
+		</tr>
+		<tr><td></td><td>Datepicker with a default date set to 12 December 2012.<br /><br /></td></tr>
+	</table>
+	<br /><br /><br /><br /><br /><br />
+</body>
+</html>

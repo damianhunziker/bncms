@@ -1,0 +1,67 @@
+div {
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #333333;
+}
+h1 {
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-size: 22px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #333333;
+	padding: 0px 10px 10px 0px;
+	margin: 0px 10px 10px 0px;
+}
+input {
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #333333;
+	padding: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+}
+table{
+	border: solid 1px #000000;
+	padding: 5px 5px 5px 5px;
+	margin: 5px 5px 5px 5px;
+}
+td{
+	padding: 2px 2px 2px 2px;
+	margin: 2px 2px 2px 2px;
+}
+a, a:link, a:visited   {
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: bold;
+	font-variant: normal;
+	font-decoration: underline;
+	text-transform: none;
+	color: #996633;
+}
+a:hover {
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: bold;
+	font-variant: normal;
+	text-transform: none;
+	font-decoration: underline;
+	color: #333333;
+}
+
+
