@@ -1,8 +1,8 @@
-bncms delivers a set of standard functionality for often returning tasks in the web development area mainly for CRUD, CMS, CRM and backend. The power of bncms lies in its ability to create and configure CRUD solutions very fast and effective only by configuration over the backend GUI. Database relations can be integrated in the CRUD processes and directly be shown to the enduser making it possible for them to edit and maintain the related data on-the-fly.
+bncms delivers a set of standard functionality for often returning tasks in the web development area mainly for CRUD, CMS, CRM and backend. The power of bncms lies in its ability to create and configure CRUD solutions very fast and effective only by configuration over the backend GUI. Database relations can be integrated in the CRUD processes and directly be shown to the enduser making it possible for them to edit and maintain the relational data on-the-fly.
 
-It is a PHP-based Content Management System for SQL-Databases and commands a universal adminarea that can be applied to any database. bncms was developed by Damian Hunziker.
+It is a PHP-based Content Management System for SQL-Databases and provides a universal adminarea that can be applied to any database. bncms was developed by Damian Hunziker.
 
-We search for helpers to extend the functionality and bring the system to another level.
+We search for helpers to extend the functionality and bring the system to new level.
 
 -----
 
