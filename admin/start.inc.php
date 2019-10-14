@@ -1,12 +1,14 @@
 <?php
 
-//
-//
-//copyright by Damian Hunziker, Brand New Design
-//
-//
-//error_reporting(E_WARNING);
-//error_reporting(E_ERROR);
+/** @license bncms
+ *
+ * Copyright (c) Damian Hunziker and other bncms contributors
+ * https://github.com/damianhunziker/bncms
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 ini_set("display_errors","1"); 
 error_reporting(E_NONE);
 
@@ -41,11 +43,6 @@ if (file_exists(PATH."/admin/project_config.php")) {
 	include (PATH."/admin/project_config.php");
 }
 
-//echo "<pre>";
-		//print_r($_SESSION);
-		//echo "</pre>";
-//$_SESSION['user_allowed'] = 1;
-//echo md5('admin');
 if ($_POST['username'] and $_POST['password'] and !$_POST['savePost'] and $_POST['username'] != "webuser") {
     $query="SELECT bncms_user.*,  bncms_user_groups.name FROM bncms_user, bncms_user_groups WHERE bncms_user.gruppe = bncms_user_groups.id AND BINARY bncms_user.username = '".e($_POST[username])."' and BINARY bncms_user.password = '".md5($_POST['password'])."' and (bncms_user_groups.name = 'Administratoren' or bncms_user_groups.name  = 'Redakteure')";
     $arr = dbQuery($query);
@@ -162,31 +159,16 @@ transform:rotate(-<?php echo rand(10,20) ?>deg translate3d(0px,0px,1px); /* W3C 
 	<?php
 	die();
 } else {
-	
 
+    if (isset($_GET['style_color']))
+        $_SESSION['style_color'] = $_GET['style_color'];
 
-if (isset($_GET['style_color']))
-	$_SESSION['style_color'] = $_GET['style_color'];
+    //if (!isset($_SESSION['style_color']))
+         $_SESSION['style_color'] = "green";
 
-//if (!isset($_SESSION['style_color']))
-	 $_SESSION['style_color'] = "green";
-	 
-/*function getPrice($id_product, $id_title) {
-	global $DB;
-	$query="SELECT price 
-	FROM ass_product_title
-	WHERE id_product = '$id_product'
-	AND id_title = '$id_title'";
-	$aPrice=dbQuery($query);
-	return $aPrice;
-}*/
-if (isset($_SESSION['errorMsg'])) {
-	$outErrormsg = "Fehlermeldung: $_SESSION[errorMsg]";
-	$_SESSION['errorMsg'] = "";
-}
-//error_reporting(E_WARNING);
-//error_reporting(E_ERROR);
-//ini_set("display_errors","on");
-
+    if (isset($_SESSION['errorMsg'])) {
+        $outErrormsg = "Fehlermeldung: $_SESSION[errorMsg]";
+        $_SESSION['errorMsg'] = "";
+    }
 }
 ?>
