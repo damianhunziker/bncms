@@ -491,7 +491,7 @@ input[type=radio]:checked + label:before {
     color: grey;
     font-size: 30px;
     text-align: center;
-    line-height: 18px; 
+    line-height: 18px;
 }
 input[type=checkbox]:checked + label:before {
 	content: "\2713";
@@ -500,7 +500,7 @@ input[type=checkbox]:checked + label:before {
 	color: black;
 	text-align: center;
     line-height: 12px;
-	border-radius:50%; 
+	border-radius:50%;
 }
 ende customcheckbox*/
 .td_toppaging {
