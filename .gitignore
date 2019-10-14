@@ -1,0 +1,14 @@
+_notes/
+admin/backup/
+barcode.php
+file/
+/.buildpath
+/.project
+/.settings/
+
+.buildpath
+.project
+.settings/
+
+/inc/configuration/database-settings.inc.php
+inc/configuration/database-settings.inc.php
