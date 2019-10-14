@@ -1,9 +1,6 @@
 <?php
 include("start.inc.php");
 if ($_GET[saveTitleIcon]) {
-	//print_r($_FILES);
-	//print_r($_GET);
-	//print_r($_POST);
 	$q = "SELECT * FROM conf_relation_visibility WHERE path = '$_GET[path]'";
 	$aRV = q($q);
 	if ($_FILES) {
@@ -18,14 +15,11 @@ if ($_GET[saveTitleIcon]) {
 					$fn = "../file/relation-icons/".$addFilename.$filename;
 				}
 				if (!move_uploaded_file($v['tmp_name'], $fn)) {
-					//echo "error moveulpoadedfile";
 				} 
 			}
 		}
 	} else 
 		$fn = $aRV[icon];
-	//echo $fn;
-	//exit();
 	if ($_GET[deleteIcon] == "on") {
 		@unlink($aRV[icon]);
 		$fn = "";
@@ -34,9 +28,7 @@ if ($_GET[saveTitleIcon]) {
 	$q = "UPDATE conf_relation_visibility SET title = '$_GET[title]', icon = '$fn', showWithEditIcons = '$_GET[showWithEditIcons]' WHERE path = '$_GET[path]'";
 	q($q);
 }  elseif ($_GET[showPossibleRelations]) {
-	//$aUsers = explode(",",urldecode($_GET[users]));
 	$aUsers = unserialize(urldecode($_GET[users]));
-	//pre($aUsers);
 	if ($_GET[users] == "null")
 		$aUsers = "";
 	if (strpos($_GET[path],"-")) {
@@ -80,7 +72,6 @@ if ($_GET[saveTitleIcon]) {
 } elseif ($_GET[nto1AjaxSearch]) {
 	$q = "SELECT * FROM conf_relations WHERE id = '$_GET[nto1AjaxSearch]'";
 	$a = dbQuery($q);
-	//print_r($a); 
 	$tt = getTableProperties($a[nto1TargetTable]);
 	$sf = getFieldProperties($a[nto1SourceTable],$a[nto1SourceField]);
 	$q = "SELECT ".$sf[nto1DropdownTitleField]." title FROM ".$tt[name]." WHERE ".$sf[nto1DropdownTitleField]." LIKE '%$_GET[value]%'  ORDER BY ".$sf[nto1DropdownTitleField]."";
@@ -106,8 +97,12 @@ if ($_GET[saveTitleIcon]) {
 	$p[9] = "";
 	$p[10] = "";
 	$p[11] = $t[id];
+	
 	if ($t[sp])
+	{
 		$p[12] = $t[sp];
+	}
+	
 	$rv = call_user_func_array($f , $p); 
 	echo $rv;
 }

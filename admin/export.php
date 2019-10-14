@@ -1,7 +1,5 @@
-<?
+<?php
 include("start.inc.php");
-
-//pre($_SESSION[$_GET[f]][export]);
 $q = $_SESSION[$_GET[f]][export][query];
 $t = $_SESSION[$_GET[f]][export][table];
 $f = $_SESSION[$_GET[f]][export][userFunction];
@@ -47,17 +45,17 @@ if ($_GET[t] == "xls")
 				echo "<td>";
 
 				$s = generateField(
-			$t, //1
-			$k2, //2 
-			$v2, //3 
-			$viewtype="view", //4 
-			"", //5 
-			"", //6 
-			"", //7 
-			"", //8 
-			$v, //9 
-			$f, //10
-			"" //11
+			$t,
+			$k2,
+			$v2,
+			$viewtype="view",
+			"",
+			"",
+			"",
+			"",
+			$v,
+			$f,
+			""
 			);
 			echo $s;
 			if ($_GET[t] == "xls")

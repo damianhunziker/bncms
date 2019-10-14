@@ -1,31 +1,6 @@
 <?php
-//DB-Editor
-//Edit Seite
 //copyright Damian Hunziker info@wide-design.ch
 include("start.inc.php");
-
-/*if ($_POST) {
-	if ($_POST['saveAssignTableValues'] != "") {
-		$aAssignTable = getTableProperties($_SESSION[assignTableName]);
-		foreach ($_POST as $key => $value) {
-			if (preg_match('/[0-9]+_[a-zA-Z_]+/',$key)) {
-				$aKey=explode("_",$key);
-				$k = str_replace("$aKey[0]_","",$key);
-				if (is_array($aKey)) {
-					
-					$query="UPDATE $aAssignTable[name] 
-					SET $k = '$value'
-					WHERE ".getIdName($_SESSION[assignTableName])." = '$aKey[0]'";
-					dbQuery($query);
-					//hardcode
-					$lastkey = $aKey[0];
-				}
-			}
-		}
-		$_SESSION[assignTableName]="";
-	}
-}*/
-
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -56,24 +31,19 @@ $(function() {
       minLength: 1,
 	    select: function( event, ui ) {
           var terms = split( this.value );
-          // remove the current input
           terms.pop();
-          // add the selected item
           terms.push( ui.item.value );
-          // add placeholder to get the comma-and-space at the end
           terms.push( "" );
           this.value = terms.join( ", " );
           return false;
         },
 		search: function() {
-          // custom minLength
           var term = extractLast( this.value );
           if ( term.length < 1 ) {
             return false;
           }
         },
 		focus: function() {
-          // prevent value inserted on focus
           return false;
         },
       source: function( request, response ) {
@@ -83,7 +53,6 @@ $(function() {
           return;
         }
 		var ntomid = this.element[0].id.replace('ntom_','');
-		//alert(RELATIVEPATH+"/ajax.php?ntomAjaxSearch="+ntomid+"&value="+term);
         jQuery.getJSON( RELATIVEPATH+"/ajax.php?ntomAjaxSearch="+ntomid+"&value="+term, {
             term: extractLast( request.term )
           }, function( data, status, xhr ) {
@@ -131,43 +100,11 @@ function opwin(url, name) {
 <BODY onLoad="waitPreloadPage();">
 
 <?php include("loading.inc.php");?>
-</DIV><h1>Datensatz bearbeiten </h1>
+</div><h1>Datensatz bearbeiten </h1>
 <?php
-/*if ($_GET['duplicate'] == true) {
-	$query="SELECT * FROM $_GET[table] WHERE id = '$_GET[id]'";
-	$aDestId=dbQuery($query);
-	$query="SELECT id FROM conf_tables WHERE name = '$_GET[table]'";
-	$aTableId=dbQuery($query);
-	$query="SELECT * FROM conf_fields WHERE id_table = '".$aTableId[0][id]."' and type='image'";
-	$aImageFields = dbQuery($query);
-	$query="INSERT INTO $_GET[table] SET ";
-	foreach ($aDestId[0] as $key => $value) {
-		//Abfrage f&uuml;r Bild Duplizierung
-		foreach ($aImageFields as $keyField => $valueField) {
-				if ($valueField[name] == $key) {
-					//todo formate, bildpfad
-					$sNewFileName=str_replace(".jpg","",$value).rand(0,100).".jpg";
-					while (file_exists("../".$sNewFileName)) {
-						$sNewFileName=str_replace(".jpg","",$value).rand(0,100).".jpg";
-					}
-					@copy("../".$value, "../".$sNewFileName);
-					$value = $sNewFileName;
-			}
-		}
-		if ($key != "id" and $value != "") {
-			$query.=" $key = '$value', ";
-		}
-		
-	}
-	$query=preg_replace('/(, )$/im','',$query);
-	dbQuery($query);
-	echo "<div>Der Eintrag wurde dupliziert unter ".mysqli_insert_id($DB)."</div>";
-	$_GET['id'] = mysqli_insert_id($DB);
-}*/
 $_SESSION[sWorkType]="edit";
 displayRow($_GET['id'], $_GET['columnNameOfId'], $_GET['table']); 
 ?>
 <?php include ("../inc/layer_visibility.inc.php"); ?>
-
 </body>
 </html>

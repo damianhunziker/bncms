@@ -1,33 +1,30 @@
 <?php
+error_reporting(E_ALL & ~E_NOTICE && ~E_WARNING);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 
-//
-//
-//copyright by Damian Hunziker, Brand New Design
-//
-//
-//error_reporting(E_WARNING);
-//error_reporting(E_ERROR);
-ini_set("display_errors","1"); 
-error_reporting(E_NONE);
+if(true) // Log everything true/false
+{
+    error_reporting(E_ALL);
+}
 
-define(PATH,$_SERVER['DOCUMENT_ROOT']."/bncms");
-define(RELATIVEPATH,"/bncms");
-define(RELATIVEPATHAJAX,"/bncms/admin");
-define(RELATIVEPATHAPP,"");
-
+define('PATH', $_SERVER['DOCUMENT_ROOT']."/bncms");
+define('RELATIVEPATH', "/bncms");
+define('RELATIVEPATHAJAX', "/bncms/admin");
+define('RELATIVEPATHAPP', "");
 date_default_timezone_set("UTC");
 
-//error_reporting(E_ERROR);
 include (PATH."/inc/configuration/database-settings.inc.php");
 $DB = mysqli_connect($aDatabase['host'],$aDatabase['user'],$aDatabase['password'],$aDatabase['dbname']);
+
 if (mysqli_connect_errno()) {
   echo "Failed to connect to MySQL: " . mysqli_connect_error();
 }
+
 include (PATH."/inc/db-functions.inc.php");
 include (PATH."/inc/functions.inc.php");
 include (PATH."/inc/editor-functions.inc.php");
 include (PATH."/inc/display-functions.inc.php");
-//checkBannedIPs();
 session_set_cookie_params(30*24*60*60, RELATIVEPATHAJAX);
 session_start();
 
@@ -41,24 +38,20 @@ if (file_exists(PATH."/admin/project_config.php")) {
 	include (PATH."/admin/project_config.php");
 }
 
-//echo "<pre>";
-		//print_r($_SESSION);
-		//echo "</pre>";
 
-if ($_POST['username'] and $_POST['password'] and !$_POST['savePost'] and $_POST['username'] != "webuser") {
-    $query="SELECT bncms_user.*,  bncms_user_groups.name FROM bncms_user, bncms_user_groups WHERE bncms_user.gruppe = bncms_user_groups.id AND BINARY bncms_user.username = '".e($_POST[username])."' and BINARY bncms_user.password = '".md5($_POST['password'])."' and (bncms_user_groups.name = 'Administratoren' or bncms_user_groups.name  = 'Redakteure')";
+if ($_POST['username'] and $_POST['password'] and !@$_POST['savePost'] and $_POST['username'] != "webuser") {
+    $query="SELECT bncms_user.*,  bncms_user_groups.name FROM bncms_user, bncms_user_groups WHERE bncms_user.gruppe = bncms_user_groups.id AND BINARY bncms_user.username = '".e($_POST['username'])."' and BINARY bncms_user.password = '".md5($_POST['password'])."' and (bncms_user_groups.name = 'Administratoren' or bncms_user_groups.name  = 'Redakteure')";
     $arr = dbQuery($query);
-    $_SESSION[user] = $_POST[username];
-    $_SESSION[userGroup] = $arr["name"];
+    $_SESSION['user'] = $_POST['username'];
+    $_SESSION['userGroup'] = $arr["name"];
     if (is_array($arr)) {
         $_SESSION['user_allowed'] = 1;
     }
     echo "<script>window.location.href='index.php';</script>";
     exit();
 }
-if ($_GET[logout] == true) {
+if (@$_GET['logout'] == true) {
 	$_SESSION = "";
-	//session_unregister();
 	$_SESSION['user_allowed'] = 0;	
 }
 if ($_SESSION['user_allowed'] != 1) {
@@ -76,15 +69,12 @@ if ($_SESSION['user_allowed'] != 1) {
 <script type="text/javascript">
 		window.addEvent('domready', function(){
 			var scroll2 = new Scroller('container', {area: 30, velocity: 2});
-			
-			// container
 			$('container').addEvent('mouseover', scroll2.start.bind(scroll2));
 			$('container').addEvent('mouseout', scroll2.stop.bind(scroll2));
 			
 		}); 
 	</script>
 <script type="text/javascript">
-
 </script>
 <script language="javascript">
 var wstat
@@ -162,30 +152,20 @@ transform:rotate(-<?php echo rand(10,20) ?>deg translate3d(0px,0px,1px); /* W3C 
 	die();
 } else {
 	
-
-
 if (isset($_GET['style_color']))
+{
 	$_SESSION['style_color'] = $_GET['style_color'];
+}
+else
+{
 
-//if (!isset($_SESSION['style_color']))
 	 $_SESSION['style_color'] = "green";
+}
 	 
-/*function getPrice($id_product, $id_title) {
-	global $DB;
-	$query="SELECT price 
-	FROM ass_product_title
-	WHERE id_product = '$id_product'
-	AND id_title = '$id_title'";
-	$aPrice=dbQuery($query);
-	return $aPrice;
-}*/
+
 if (isset($_SESSION['errorMsg'])) {
 	$outErrormsg = "Fehlermeldung: $_SESSION[errorMsg]";
 	$_SESSION['errorMsg'] = "";
 }
-//error_reporting(E_WARNING);
-//error_reporting(E_ERROR);
-//ini_set("display_errors","on");
-
 }
 ?>

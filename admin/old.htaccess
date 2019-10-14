@@ -1,3 +1,0 @@
-Options +FollowSymLinks
-RewriteEngine on
-php_flag display_errors on

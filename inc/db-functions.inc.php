@@ -39,7 +39,7 @@ $q = "CREATE TABLE IF NOT EXISTS `conf_tables` (
     PRIMARY KEY  (`id`)
 );
 ";
-mysqli_query($DB,$q) or exit(mysql_error());
+mysqli_query($DB,$q) or exit(mysqli_error($DB));
 $q = "CREATE TABLE IF NOT EXISTS `conf_fields` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -66,7 +66,7 @@ $q = "CREATE TABLE IF NOT EXISTS `conf_fields` (
   `max_width` int(6) NOT NULL,
   PRIMARY KEY (`id`)
 ) ";
-mysqli_query($DB,$q) or exit(mysql_error());
+mysqli_query($DB,$q) or exit(mysqli_error($DB));
 $q = "CREATE TABLE IF NOT EXISTS `conf_relations` (
     `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -90,7 +90,7 @@ $q = "CREATE TABLE IF NOT EXISTS `conf_relations` (
   PRIMARY KEY (`id`)
 
 )";
-mysqli_query($DB,$q) or exit(mysql_error());
+mysqli_query($DB,$q) or exit(mysqli_error($DB));
 $q = "CREATE TABLE IF NOT EXISTS  `conf_relation_visibility` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `path` varchar(255) NOT NULL,
@@ -101,7 +101,7 @@ $q = "CREATE TABLE IF NOT EXISTS  `conf_relation_visibility` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `path` (`path`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;";
-mysqli_query($DB,$q) or exit(mysql_error());
+mysqli_query($DB,$q) or exit(mysqli_error($DB));
 $q = "CREATE TABLE IF NOT EXISTS `bncms_user` (
     `id` int(10) unsigned NOT NULL auto_increment,
     `username` varchar(50) NOT NULL default '',
@@ -111,7 +111,7 @@ $q = "CREATE TABLE IF NOT EXISTS `bncms_user` (
     PRIMARY KEY  (`id`),
     UNIQUE KEY (`username`) 
 )";
-mysqli_query($DB,$q) or exit(mysql_error());
+mysqli_query($DB,$q) or exit(mysqli_error($DB));
 
 $q = "CREATE TABLE IF NOT EXISTS `bncms_user_groups` (
 `id` int(20) NOT NULL,
@@ -119,26 +119,11 @@ $q = "CREATE TABLE IF NOT EXISTS `bncms_user_groups` (
   `permit_configuration` set('','on','off') NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
-mysqli_query($DB,$q) or exit(mysql_error());
+mysqli_query($DB,$q) or exit(mysqli_error($DB));
 
 $q = "SELECT * FROM bncms_user WHERE username = 'admin' ";
 $res =mysqli_query($DB,$q);
-/*if (!mysqli_num_rows($res)) {
-	$q = "INSERT INTO bncms_user SET username = 'admin', password = '".md5("admin")."', gruppe = 'admin'";
-	mysqli_query($DB,$q);
-	$q = "INSERT INTO bncms_user SET username = 'webuser', password = '', gruppe = 'webuser'";
-	mysqli_query($DB,$q);
-	$q = "
-INSERT INTO `conf_tables` (`id`, `name`, `columnNameOfId`, `lang`, `insert`, `mysql_condition`, `orderkey`, `color`, `users`, `editors`, `deletors`, `addors`, `is_assign_table`, `id_relation`, `editable`, `sort_order`, `sort_order_ascdesc`, `entries_per_page`) VALUES
-(1, 'bncms_user', 'id', 'Admin Benutzer', '0', '', 0.00, '', 'a:1:{i:0;s:5:\"admin\";}', 'a:1:{i:0;s:5:\"admin\";}', 'a:1:{i:0;s:5:\"admin\";}', 'a:1:{i:0;s:5:\"admin\";}', '', 0, '', '', '', 0);
-INSERT INTO `conf_fields` (`id`, `name`, `title`, `type`, `mysql_order`, `unchangeable`, `hidden`, `id_table`, `mysqlType`, `mysql_type_bez`, `length_values`, `nto1TargetField`, `nto1TargetTable`, `validation_required`, `validation_unique`, `validation_min_length`, `nto1DisplayType`, `nto1DropdownTitleField`, `processing`, `min_height`, `min_width`, `max_height`, `max_width`) VALUES
-(1, 'id', '', 'textfield', 0.00, NULL, NULL, 1, 'int(10) unsigned', 'INT', '10', '', '', '', '', 0, '', '', '', 0, 0, 0, 0),
-(2, 'username', '', 'textfield', 0.00, NULL, NULL, 1, 'varchar(50)', 'VARCHAR', '50', '', '', '', '', 0, '', '', '', 0, 0, 0, 0),
-(3, 'password', '', 'password', 0.00, '0', '0', 1, 'varchar(50)', 'VARCHAR', '50', '', 'b', 'off', 'off', 0, 'radio', '', '', 0, 0, 0, 0),
-(4, 'notizen', '', 'textfield', 0.00, NULL, NULL, 1, 'text', 'TEXT', '', '', '', '', '', 0, '', '', '', 0, 0, 0, 0),
-(5, 'gruppe', '', 'dropdown', 0.00, '0', '0', 1, 'set(''admin'',''redakteur'')', 'SET', '''admin'',''redakteur''', '', 'b', 'off', 'off', 0, 'radio', '', '', 0, 0, 0, 0);";
-	mysqli_query($DB,$q);
-}*/
+
 if (!mysqli_num_rows($res)) {
 
     $q = "
@@ -204,14 +189,14 @@ function dbQuery ($query, $limit="", $removeAssociativeKeys="") {
 	if (@ mysqli_num_rows($RS) == 0) 
 		return;
 	if (@ mysqli_num_rows($RS) == 1) {
-		$arrOut[0]=mysqli_fetch_array($RS, MYSQL_ASSOC);
+		$arrOut[0]=mysqli_fetch_array($RS, MYSQLI_ASSOC);
 	}
 	elseif (@ mysqli_num_rows($RS) > 1) {
-		while ($arrTempOut=mysqli_fetch_array($RS, MYSQL_ASSOC)) {
+	    while ($arrTempOut=mysqli_fetch_array($RS, MYSQLI_ASSOC)) {
 			$arrOut[]=$arrTempOut;
 		}
 	} else {
-		$arrOut= @mysqli_fetch_array($RS, MYSQL_ASSOC);
+	    $arrOut= @mysqli_fetch_array($RS, MYSQLI_ASSOC);
 	}
 	if (count($arrOut) == 1) {
 		//inhalte wenn nur ein Eintrag nicht nur unter index 0 erreichbar machen sondern auch direkt �ber die assoziativen Bezeichnungen
@@ -238,7 +223,6 @@ function selectRec ($table, $condition, $limit = "", $order = "") {
 	}
 	$query="SELECT * FROM $table $condition"; 
 	$RS=mysqli_query($DB, $query);
-	//echo mysql_error();
 	if (mysqli_error($DB)) {
 		echo "<red>Fehler in Anfrage: ".$query."<br>".mysqli_error($DB)."<br></red>";
 		exit();

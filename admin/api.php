@@ -1,13 +1,7 @@
 <?php
-//DB-Editor
-//Startseite
 //copyright Damian Hunziker info@wide-design.ch
-//echo md5("keIsnd62md"); 
 
 include("start.inc.php");
-//echo"<pre>"; 
-error_reporting(E_NONE);
-ini_set("display_errors",0);	
 function rankTableGroup(){
 }
 function searchTableGroup($table){
@@ -42,8 +36,6 @@ if ($_GET[conf] == "all") {
 		$q = "SELECT * FROM $v[name]";
 		$r = mysqli_query($DB, $q);
 		$aTable[$k]['count'] = mysqli_num_rows($r);
-		//$countRows++;
-		//Nur mit Eintr&auml;gen im Relationsarray checken ob dieser Eintrag auch wirklich Relationswert gesetzt hat, damit Relationslinien sauber ausgegeben werden.
 		$countRels=0;
 		while ($a = mysqli_fetch_array($r)) {
 			$id = $a[$v[columnNameOfId]];
@@ -58,7 +50,6 @@ if ($_GET[conf] == "all") {
 				}
 		}
 	}
-	//Ranking und Gruppierung
 	
 	foreach ($aTable as $k => $v) {
 		if ($v['count'] > $maxCount) {
@@ -84,7 +75,6 @@ if ($_GET[conf] == "all") {
 	$tablesRanked = 1;
 	$rankedTables[$centerTable]=1;
 	
-	//ranking
 	$aGroup=searchTableGroup($centerTable);
 	if (is_array($aGroup))
 	foreach ($aGroup as $k => $v) {
@@ -93,18 +83,6 @@ if ($_GET[conf] == "all") {
 		$aTable[$ti][rank] = $tablesRanked;
 		$rankedTables[$v]=1;
 	}
-	//foreach ($rankedTables as $k => $v) {
-		
-	//}
-
-	//while ($tablesRanked < count($aTable)) {
-		//searchTableGroup($rankedTables);
-		 
-		//Gr&ouml;sse
-		//Wieviele Rels zu und von
-		//Rels zu anderen Tabellen
-		//rankTableGroup();
-	//}
 	
 	$a = array();
 	$a[tables]=$aTable;
@@ -112,6 +90,7 @@ if ($_GET[conf] == "all") {
 	$a[relations]=$aRel;
 	$a[rightsHidden]=$aRightsHidden;
 	$a[rightsUnchangeable]=$aRightsUnchangeable;
+	
 	if ($_GET[pre])
 		echo "<pre>".print_r($a,true)."</pre>";   
 	else

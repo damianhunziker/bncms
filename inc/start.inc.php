@@ -1,13 +1,11 @@
 <?php
-
 //copyright by Damian Hunziker, Brand New Design";
 define(PATH,$_SERVER['DOCUMENT_ROOT']."/bncms");
 define(RELATIVEPATH,"/bncms");
 define(RELATIVEPATHAJAX,"/bncms");
 define(RELATIVEPATHAPP,"/");
-define(DOMAIN,"https://hu.de1.biz"); 
+define(DOMAIN,"http://localhost"); 
 $webuser = "webuser";
-//ajax aufrufe würden den relativen Pfad nicht erkennen
 
 if ($_GET[projectpath] != "") {
 	include($_SERVER['DOCUMENT_ROOT'].$_GET[projectpath]."/project_config.php");
@@ -18,38 +16,34 @@ if ($_GET[projectpath] != "") {
 include (PATH."/inc/configuration/database-settings.inc.php");
 $DB = @mysqli_connect($aDatabase['host'],$aDatabase['user'],$aDatabase['password']);
 @mysqli_select_db($DB, $aDatabase['dbname']);
+
 if (!$DB)
+{
 	exit("Datenbank Login Fehler");
+}
+
 mysqli_query($DB, "SET NAMES 'utf8'");
 include (PATH."/inc/db-functions.inc.php");
 include (PATH."/inc/functions.inc.php");
 
 include (PATH."/inc/editor-functions.inc.php");
 include (PATH."/inc/display-functions.inc.php");
-//checkBannedIPs();
 
 session_set_cookie_params(24*60*60, RELATIVEPATHAPP);
 session_start();
-/*echo  RELATIVEPATHAJAX;
-echo "cookie start.inc";
-pre($_COOKIE);*/
-//$_SESSION = "";
 include (PATH."/inc/configuration/table-rights.inc.php");
 include (PATH."/inc/configuration/table-relations.inc.php");
 include (PATH."/inc/configuration/table-properties.inc.php");
 
-//$_SESSION = "";
-error_reporting(E_STRICT | E_ERROR); 
 
 if ($_SESSION[errorMsg]) {
 	$outErrormsg = "Fehlermeldung: $_SESSION[errorMsg]";
 	$_SESSION[errorMsg] = "";
 }
 
-//Texte einlesen
 $query="
 SELECT * FROM text as a, site as b 
-WHERE b.url = '".str_replace("/","",$_SERVER[PHP_SELF])."'
+WHERE b.url = '".str_replace("/","",$_SERVER['PHP_SELF'])."'
 AND b.id = a.id_site
 ";
 $aText = dbQuery($query);

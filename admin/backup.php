@@ -1,6 +1,4 @@
 <?php
-//DB-Editor
-//Edit Seite
 //copyright Damian Hunziker info@wide-design.ch
 include("start.inc.php");
 ?>
@@ -17,7 +15,6 @@ include("start.inc.php");
 <script type="text/javascript">
 function an(div)
 {
-	//setze_scrollposition();
 	document.getElementById(div).style.display = '';
 	document.getElementById('minus'+div).style.display = '';
 	document.getElementById('plus'+div).style.display = 'none';
@@ -25,7 +22,6 @@ function an(div)
 
 function aus(div)
 {
-	//setze_scrollposition();
 	document.getElementById(div).style.display = 'none';
 	document.getElementById('minus'+div).style.display = 'none';
 	document.getElementById('plus'+div).style.display = '';
@@ -50,16 +46,16 @@ function opwin(url, name) {
 <title>Edit Fields</title>
 </head>
 
-<BODY onLoad="waitPreloadPage();">
+<body onLoad="waitPreloadPage();">
 
 <?php include("loading.inc.php");?>
 <!--<img src="../image/logo-middle-<?php echo $_SESSION['style_color'];?>.jpg"> -->
 <div><h1>Datenbank Backup</h1>
 <?php
 include("admin_nav.inc.php");
-if ($_GET[action] == "save") {
+if ($_GET['action'] == "save") {
 	saveBackup();
-} elseif ($_GET[action] == "load") {
+} elseif ($_GET['action'] == "load") {
 	backupMenu();
 	loadBackup();
 }

@@ -11,9 +11,7 @@ include("start.inc.php");
 <script type="text/javascript" src="admin.inc.js"></script> 
 <title>DB-Editor</title>
 </head>
-
-<BODY onLoad="waitPreloadPage();">
-
+<body onLoad="waitPreloadPage();">
 <?php include("loading.inc.php");?>
 <div class="table_overall">
 <?php

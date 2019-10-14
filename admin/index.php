@@ -1,16 +1,6 @@
 <?php
-//DB-Editor
-//Startseite
 //copyright Damian Hunziker info@wide-design.ch
-//echo md5("keIsnd62md"); 
-//echo set_include_path("/pps/bncms/admin");
 include("start.inc.php");
-//fix scrollpos und layervisibility
-if (!strpos($_SERVER[REQUEST_URI], "index.php")) {
-	echo "<script>window.location.href='index.php';</script>";
-	exit();
-}
-
 include("../inc/save.inc.php");
 
 if (isset($_GET['display'])) {
@@ -73,30 +63,22 @@ function opwin(url, name) {
 <link href="style-admin.css" rel="stylesheet" type="text/css">
 <link href="style-admin-<?php echo $_SESSION[style_color]?>.css" rel="stylesheet" type="text/css">
 </head>
-
-<BODY onLoad="waitPreloadPage();">
-
+<body onLoad="waitPreloadPage();">
 <?php include("loading.inc.php");?>
-
 <div>
-<!--<img src="../image/logo-middle-<?php echo $_SESSION['style_color'];?>.jpg">-->
 <h1>Administrationsbereich <?php echo $_SERVER['HTTP_HOST'] ?> <!--<a href=\"index.php?logout=true\">Logout</a>--></h1>
 <?php
-/*echo "<pre>";
-print_r($_SERVER);
-print_r($_SESSION);
-echo "</pre>";*/
 include("admin_nav.inc.php");
-$_SESSION[sWorkType]="view";
+$_SESSION['sWorkType']="view";
 if (is_array($aTable))
 foreach ($aTable as $key => $value) {
-    if (checkPermission($value[users], $_SESSION[user], $_SESSION[userGroup])) {
-		echo displayVisibilityButtons($value[lang], $value[id], $value[name]." ".$value[id]);
-		echo "<div class=\"table_overall\" id='".$value[id]."' style='display:none;'>";
+    if (checkPermission($value['users'], $_SESSION['user'], $_SESSION['userGroup'])) {
+		echo displayVisibilityButtons($value['lang'], $value['id'], $value['name']." ".$value['id']);
+		echo "<div class=\"table_overall\" id='".$value['id']."' style='display:none;'>";
 			displayTable(
-			$value[id], 
-			$value[columnNameOfId],
-			$value[mysql_condition]);
+			$value['id'], 
+			$value['columnNameOfId'],
+			$value['mysql_condition']);
 		echo "</div>";
 		$z = 1;
 	} 

@@ -1,9 +1,9 @@
-<?
+<?php
 include("inc/start.inc.php");
+ini_set('display_errors', 1);
 if ($_GET[ntomAjaxSearch]) {
 	$q = "SELECT * FROM conf_relations WHERE id = '$_GET[ntomAjaxSearch]'";
 	$a = dbQuery($q);
-	//print_r($a); 
 	$tt = getTableProperties($a[0][table2]);
 	$q = "SELECT ".$a[0][ntomAjaxDisplayTitleField]." title FROM ".$tt[name]." WHERE ".$a[0][ntomAjaxDisplayTitleField]." LIKE '%$_GET[value]%'  ORDER BY ".$a[0][ntomAjaxDisplayTitleField]."";
 	$a = dbQuery($q);
@@ -12,16 +12,12 @@ if ($_GET[ntomAjaxSearch]) {
 		array_push($r,$v[title]);
 	echo json_encode($r);
 } elseif ($_GET[nto1AjaxSearch]) {
-	//$q = "SELECT * FROM conf_relations WHERE id = '$_GET[nto1AjaxSearch]'";
-	//$a = dbQuery($q); 
-	//pre($_SESSION);
 	$a = getRelationPropertiesById($_GET[nto1AjaxSearch], $_SESSION[aManualFieldProperties][displayTable][$_GET[formid]]);
 	$tt = getTableProperties($a[nto1TargetTable], $_SESSION[aManualFieldProperties][displayTable][$_GET[formid]]);
 	$sf = getFieldProperties($a[nto1SourceTable], $a[nto1SourceField], $_SESSION[aManualFieldProperties][displayTable][$_GET[formid]]);
 	$q = "SELECT ".$sf[nto1DropdownTitleField]." title FROM ".$tt[name]." WHERE ".$sf[nto1DropdownTitleField]." LIKE '%$_GET[value]%'  ORDER BY ".$sf[nto1DropdownTitleField]."";
 	$a = dbQuery($q);
 	$r = array();
-	//$r[]=$q;
 	foreach ($a as $k => $v) 
 		@array_push($r,$v[title]);
 	echo json_encode($r);
@@ -29,28 +25,19 @@ if ($_GET[ntomAjaxSearch]) {
 	$va = unserialize(urldecode($_POST[userValues]));
 	foreach ($va as $k => $v) {
 		
-		//$a = selectRec("conf_tables","name= '$_GET[validate]'");
 		$a = getTableProperties($_GET[validate], $_SESSION[manualFieldProperties][$_GET[formid]]);
 		$tid = $a[id];
-		//$er[$k] = pre($a,1);
-		//$q = "SELECT * FROM conf_fields WHERE name = '$k' and id_table='".$a[0][id]."'";
 		$a = getFieldProperties($a[id], $k, $_SESSION[manualFieldProperties][$_GET[formid]]);
-		//$a = dbQuery($q);
-		//muss image und file und passwort nur required validieren wenn nichts bereits gespeichert ist
 		$tp = getTableProperties($a[id_table], $_SESSION[manualFieldProperties][$_GET[formid]]);
 		
 		$tn = $tp[name];
-		//if ($va[id]) {
 			$fp=getFieldProperties($a[id_table], $k, $_SESSION[manualFieldProperties][$_GET[formid]]);
 			if ($fp[type] == "password" or $fp[type] == "file"  or $fp[type] == "image") {
 				$q = "SELECT * FROM $tn WHERE $tp[columnNameOfId] ='".$_SESSION[tempRights][$_GET[formid]][id]."'";
-				//$er[$k] .= "<pre>".print_r(,1)."</pre>".$q;
 				$ti = dbQuery($q);
 				if ($ti[0][$k] != "")
 					$notRequired=1;
 			}
-		//}
-		//$er[$k] .= print_r($fp,1);
 		if ($fp[type] == 'image') {
 			$ff = strtolower(getFileFormat($v));
 			if ($ff == "gif" or $ff == "jpg" or $ff == "png" or $ff == "jpeg" or $v == "") {
@@ -93,7 +80,6 @@ if ($_GET[ntomAjaxSearch]) {
 		if ($val_min_length > strlen($v) and $notRequired != 1) {
 			$er[$k] .= "Bitte mindestens ".$val_min_length." Zeichen verwenden. "; 
 		}
-		//$er[$k] .= session_id().print_r($_SESSION[manualFieldProperties],1);
 		if ($a[validation_unique] == "on") {
 			$q = "SELECT * FROM $_GET[validate] WHERE $k = '$v'";
 			$r = mysqli_query($DB, $q);
@@ -114,15 +100,8 @@ if ($_GET[ntomAjaxSearch]) {
 } else {
 	if ($_POST[func] == "dt")
 		$f = "displayTable";
-	/*echo "cookie ajax.php";
-	print_r($_COOKIE);	**/
 	$p = array();
 	$t = unserialize(urldecode($_POST[param]));
-	/*echo "session";
-		pre($_SESSION);
-		echo "post param";
-		pre($t);
-		exit();*/
 	$p[0] = "e";
 	$p[1] = "e";
 	$p[2] = "";
@@ -135,8 +114,12 @@ if ($_GET[ntomAjaxSearch]) {
 	$p[9] = "";
 	$p[10] = "";
 	$p[11] = $t[id];
+	
 	if ($t[sp])
+	{
 		$p[12] = $t[sp];
+	}
+	
 	$rv = call_user_func_array($f , $p); 
 	echo "rv";
 	echo $rv;

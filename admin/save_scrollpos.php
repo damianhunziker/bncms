@@ -7,17 +7,11 @@ if ($iPosParameters = strpos($_GET['phpSelf'], "?")) {
 $_SESSION['scrollPos'][$_GET['phpSelf']]['top'] = $_GET['scrollTop'];
 $_SESSION['scrollPos'][$_GET['phpSelf']]['left'] = $_GET['scrollLeft'];
 $aSessVisibleLayers = $_SESSION[aVisibleLayers];
-/*if (!is_array($aSessVisibleLayers[$_GET[phpSelf]])) 
-	$aSessVisibleLayers[$_GET[phpSelf]] = array();*/
 if ($_GET[an] != "") {
 	if (!is_array($aSessVisibleLayers[$_GET[phpSelf]])) 
 		$aSessVisibleLayers[$_GET[phpSelf]] = array();
 	array_push($aSessVisibleLayers[$_GET[phpSelf]], $_GET[an]);
 	$aSessVisibleLayers[$_GET[phpSelf]]=array_unique($aSessVisibleLayers[$_GET[phpSelf]]);
-	/*echo "
-<script type='text/javascript'>
-an('$_GET[an]');
-</script>";*/
 }
 
 if ($_GET[aus] != "") {
@@ -29,10 +23,6 @@ if ($_GET[aus] != "") {
 		}
 	}
 	$aSessVisibleLayers[$_GET[phpSelf]] = $aTempSessVisibleLayers;
-	/*echo "
-<script type='text/javascript'>
-aus('$_GET[aus]');
-</script>";*/
 }
 $_SESSION[aVisibleLayers] = $aSessVisibleLayers;
 ?>

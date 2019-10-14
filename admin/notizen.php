@@ -1,14 +1,11 @@
 <?php
-//DB-Editor
-//Edit Seite
 //copyright Damian Hunziker info@wide-design.ch
 include("start.inc.php");
 if ($_POST[notizen]) {
 	 $q = "UPDATE bncms_user SET notizen = '$_POST[notizen]' WHERE username='$_SESSION[user]'";
 	mysqli_query($DB, $q);
 }
-	?>
-
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -21,8 +18,6 @@ if ($_POST[notizen]) {
 <script type="text/javascript">
 function an(div)
 {
-	//setze_scrollposition();
-	//alert(div);
 	document.getElementById(div).style.display = '';
 	document.getElementById('minus'+div).style.display = '';
 	document.getElementById('plus'+div).style.display = 'none';
@@ -30,12 +25,9 @@ function an(div)
 
 function aus(div)
 {
-	//setze_scrollposition();
-	//alert(div);
 	document.getElementById(div).style.display = 'none';
 	document.getElementById('minus'+div).style.display = 'none';
 	document.getElementById('plus'+div).style.display = '';
-
 }
 </script>
 <script language="javascript">
@@ -53,21 +45,15 @@ function opwin(url, name) {
 	wstat.focus();
 }
 </script>
-
-
 <title>Verschiedenes</title>
 </head>
-
-<BODY onLoad="waitPreloadPage();">
-
+<body onLoad="waitPreloadPage();">
 <?php include("loading.inc.php");?>
 <div>
-<!--<img src="../image/logo-small-<?php echo $_SESSION['style_color'];?>.jpg"> -->
 <h1>Verschiedenes</h1>
 <?php
 include("admin_nav.inc.php");
 ?>
-
 <a href='../lib/phpwebstat/index.php?parameter=finished' target="_blank">Besucher-Statistik</a><br><br>
 <form action='' method=post>
 <?php

@@ -762,7 +762,7 @@ print_r($searchParams);
         $ed = "edit_entry";
 
     if ($isNToMDisplayEditEntry == "no" and $addable == "yes") {
-        $sOut .= "<a class=sidebar-item href='#' onClick=\"ajax_send_scrollpos('" . $_SERVER[PHP_SELF] . "');
+        $sOut .= "<a class=sidebar-item href='#' onClick=\"ajax_send_scrollpos('" . $_SERVER['PHP_SELF'] . "');
 opwin('$ed.php?action=new&columnNameOfId=$columnNameOfId&table=$tableOrId','Edit'); return false;\" title=\"Neuen Eintrag erstellen\"><img src=\"" . RELATIVEPATH . "/image/icons/add-page-$_SESSION[style_color].gif\"></a>";
         $sideBarActive = 1;
     }
@@ -1045,7 +1045,7 @@ jQuery(function() {
                 }
                 if ($isNToMDisplayEditEntry == "yes") {
                     if (inSerializedArray($_SESSION[user], $aActualRelation[deletors])) {
-                        $op .= "<a class=sidebar-item href='#' onClick=\"ajax_send_scrollpos('" . $_SERVER[PHP_SELF] . "');
+                        $op .= "<a class=sidebar-item href='#' onClick=\"ajax_send_scrollpos('" . $_SERVER['PHP_SELF'] . "');
 		opwin('index.php?id=" . $row[assign][getIdName($sAssignTable, $aManualFieldProperties)] . "&table=" . $sAssignTable . "&action=delete','Delete'); return false;\" title=\"Referenz l&ouml;schen\"><img src=\"" . RELATIVEPATH . "/image/icons/delete-page-$_SESSION[style_color].gif\"></a>";
                         $sideBarActive = 1;
                     }
@@ -1584,8 +1584,8 @@ function displayRow(
     overwriteRights($aManualFieldProperties);
     //pre($aTableProperties);
     if (is_numeric($tableOrId)) {
-        $table = $aTableProperties[name];
-        $tableId = $aTableProperties[id];
+        $table = @$aTableProperties['name'];
+        $tableId = @$aTableProperties['id'];
     } else {
         $table = $tableOrId;
         $tableId = "";
@@ -1594,8 +1594,8 @@ function displayRow(
     if (!$viewtype)
         $viewtype = "edit";
 
-    $aFormIds[$_SERVER[PHP_SELF]][$table][] = 1;
-    $fi = md5($_SERVER[PHP_SELF] . $table . count($aFormIds[$_SERVER[PHP_SELF]][$table]));
+    $aFormIds[$_SERVER['PHP_SELF']][$table][] = 1;
+    $fi = md5($_SERVER['PHP_SELF'] . $table . count($aFormIds[$_SERVER['PHP_SELF']][$table]));
 
     if ($sSavePost == "" or $sSavePost == null)
         $sSavePost = "on";
@@ -2100,14 +2100,14 @@ jQuery(".bncms_ip_address").mask("099.099.099.099")';
             //Bild
             $fo .= "<input type=\"file\" name=\"$outputFieldname\">";
             if (file_exists(PATH . "/" . $field) and $field != "") {
-                $fo .= "<br /><a href=\"" . RELATIVEPATH . "/$field\" target=\"_blank\" onClick=\"javascript: ajax_send_scrollpos('" . $_SERVER[PHP_SELF] . "');\"><img src=\"" . RELATIVEPATH . "/" . str_replace("file/", "file/th_", $field) . "\" class=bnul></a>";
+                $fo .= "<br /><a href=\"" . RELATIVEPATH . "/$field\" target=\"_blank\" onClick=\"javascript: ajax_send_scrollpos('" . $_SERVER['PHP_SELF'] . "');\"><img src=\"" . RELATIVEPATH . "/" . str_replace("file/", "file/th_", $field) . "\" class=bnul></a>";
                 $fo .= "<div style=\"clear:both;\" align=\"left\"><input type=\"checkbox\" style=\"\" name=\"deleteFile[$fieldName]\" id='" . $fi . "_deleteFile[" . $fieldName . "]' class='checkbox'><label for=\"" . $fi . "_deleteFile[" . $fieldName . "]\"> Bild l&ouml;schen?</label></div>";
             }
         } elseif ($aFieldProperties['type'] == "file") {
             //Datei
             $fo .= "<input type=\"file\" name=\"$outputFieldname\">";
             if (file_exists(PATH . "/" . $field) and $field != "") {
-                $fo .= "<br /><a href=\"" . RELATIVEPATH . "/$field\" target=\"_blank\" onClick=\"javascript: ajax_send_scrollpos('" . $_SERVER[PHP_SELF] . "');\">" . str_replace("file/", "", $field) . "</a>";
+                $fo .= "<br /><a href=\"" . RELATIVEPATH . "/$field\" target=\"_blank\" onClick=\"javascript: ajax_send_scrollpos('" . $_SERVER['PHP_SELF'] . "');\">" . str_replace("file/", "", $field) . "</a>";
                 $fo .= "<br><input type=\"checkbox\"  class='checkbox' style=\"width:20px;\" name=\"deleteFile[$fieldName]\" value=\"1\">Datei l&ouml;schen?";
             }
 
