@@ -502,11 +502,15 @@ input[type=checkbox]:checked + label:before {
     line-height: 12px;
 	border-radius:50%;
 }
-ende customcheckbox*/
+*/
 .td_toppaging {
     padding-left: 0px !important;
 }
 .generateUserDropdown {
-    height: 200px;
-    width: 150px;
+	height:200px;
+	width:150px;
+}
+
+.image .bnul {
+	max-height: 200px;
 }

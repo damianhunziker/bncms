@@ -2938,8 +2938,23 @@ function editTable() {
 	echo "<br /><br /><br><input type=\"Submit\" class='submit' value=\"Speichern\"></div>";
 	echo "</form>";
 }
+
+function cleanUserPermissionsSaveArray($a) {
+	foreach ($a as $k => $v) {
+		$v = htmlentities($v, null, 'utf-8');
+		$a[$k] = str_replace("&nbsp;","",$v);
+	}
+	return $a;
+}
+
 function saveTable() {
 	global $DB;
+	
+	$_POST['table_users'] = cleanUserPermissionsSaveArray($_POST['table_users']);
+	$_POST['table_editors'] = cleanUserPermissionsSaveArray($_POST['table_editors']);
+	$_POST['table_addors'] = cleanUserPermissionsSaveArray($_POST['table_addors']);
+	$_POST['table_deletors'] = cleanUserPermissionsSaveArray($_POST['table_deletors']);
+	
 	foreach ($_POST as $k => $v) {
 		if (strpos("a".$k, "table_") == 1) {
 			if (is_array($v))
@@ -2954,11 +2969,13 @@ function saveTable() {
 	if (!$_POST['table_actualize'])
 		$queryAdd .= " actualize = '', ";
 	$queryAdd = rtrim($queryAdd, ", ");
+	
 	if ($_POST['id'] == "") {
 		$query = "INSERT INTO conf_tables SET $queryAdd";
 	} else { 
 		$query = "UPDATE conf_tables SET $queryAdd WHERE id = '" . $_POST['id'] . "'";
 	}
+
 	dbQuery($query);
 	echo "<script type=\"text/javascript\">window.location.href='edit_fields.php';</script>";
 	exit();
