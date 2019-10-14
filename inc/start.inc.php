@@ -1,14 +1,14 @@
 <?php
 //copyright by Damian Hunziker, Brand New Design";
-define(PATH,$_SERVER['DOCUMENT_ROOT']."/bncms");
-define(RELATIVEPATH,"/bncms");
-define(RELATIVEPATHAJAX,"/bncms");
-define(RELATIVEPATHAPP,"/");
-define(DOMAIN,"http://localhost"); 
+define('PATH',$_SERVER['DOCUMENT_ROOT']."/bncms");
+define('RELATIVEPATH',"/bncms");
+define('RELATIVEPATHAJAX',"/bncms");
+define('RELATIVEPATHAPP',"/");
+define('DOMAIN',"https://hu.de1.biz");
 $webuser = "webuser";
 
-if ($_GET[projectpath] != "") {
-	include($_SERVER['DOCUMENT_ROOT'].$_GET[projectpath]."/project_config.php");
+if ($_GET['projectpath'] != "") {
+	include($_SERVER['DOCUMENT_ROOT'].$_GET['projectpath']."/project_config.php");
 } else {
 	include($_SERVER['DOCUMENT_ROOT']."/project_config.php");
 }
@@ -49,17 +49,17 @@ AND b.id = a.id_site
 $aText = dbQuery($query);
 if (is_array($aText)) {
 	foreach ($aText as $key => $value) {
-		if ($value[place] == "header") {
-			$sHeader = $value[html];
+		if ($value['place'] == "header") {
+			$sHeader = $value['html'];
 		}
-		if ($value[place] == "footer") {
-			$sFooter = $value[html];
+		if ($value['place'] == "footer") {
+			$sFooter = $value['html'];
 		}
 	}
 }
 
-if (!$_SESSION[style_color])
-	$_SESSION[style_color] = "green";
+if (!$_SESSION['style_color'])
+	$_SESSION['style_color'] = "green";
 	
 include(PATH."/inc/save.inc.php");
 
@@ -146,17 +146,17 @@ $(function() {
 </DIV><h1>Datensatz bearbeiten </h1>
 <?php
 if ($_GET['duplicate'] == true) {
-	$query="SELECT * FROM $_GET[table] WHERE id = '$_GET[id]'";
+	$query="SELECT * FROM ".e($_GET[table])." WHERE id = '".e($_GET[id])."'";
 	$aDestId=dbQuery($query);
-	$query="SELECT id FROM conf_tables WHERE name = '$_GET[table]'";
+	$query="SELECT id FROM conf_tables WHERE name = '".e($_GET[table])."'";
 	$aTableId=dbQuery($query);
 	$query="SELECT * FROM conf_fields WHERE id_table = '".$aTableId[0][id]."' and type='image'";
 	$aImageFields = dbQuery($query);
-	$query="INSERT INTO $_GET[table] SET ";
+	$query="INSERT INTO ".e($_GET['table'])." SET ";
 	foreach ($aDestId[0] as $key => $value) {
 		//Abfrage f&uuml;r Bild Duplizierung
 		foreach ($aImageFields as $keyField => $valueField) {
-				if ($valueField[name] == $key) {
+				if ($valueField['name'] == $key) {
 					//todo formate, bildpfad
 					$sNewFileName=str_replace(".jpg","",$value).rand(0,100).".jpg";
 					while (file_exists("../".$sNewFileName)) {
@@ -176,16 +176,16 @@ if ($_GET['duplicate'] == true) {
 	echo "<div>Der Eintrag wurde dupliziert unter ".mysqli_insert_id($DB)."</div>";
 	$_GET['id'] = mysqli_insert_id($DB);
 }
-$_SESSION[sWorkType]="edit";
-$a = $_SESSION[aManualFieldProperties][displayTable][$_GET[ajaxExec]];
+$_SESSION['sWorkType']="edit";
+$a = $_SESSION['aManualFieldProperties']['displayTable'][$_GET['ajaxExec']];
 //Überschreiben Form spezifische Variablen
-foreach ($a[$_GET['table']]["bncms_edit_form"]["fields"] as $k => $v) {
+foreach ($a[$_GET['table']]['bncms_edit_form']['fields'] as $k => $v) {
 	foreach ($v as $k2 => $v2)
-		$a[$_GET['table']]["fields"][$k][$k2] = $v2;
+		$a[$_GET['table']]['fields'][$k][$k2] = $v2;
 }
-foreach ($a[$_GET['table']]["bncms_edit_form"]["table"] as $k => $v) {
+foreach ($a[$_GET['table']]['bncms_edit_form']['table'] as $k => $v) {
 	foreach ($v as $k2 => $v2)
-		$a[$_GET['table']]["table"][$k][$k2] = $v2;
+		$a[$_GET['table']]['table'][$k][$k2] = $v2;
 }
 displayRow(
 	$_GET['id'], 

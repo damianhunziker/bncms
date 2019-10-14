@@ -4,8 +4,8 @@ if (!is_array($aSessVisibleLayers))
 	$aSessVisibleLayers = array();
 $_SESSION['aVisibleLayers'] = $aSessVisibleLayers;
 
-if (@is_array($aSessVisibleLayers[($_SERVER['PHP_SELF'])])) {
-	foreach ($aSessVisibleLayers[($_SERVER['PHP_SELF'])] as $key => $value) {
+if (@is_array($aSessVisibleLayers[$_SERVER['PHP_SELF']])) {
+	foreach ($aSessVisibleLayers[$_SERVER['PHP_SELF']] as $key => $value) {
 		if (!strpos($value, "_relations_"))
 			echo "
 <script type='text/javascript'>

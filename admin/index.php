@@ -1,6 +1,13 @@
 <?php
 //copyright Damian Hunziker info@wide-design.ch
 include("start.inc.php");
+
+//fix scrollpos und layervisibility
+if (!strpos($_SERVER[REQUEST_URI], "index.php")) {
+    echo "<script>window.location.href='index.php';</script>";
+    exit();
+}
+
 include("../inc/save.inc.php");
 
 if (isset($_GET['display'])) {

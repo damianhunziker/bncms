@@ -102,6 +102,38 @@ function opwin(url, name) {
 <?php include("loading.inc.php");?>
 </div><h1>Datensatz bearbeiten </h1>
 <?php
+/*if ($_GET['duplicate'] == true) {
+	$query="SELECT * FROM $_GET[table] WHERE id = '$_GET[id]'";
+	$aDestId=dbQuery($query);
+	$query="SELECT id FROM conf_tables WHERE name = '$_GET[table]'";
+	$aTableId=dbQuery($query);
+	$query="SELECT * FROM conf_fields WHERE id_table = '".$aTableId[0][id]."' and type='image'";
+	$aImageFields = dbQuery($query);
+	$query="INSERT INTO $_GET[table] SET ";
+	foreach ($aDestId[0] as $key => $value) {
+		//Abfrage f&uuml;r Bild Duplizierung
+		foreach ($aImageFields as $keyField => $valueField) {
+				if ($valueField[name] == $key) {
+					//todo formate, bildpfad
+					$sNewFileName=str_replace(".jpg","",$value).rand(0,100).".jpg";
+					while (file_exists("../".$sNewFileName)) {
+						$sNewFileName=str_replace(".jpg","",$value).rand(0,100).".jpg";
+					}
+					@copy("../".$value, "../".$sNewFileName);
+					$value = $sNewFileName;
+			}
+		}
+		if ($key != "id" and $value != "") {
+			$query.=" $key = '$value', ";
+		}
+
+	}
+	$query=preg_replace('/(, )$/im','',$query);
+	dbQuery($query);
+	echo "<div>Der Eintrag wurde dupliziert unter ".mysqli_insert_id($DB)."</div>";
+	$_GET['id'] = mysqli_insert_id($DB);
+}*/
+
 $_SESSION[sWorkType]="edit";
 displayRow($_GET['id'], $_GET['columnNameOfId'], $_GET['table']); 
 ?>

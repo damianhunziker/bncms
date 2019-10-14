@@ -1,12 +1,5 @@
 <?php
-error_reporting(E_ALL & ~E_NOTICE && ~E_WARNING);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-
-if(true) // Log everything true/false
-{
-    error_reporting(E_ALL);
-}
+error_reporting(E_NONE);
 
 define('PATH', $_SERVER['DOCUMENT_ROOT']."/bncms");
 define('RELATIVEPATH', "/bncms");
@@ -33,6 +26,7 @@ dbQuery("SET NAMES utf8");
 include (PATH."/inc/configuration/table-rights.inc.php");
 include (PATH."/inc/configuration/table-relations.inc.php");
 include (PATH."/inc/configuration/table-properties.inc.php");
+//checkBannedIPs();
 
 if (file_exists(PATH."/admin/project_config.php")) {
 	include (PATH."/admin/project_config.php");
