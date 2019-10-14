@@ -2215,6 +2215,11 @@ jQuery(".bncms_ip_address").mask("099.099.099.099")';
         } else {
             $field = $field;
         }
+		
+		//tinymce
+        if ($aFieldProperties['type'] == "tinymce")
+            if ($field != "")
+                $field = strip_tags($field);
 
         //Datei
         if ($aFieldProperties['type'] == "url")

@@ -56,6 +56,7 @@ function opwin(url, name) {
 <!--<img src="../image/logo-middle-<?php echo $_SESSION['style_color'];?>.jpg"> -->
 <div><h1>Datenbank Backup</h1>
 <?php
+//exit('deactivated');
 include("admin_nav.inc.php");
 if ($_GET[action] == "save") {
 	saveBackup();

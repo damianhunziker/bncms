@@ -1048,7 +1048,7 @@ input[type=checkbox]:checked + label:before {
 
 	border-radius:50%; 
 
-}
+} 
 
 ende customcheckbox*/
 
@@ -1058,4 +1058,8 @@ ende customcheckbox*/
 .generateUserDropdown {
 	height:200px;
 	width:150px;
+}
+
+.image .bnul {
+	max-height: 200px; 
 }
