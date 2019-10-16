@@ -3,7 +3,7 @@
 include("start.inc.php");
 
 //fix scrollpos und layervisibility
-if (!strpos($_SERVER[REQUEST_URI], "index.php")) {
+if (!strpos($_SERVER['REQUEST_URI'], "index.php")) {
     echo "<script>window.location.href='index.php';</script>";
     exit();
 }

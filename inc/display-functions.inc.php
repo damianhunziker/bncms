@@ -21,7 +21,7 @@ function displayTable(
     $checkableFunction = ""/*18 obsolet*/,
     $additionalColumn = ""/*19*/,
     $columnsToDisplay = ""/*20*/,
-    $aManualFieldProperties = ""/*21*/,
+    $aManualFieldProperties = array()/*21*/,
     $sUserFunction = ""/*22*/,
     $deletable = ""/*23*/,
     $addable = ""/*24*/,

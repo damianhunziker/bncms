@@ -44,7 +44,7 @@ if ($_GET['saveTitleIcon']) {
 			if (count($a)) {
 				echo $q = "UPDATE conf_relation_visibility SET users = '".serialize($aUsers)."' WHERE path = '".e($_GET['path'])."'";
 			} else {
-				echo $q = "INSERT INTO conf_relation_visibility SET users = '".serialize($aUsers)."', path = '".e($_GET['path']."'";
+				echo $q = "INSERT INTO conf_relation_visibility SET users = '".serialize($aUsers)."', path = '".e($_GET['path'])."'";
 			}
 		}
 		q($q);
