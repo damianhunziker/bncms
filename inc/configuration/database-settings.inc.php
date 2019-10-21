@@ -1,6 +1,6 @@
 <?php
-$aDatabase['user']="root";
+$aDatabase['user']="";
 $aDatabase['password']="";
-$aDatabase['dbname']="bncms";
-$aDatabase['host']="localhost";
+$aDatabase['dbname']="";
+$aDatabase['host']="";
 ?>

@@ -2772,5 +2772,4 @@ function buildLimit($place, $table, $tableId, $limit)
     $limitSql = preg_replace('/(\-[0-9]+),/', "0", $limitSql);
     return $limitSql;
 }
-
 ?>
