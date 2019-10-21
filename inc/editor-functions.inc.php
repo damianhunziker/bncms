@@ -441,14 +441,15 @@ function getNTo1RelationId($targetTable,$assignmentField,$sourceTable,$aManualFi
 
 	//Ist manuell konfiguriert?
 	//pre($aManualFieldProperties["relations"] );
-	foreach ($aManualFieldProperties["bncms_relations"] as $k => $v) {
-		//echo "$v[nto1TargetTable] == $targetTable and $v[nto1SourceTable] == $sourceTable and $v[nto1SourceField] == $assignmentField $k";
-		if ($v['nto1TargetTable'] == $targetTable and 
-		$v['nto1SourceTable'] == $sourceTable and 
-		$v['nto1SourceField'] == $assignmentField) {
-			return $k;
-		}
-	}
+    if (isset($aManualFieldProperties["bncms_relations"]))
+        foreach ($aManualFieldProperties["bncms_relations"] as $k => $v) {
+            //echo "$v[nto1TargetTable] == $targetTable and $v[nto1SourceTable] == $sourceTable and $v[nto1SourceField] == $assignmentField $k";
+            if ($v['nto1TargetTable'] == $targetTable and
+            $v['nto1SourceTable'] == $sourceTable and
+            $v['nto1SourceField'] == $assignmentField) {
+                return $k;
+            }
+        }
 	
 	if (!is_numeric($targetTable)) {
 		$a = getTableProperties($targetTable);
@@ -619,10 +620,12 @@ function getPrice($id_product, $id_title) {
 }*/
 function displayVisibilityButtons($text, $instance, $altText="", $simple=0, $iconOpen="", $iconClose="") {
 	global $sBeforeAjaxQueryString;
+
 	if (strpos($_SERVER['REQUEST_URI'], "ajax.php")) 
 		$requesturi = urlencode($sBeforeAjaxQueryString);
 	else 
-		$requesturi = urlencode($_SERVER['REQUEST_URI']);	
+		$requesturi = urlencode($_SERVER['REQUEST_URI']);
+
 	if ($simple) {
 		$s = "table_overall_simple";
 		if ($text)
@@ -640,7 +643,7 @@ function displayVisibilityButtons($text, $instance, $altText="", $simple=0, $ico
 		$iconClose = RELATIVEPATH."/image/icons/folder-close-$_SESSION[style_color].gif";
 		
 	$out = "<div id=\"plus".$instance."\" style=\"display:inline;\" class=\"$s plus\" $onm><nobr><a id=\"a" . @$arrSched['id'] . "\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '".$instance.urlencode(@$queryString)."');\" title=\"$altText\" ><img src=\"$iconClose\"></a>$sp<a id = \"a" . @$arrSched['id'] . "\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '".$instance.urlencode(@$queryString)."', '');\" title=\"$altText\" >$text</a></nobr></div><div id=\"minus".$instance."\" style=\"display:none; clear:both\" class=\"$s minus\" $onm><nobr><a id=\"b" . @$arrSched['id'] . "\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '', '".$instance.@$queryString."');\" title=\"$altText\"><img src=\"$iconOpen\"></a>$sp<a id=\"b" . @$arrSched['id'] . "\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '', '".$instance.@$queryString."');\" title=\"$altText\" >$text</a></nobr></div>";
-	
+
 	if ($text != "") {
 		return "$out";
 	} else {
@@ -1186,7 +1189,7 @@ function displayFields($sTable="", $sComingFrom='') {
 				ini_set('display_errors', 1);
 				ini_set('display_startup_errors', 1);
 				
-				$sOutput .= "<div class='table_overall' id='onoff_".$value['id']."_".$sComingFrom."' style='display:none;'>";
+				$sOutput .= "<div class='table_overall conf_editor' id='onoff_".$value['id']."_".$sComingFrom."' style='display:none;'>";
 		
 				$query ="SELECT * FROM conf_relations WHERE table1 = '" . $value['id'] . "' or table2 = '" . $value['id'] . "'";
 				$aRelations = dbQuery($query);
@@ -1195,7 +1198,7 @@ function displayFields($sTable="", $sComingFrom='') {
 				/*n zu m Relationen Konfigurationtabelle anzeigen*/
 				if (is_array($aRelations)) {
 					$sOutput .= "<div style='padding:10px'>".displayVisibilityButtons("n zu m Relationen $value[lang]","onoff_relation".$value['id'],"",1);
-					$sOutput .= "</div><div id='onoff_relation" . $value['id'] . "style='display:none;'>";
+					$sOutput .= "</div><div id='onoff_relation" . $value['id'] . "' class='ntom' style='display:none;'>";
 					$sOutput .= "<table>";
 					//echo "<pre>";
 					//print_r($aRelations);
@@ -1636,7 +1639,7 @@ function saveField() {
 		$a = q($q);
 		$aF = getFieldProperties($_POST[save_nto1TargetTable], $_POST[save_nto1TargetField]);
 		if (count($a)) {
-			$q = "UPDATE conf_relations SET type = 'nto1', 
+		    $q = "UPDATE conf_relations SET type = 'nto1', 
 			nto1TargetTable = '$_POST[save_nto1TargetTable]', 
 			nto1TargetField = '$aF[name]', 
 			nto1SourceTable = '$_POST[id_table]', 
@@ -2810,6 +2813,7 @@ function getDatabaseStructure() {
 	}
 }
 function generateUserDropdown($sNameSelect, $sSelectedUsers, $sAddToSelect="", $aDisplayedUsers="") {
+
     $re = "<input type='hidden' name='".$sNameSelect."' value=''><select multiple name=\"".$sNameSelect."[]\" $sAddToSelect >";
     //echo $sSelectedUsers;
 	if (!is_array($sSelectedUsers))
@@ -2841,7 +2845,6 @@ function generateUserDropdown($sNameSelect, $sSelectedUsers, $sAddToSelect="", $
             else
                 $s = "";
             $re .= "<option $s >$vUserGroup[name]</option>";
-
 
             foreach ($aAllUsers as $k => $vUser) {
                 if (in_array($vUser[username], $aSelectedUsers))

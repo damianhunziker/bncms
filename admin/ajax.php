@@ -30,28 +30,29 @@ if ($_GET['saveTitleIcon']) {
 	$q = "UPDATE conf_relation_visibility SET title = '".e($_GET['title'])."', icon = '$fn', showWithEditIcons = '".e($_GET['showWithEditIcons'])."' WHERE path = '".e($_GET['path'])."'";
 	q($q);
 }  elseif ($_GET['showPossibleRelations']) {
-	//$aUsers = explode(",",urldecode($_GET[users]));
+	$aUsers = explode(",",urldecode($_GET['users']));
+
 	if ($_GET['users'] == "null")
 		$aUsers = "";
 	if (strpos($_GET['path'],"-")) {
 		if (!is_array($aUsers)) {
-			echo $q = "DELETE FROM conf_relation_visibility WHERE path = '".e($_GET[path])."'";
+			$q = "DELETE FROM conf_relation_visibility WHERE path = '".e($_GET['path'])."'";
 			q($q);
 			exit();
 		} else {
-			$q = "SELECT id FROM conf_relation_visibility WHERE path = '".e($_GET[path])."'";
+			$q = "SELECT id FROM conf_relation_visibility WHERE path = '".e($_GET['path'])."'";
 			$a = q($q);
 			if (count($a)) {
-				echo $q = "UPDATE conf_relation_visibility SET users = '".serialize($aUsers)."' WHERE path = '".e($_GET['path'])."'";
+				$q = "UPDATE conf_relation_visibility SET users = '".$aUsers[0]."' WHERE path = '".e($_GET['path'])."'";
 			} else {
-				echo $q = "INSERT INTO conf_relation_visibility SET users = '".serialize($aUsers)."', path = '".e($_GET['path']."'";
+				$q = "INSERT INTO conf_relation_visibility SET users = '".$aUsers[0]."', path = '".e($_GET['path'])."'";
 			}
 		}
 		q($q);
 	} else {
-		echo $q = "UPDATE conf_tables SET users = '".serialize($aUsers)."' WHERE id='".e($_GET['showPossibleRelations'])."'";
+		$q = "UPDATE conf_tables SET users = '".$aUsers[0]."' WHERE id='".e($_GET['showPossibleRelations'])."'";
 		q($q);
-        echo $q = "UPDATE conf_relation_visibility SET users = '".serialize($aUsers)."' WHERE path = '".e($_GET['showPossibleRelations'])."-'";
+        $q = "UPDATE conf_relation_visibility SET users = '".$aUsers[0]."' WHERE path = '".e($_GET['showPossibleRelations'])."-'";
         q($q);
 		if (!is_array($aUsers)) {
 			exit();
@@ -104,7 +105,7 @@ if ($_GET['saveTitleIcon']) {
 	{
 		$p[12] = $t['sp'];
 	}
-	
+	//print_r($p);
 	$rv = call_user_func_array($f , $p); 
 	echo $rv;
 }

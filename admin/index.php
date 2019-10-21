@@ -3,7 +3,7 @@
 include("start.inc.php");
 
 //fix scrollpos und layervisibility
-if (!strpos($_SERVER[REQUEST_URI], "index.php")) {
+if (!strpos($_SERVER['REQUEST_URI'], "index.php")) {
     echo "<script>window.location.href='index.php';</script>";
     exit();
 }
@@ -30,14 +30,14 @@ if (empty($_SESSION['display'])) {
 <script type="text/javascript" src="scroller/mootools.svn.js"></script>
 <script type="text/javascript" src="../lib/jquery-visible-master/jquery.visible.js"></script>
 <script type="text/javascript">
-		window.addEvent('domready', function(){
+		/*window.addEvent('domready', function(){
 			var scroll2 = new Scroller('container', {area: 30, velocity: 2});
 			
 			// container
 			jQuery('container').addEvent('mouseover', scroll2.start.bind(scroll2));
 			jQuery('container').addEvent('mouseout', scroll2.stop.bind(scroll2));
 			
-		}); 
+		}); */
 	</script>
 <script type="text/javascript">
 
@@ -81,7 +81,7 @@ if (is_array($aTable))
 foreach ($aTable as $key => $value) {
     if (checkPermission($value['users'], $_SESSION['user'], $_SESSION['userGroup'])) {
 		echo displayVisibilityButtons($value['lang'], $value['id'], $value['name']." ".$value['id']);
-		echo "<div class=\"table_overall\" id='".$value['id']."' style='display:none;'>";
+		echo "<div class='table_overall' id='".$value['id']."' style='display:none'>";
 			displayTable(
 			$value['id'], 
 			$value['columnNameOfId'],

@@ -21,7 +21,7 @@ function displayTable(
     $checkableFunction = ""/*18 obsolet*/,
     $additionalColumn = ""/*19*/,
     $columnsToDisplay = ""/*20*/,
-    $aManualFieldProperties = ""/*21*/,
+    $aManualFieldProperties = array()/*21*/,
     $sUserFunction = ""/*22*/,
     $deletable = ""/*23*/,
     $addable = ""/*24*/,
@@ -84,11 +84,16 @@ function displayTable(
     global $aPagingRecursivePath;
     global $webuser;
     global $countDisplayTablesOnPage;
+	
+	// sBeforeAjaxQueryString wird nur gespeichert wenn nicht ajax-Datei ist oder leer ist
+	if (strpos($sBeforeAjaxQueryString, "/ajax.php") == "" and $sBeforeAjaxQueryString)  {
+		$GLOBALS['sBeforeAjaxQueryString'] = $sBeforeAjaxQueryString;
+	}
 
     $countDisplayTablesOnPage++;
 
     //Muss Global machen damit überall verfügbar
-    $GLOBALS[aManualFieldProperties] = $aManualFieldProperties;
+    $GLOBALS['aManualFieldProperties'] = $aManualFieldProperties;
 
     /*$aTableProperties = getTableProperties($tableOrId);
 	if (is_numeric($tableOrId)) {
@@ -199,12 +204,10 @@ function displayTable(
 			function ci() {
 				if (jQuery('#s_" . $id . "').visible()) {
 					window.clearInterval(in" . $id . ");
-					console.log(\"" . RELATIVEPATH . $pa . "/ajax.php" . $pp . "\");
 					jQuery.ajax({
 						method: \"POST\",
 						url: \"" . RELATIVEPATH . $pa . "/ajax.php" . $pp . "\", 
 						success: function(msg) {
-						console.log(msg);
 							jQuery('#s_" . $id . "').hide();
 							jQuery('#l_" . $id . "').hide();
 							jQuery('#" . $id . "').hide().html(msg).slideDown('slow');
@@ -231,10 +234,9 @@ function displayTable(
             $pn[11] = $p[11];
             if ($p[12] and $p[12] != null)
                 $pn[12] = $p[12];
-            /*print_r($pn);
-			pre($_SESSION[ajaxParameter]);*/
+            //print_r($pn);
+            /*pre($_SESSION[ajaxParameter]);*/
 
-            //exit();
             if ($pn[9] == "ntom" or $pn[9] == "nto1input" or $pn[9] == "nto1output" or $pn[9] == "noecho") {
                 call_user_func_array('displayTable', $pn);
             } else {
@@ -245,7 +247,7 @@ function displayTable(
             //pre($p);
             //echo $_SESSION[ajaxParameter][$p[11]][0];
             $t = getTableProperties($_SESSION[ajaxParameter][$p[11]][0], $aManualFieldProperties);
-
+            //print_r($t);
             //$t = getTableProperties("sdasdasdaf");
             if ($t) {
                 $pn = $_SESSION[ajaxParameter][$p[11]];
@@ -644,7 +646,7 @@ print_r($searchParams);
                 $op .= "
 				<div class='toppaging_button_small' onclick=\"jQuery('form#f_" . $ajaxExec . " .toppaging').val(1); ajax_submit('" . $ajaxExec . "','','" . RELATIVEPATHAJAX . "','" . RELATIVEPATHAPP . "');\"></div>
 				<div class='toppaging_button br' onclick=\"jQuery('form#f_" . $ajaxExec . " .toppaging').val(" . $_SESSION[aActivePagesRelations][$place][$table . "-" . $tableId] . " -1); ajax_submit('" . $ajaxExec . "','','" . RELATIVEPATHAJAX . "','" . RELATIVEPATHAPP . "');\"></div>
-				<input  class='c" . $ajaxExec . " display_table_paging_search toppaging' type=text id='page' onChange=\"console.log('onchange textfield'); ajax_submit('" . $ajaxExec . "','','" . RELATIVEPATHAJAX . "','" . RELATIVEPATHAPP . "');\" placeholder='" . $_SESSION[aActivePagesRelations][$place][$table . "-" . $tableId] . " / $iMaxPages'>
+				<input  class='c" . $ajaxExec . " display_table_paging_search toppaging' type=text id='page' onChange=\"ajax_submit('" . $ajaxExec . "','','" . RELATIVEPATHAJAX . "','" . RELATIVEPATHAPP . "');\" placeholder='" . $_SESSION[aActivePagesRelations][$place][$table . "-" . $tableId] . " / $iMaxPages'>
 				<div class='toppaging_button bl' onclick=\"jQuery('form#f_" . $ajaxExec . " .toppaging').val(" . $_SESSION[aActivePagesRelations][$place][$table . "-" . $tableId] . " + 1); window.setTimeout(ajax_submit('" . $ajaxExec . "','','" . RELATIVEPATHAJAX . "','" . RELATIVEPATHAPP . "'),25);\"></div>
 				<div class='toppaging_button_small' onclick=\"jQuery('form#f_" . $ajaxExec . " .toppaging').val(" . $iMaxPages . "); ajax_submit('" . $ajaxExec . "','','" . RELATIVEPATHAJAX . "','" . RELATIVEPATHAPP . "');\"></div>
 				
@@ -762,7 +764,7 @@ print_r($searchParams);
         $ed = "edit_entry";
 
     if ($isNToMDisplayEditEntry == "no" and $addable == "yes") {
-        $sOut .= "<a class=sidebar-item href='#' onClick=\"ajax_send_scrollpos('" . $_SERVER['PHP_SELF'] . "');
+	        $sOut .= "<a class=sidebar-item href='#' onClick=\"ajax_send_scrollpos('" . $_SERVER['PHP_SELF'] . "');
 opwin('$ed.php?action=new&columnNameOfId=$columnNameOfId&table=$tableOrId','Edit'); return false;\" title=\"Neuen Eintrag erstellen\"><img src=\"" . RELATIVEPATH . "/image/icons/add-page-$_SESSION[style_color].gif\"></a>";
         $sideBarActive = 1;
     }
@@ -879,14 +881,9 @@ jQuery(function() {
 					return;
 				}
 				var nto1id = this.element[0].name.replace(\'nto1_\',\'\');
-				//console.log(this.element[0]);
-				//console.log(RELATIVEPATH+"/ajax.php?nto1AjaxSearch="+nto1id+"&value="+encodeURI(term)+"&formid=' . $ajaxExec . '");
-				//console.log("hu");
 				jQuery.getJSON( RELATIVEPATH+"/ajax.php?nto1AjaxSearch="+nto1id+"&value="+encodeURI(term)+"&formid=' . $ajaxExec . '", {
 					term: extractLast( request.term )
 				}, function( data, status, xhr ) {
-					
-					console.log(data);
 					cache[ term ] = data;
 					response( data );
 				});
@@ -1124,7 +1121,10 @@ jQuery(function() {
                                 "",
                                 "div_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $ajaxExec,
                                 "Relationen des Eintrags &ouml;ffnen",
-                                1
+                                1,
+                                    "",
+                                    "",
+                                    $sBeforeAjaxQueryString
                             );
                             $op .= "</div>";
                         }
@@ -1325,6 +1325,7 @@ jQuery(function() {
     }//Foreach arrTableContent eof
 
     //sidebar ausblenden falls keine Icons
+
     if ($sideBarActive != 1)
         echo "<script>jQuery('.$ajaxExec .sidebar').css('display','none');</script>";
     if ($isNToMDisplayEditEntry == "yes") {
@@ -2414,6 +2415,7 @@ function generateRelatedContent(
     }
     //Ermitteln ob n:1 Relation vorhanden ist (Output
     //n:1 Relation
+    //pre($aRel);
     foreach ($row as $field => $content) {
         //Ermitteln ob n:1 Relation vorhanden ist
         if (isset($aRel[NTo1][$tableOrId][$field])) {
@@ -2461,6 +2463,7 @@ function generateRelatedContent(
                 }
             }
         }
+    //pre($iSwitchInDot);
     if ($iSwitchInDot == 1) {
 
         $op .= "<div id=\"div_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_$ajaxExec\" style=\"display:none\"><table class=\"table_spacer\">";
@@ -2468,7 +2471,6 @@ function generateRelatedContent(
         $op .= "$opo</table></div>";
 
     }
-    //echo htmlentities($op);
     return $op;
 }
 
@@ -2581,6 +2583,7 @@ function displayNTo1OutputRelation(
     $cr = getNTo1RelationId(getIdFromTableString($aRel['NTo1'][$tableOrId][$field]), $field, $tableOrId, $aManualFieldProperties);
     //echo "hu".checkRelationVisibility($sComingFromRelations."-".$cr,$showWithEditIcons,$aManualFieldProperties);
     //pre($aManualFieldProperties);
+
     if (checkRelationVisibility($sComingFromRelations . "-" . $cr, $showWithEditIcons, $aManualFieldProperties)) {
 
         $aVisibility = getRelationVisibility($sComingFromRelations . "-" . $cr, $aManualFieldProperties);

@@ -1,9 +1,9 @@
 <?php
-error_reporting(E_NONE);
+error_reporting(E_WARNING);
 
-define('PATH', $_SERVER['DOCUMENT_ROOT']."/bncms");
-define('RELATIVEPATH', "/bncms");
-define('RELATIVEPATHAJAX', "/bncms/admin");
+define('PATH', $_SERVER['DOCUMENT_ROOT']."/");
+define('RELATIVEPATH', "");
+define('RELATIVEPATHAJAX', "/admin");
 define('RELATIVEPATHAPP', "");
 date_default_timezone_set("UTC");
 
@@ -32,19 +32,9 @@ if (file_exists(PATH."/admin/project_config.php")) {
 	include (PATH."/admin/project_config.php");
 }
 
-<<<<<<< HEAD
-
 if ($_POST['username'] and $_POST['password'] and !@$_POST['savePost'] and $_POST['username'] != "webuser") {
     $query="SELECT bncms_user.*,  bncms_user_groups.name FROM bncms_user, bncms_user_groups WHERE bncms_user.gruppe = bncms_user_groups.id AND BINARY bncms_user.username = '".e($_POST['username'])."' and BINARY bncms_user.password = '".md5($_POST['password'])."' and (bncms_user_groups.name = 'Administratoren' or bncms_user_groups.name  = 'Redakteure')";
-=======
-//echo "<pre>";
-		//print_r($_SESSION);
-		//echo "</pre>";
-//$_SESSION['user_allowed'] = 1;
-//echo md5('admin');
-if ($_POST['username'] and $_POST['password'] and !$_POST['savePost'] and $_POST['username'] != "webuser") {
-    $query="SELECT bncms_user.*,  bncms_user_groups.name FROM bncms_user, bncms_user_groups WHERE bncms_user.gruppe = bncms_user_groups.id AND BINARY bncms_user.username = '".e($_POST[username])."' and BINARY bncms_user.password = '".md5($_POST['password'])."' and (bncms_user_groups.name = 'Administratoren' or bncms_user_groups.name  = 'Redakteure')";
->>>>>>> 929a5cc... deactivate backup area, add strip tags to tinymce fields
+
     $arr = dbQuery($query);
     $_SESSION['user'] = $_POST['username'];
     $_SESSION['userGroup'] = $arr["name"];

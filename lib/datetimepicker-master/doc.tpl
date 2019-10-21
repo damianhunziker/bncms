@@ -967,6 +967,5 @@ $('#input').datetimepicker({format: 'd/m/Y'});
 <pre><code data-language="javascript">$('#input').datetimepicker();
 $('button.somebutton').on('click', function () {
     var d = $('#input').datetimepicker('getValue');
-    console.log(d.getFullYear());
 });
 </code></pre>
