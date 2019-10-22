@@ -1,10 +1,17 @@
 <?php
-error_reporting(E_NONE);
+error_reporting(E_WARNING);
 
-define('PATH', $_SERVER['DOCUMENT_ROOT']."/bncms");
-define('RELATIVEPATH', "/bncms");
-define('RELATIVEPATHAJAX', "/bncms/admin");
-define('RELATIVEPATHAPP', "");
+/** @license bncms
+ *
+ * Copyright (c) Damian Hunziker and other bncms contributors
+ * https://github.com/damianhunziker/bncms
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+include ("../inc/configuration/backend-config.inc.php");
+
 date_default_timezone_set("UTC");
 
 include (PATH."/inc/configuration/database-settings.inc.php");
@@ -32,19 +39,9 @@ if (file_exists(PATH."/admin/project_config.php")) {
 	include (PATH."/admin/project_config.php");
 }
 
-<<<<<<< HEAD
-
 if ($_POST['username'] and $_POST['password'] and !@$_POST['savePost'] and $_POST['username'] != "webuser") {
     $query="SELECT bncms_user.*,  bncms_user_groups.name FROM bncms_user, bncms_user_groups WHERE bncms_user.gruppe = bncms_user_groups.id AND BINARY bncms_user.username = '".e($_POST['username'])."' and BINARY bncms_user.password = '".md5($_POST['password'])."' and (bncms_user_groups.name = 'Administratoren' or bncms_user_groups.name  = 'Redakteure')";
-=======
-//echo "<pre>";
-		//print_r($_SESSION);
-		//echo "</pre>";
-//$_SESSION['user_allowed'] = 1;
-//echo md5('admin');
-if ($_POST['username'] and $_POST['password'] and !$_POST['savePost'] and $_POST['username'] != "webuser") {
-    $query="SELECT bncms_user.*,  bncms_user_groups.name FROM bncms_user, bncms_user_groups WHERE bncms_user.gruppe = bncms_user_groups.id AND BINARY bncms_user.username = '".e($_POST[username])."' and BINARY bncms_user.password = '".md5($_POST['password'])."' and (bncms_user_groups.name = 'Administratoren' or bncms_user_groups.name  = 'Redakteure')";
->>>>>>> 929a5cc... deactivate backup area, add strip tags to tinymce fields
+
     $arr = dbQuery($query);
     $_SESSION['user'] = $_POST['username'];
     $_SESSION['userGroup'] = $arr["name"];
@@ -156,20 +153,18 @@ transform:rotate(-<?php echo rand(10,20) ?>deg translate3d(0px,0px,1px); /* W3C 
 	die();
 } else {
 	
-if (isset($_GET['style_color']))
-{
-	$_SESSION['style_color'] = $_GET['style_color'];
-}
-else
-{
+    if (isset($_GET['style_color']))
+    {
+        $_SESSION['style_color'] = $_GET['style_color'];
+    }
+    else
+    {
+         $_SESSION['style_color'] = "green";
+    }
 
-	 $_SESSION['style_color'] = "green";
-}
-	 
-
-if (isset($_SESSION['errorMsg'])) {
-	$outErrormsg = "Fehlermeldung: $_SESSION[errorMsg]";
-	$_SESSION['errorMsg'] = "";
-}
+    if (isset($_SESSION['errorMsg'])) {
+        $outErrormsg = "Fehlermeldung: $_SESSION[errorMsg]";
+        $_SESSION['errorMsg'] = "";
+    }
 }
 ?>

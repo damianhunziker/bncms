@@ -168,9 +168,9 @@ div.table_overall {
     margin: 0px;
     margin-bottom: 15px;
     /*margin-top:23px;*/
-    display: table;
     clear: both;
     background-color: rgba(255, 255, 255, 0.7);
+	display: table;
 }
 .table_overall_title {
     padding: 10px;
@@ -513,4 +513,8 @@ input[type=checkbox]:checked + label:before {
 
 .image .bnul {
 	max-height: 200px;
+}
+
+.conf_editor .ntom {
+	margin-bottom: 10px;
 }

@@ -1,5 +1,6 @@
 <?php
 session_start();
+error_reporting(E_WARNING);
 if ($iPosParameters = strpos($_GET['phpSelf'], "?")) {
 	$_GET['phpSelf'] = substr($_GET['phpSelf'], 0, $iPosParameters);
 }

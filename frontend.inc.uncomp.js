@@ -44,8 +44,6 @@ $.fn.textWidth = function(text, font) {
 
                 if ($(selector).is(":visible")) {
 
-					console.log(self);
-
                     callback.call($(selector));
 
                     clearInterval(timer);
