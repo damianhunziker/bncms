@@ -84,7 +84,7 @@ function displayTable(
     global $aPagingRecursivePath;
     global $webuser;
     global $countDisplayTablesOnPage;
-	
+
 	// sBeforeAjaxQueryString wird nur gespeichert wenn nicht ajax-Datei ist oder leer ist
 	if (strpos($sBeforeAjaxQueryString, "/ajax.php") == "" and $sBeforeAjaxQueryString)  {
 		$GLOBALS['sBeforeAjaxQueryString'] = $sBeforeAjaxQueryString;
@@ -2008,6 +2008,7 @@ function generateField(
             } elseif ($aFieldProperties[nto1DisplayType] == "dropdown") {
                 $fo .= "<select name=\"$outputFieldname\">";
                 $tt = getTableProperties($aFieldProperties['nto1TargetTable'], $aManualFieldProperties);
+
                 $q = "SELECT * FROM $tt[name] ORDER BY $aFieldProperties[nto1DropdownTitleField]";
                 $a = dbQuery($q);
                 $fo .= "<option></option>";
@@ -2263,7 +2264,6 @@ jQuery(".bncms_ip_address").mask("099.099.099.099")';
 
             $aF = getFieldProperties($aFieldProperties[nto1TargetTable], $aFieldProperties[nto1TargetField], $aManualFieldProperties);
             //echo "$aFieldProperties[nto1TargetTable], $aFieldProperties[nto1TargetField],  ";
-            //pre($aManualFieldProperties);
             $q = "SELECT * FROM $aT[name] WHERE $aF[name] = '$field'";
             $a = q($q);
             $field = $a[$aFieldProperties[nto1DropdownTitleField]];
@@ -2599,6 +2599,7 @@ function displayNTo1OutputRelation(
 			$langTable = $aRel['NTo1'][$tableOrId][$field];*/
         $aFieldProp = getFieldProperties($tableOrId, $field, $aManualFieldProperties);
         $aTargetField = getFieldProperties($aFieldProp[nto1TargetTable], $aFieldProp[nto1TargetField]);
+
         $query = " SELECT * FROM " . getNameFromTableString($aRel['NTo1'][$tableOrId][$field]) . " WHERE " . $aTargetField[name] . " = '$content' ";
         $RS = dbQuery($query);
         if (count($RS) > 0) {

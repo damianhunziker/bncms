@@ -105,7 +105,7 @@ if ($_GET['saveTitleIcon']) {
 	{
 		$p[12] = $t['sp'];
 	}
-	//print_r($p);
+	
 	$rv = call_user_func_array($f , $p); 
 	echo $rv;
 }

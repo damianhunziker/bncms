@@ -1698,7 +1698,7 @@ function backupMenu() {
 function saveBackup($sButton="on") {
 	global $aDatabase;
 	$backupFile = "backup/".@$dbname . date("d.m.Y-H-i-s")  . '.sql';
-	echo $command = "mysqldump --opt -h$aDatabase[host] -u$aDatabase[user] -p$aDatabase[password] $aDatabase[dbname] > $backupFile";
+	$command = "mysqldump --opt -h$aDatabase[host] -u$aDatabase[user] -p$aDatabase[password] $aDatabase[dbname] > $backupFile";
 	system($command, $fp);
 	if ($fp==0) echo "<div style=\"border:1px solid green; width:350px; padding:5px; color:green; font-weight:bold\">Datenbank gesichert unter $backupFile.</div>"; else echo "<div style=\"border:1px solid red; width:350px; padding:5px; color:red; font-weight:bold\">ACHTUNG: Datenbank konnte nicht gesichert werden unter $backupFile. Fehler: $fp</div>";
 	if ($sButton == "on") {
@@ -1712,7 +1712,7 @@ function loadBackup() {
 	if (@$_GET['loadfile'] != "") {
 		if ($_GET['confirmed'] != true) {
 			echo "<script type='text/javascript'>
-				Check = confirm('Wollen Sie wirklich die Sicherung ".$_GET[filename]." laden? Alle neueren '+unescape(\"%C4\")+'nderungen gehen verloren.');
+				Check = confirm('Wollen Sie wirklich die Sicherung ".$_GET[filename]." laden? Ein Backup des alten Stands wird erstellt.');
 				if (Check == false) {
 					window.close();
 				 } else {
@@ -1725,6 +1725,7 @@ function loadBackup() {
 				if ($entry != "." and $entry != ".." ) {
 					$countFiles++;
 					if ($countFiles == $_GET[loadfile]) {
+                        saveBackup();
 						$command = "mysql  -E -h$aDatabase[host] -u$aDatabase[user] -p$aDatabase[password] $aDatabase[dbname] < backup/".$entry;
 						system($command, $fp);
 						if ($fp==0) echo "<div style=\"border:1px solid green; width:350px; padding:5px; color:green; font-weight:bold\">Daten importiert von $entry.</div><br /><br />"; else echo "<div style=\"border:1px solid red; width:350px; padding:5px; color:red; font-weight:bold\">Es ist ein Fehler aufgetreten Fehler: $fp</div><br /><br />";
@@ -1739,7 +1740,7 @@ function loadBackup() {
 		
 	} 
 	$countFiles = 0;
-	$d = dir("../backup"); //ToDo
+	$d = dir("backup"); //ToDo
 	
 	while (false !== ($entry = $d->read())) {
 		if ($entry != "." and $entry != ".." ) {

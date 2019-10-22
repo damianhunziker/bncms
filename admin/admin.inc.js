@@ -519,7 +519,6 @@ if (window.XMLHttpRequest) {
 }
 
 function ajax_send_scrollpos(sPhpSelf, an, aus) {
-	
 	pos = pageOffset();
 	if (an) {
 		anschalten(an);
