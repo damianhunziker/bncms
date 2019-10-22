@@ -144,20 +144,19 @@ transform:rotate(-<?php echo rand(10,20) ?>deg translate3d(0px,0px,1px); /* W3C 
 	die();
 } else {
 	
-if (isset($_GET['style_color']))
-{
-	$_SESSION['style_color'] = $_GET['style_color'];
-}
-else
-{
+    if (isset($_GET['style_color']))
+    {
+        $_SESSION['style_color'] = $_GET['style_color'];
+    }
+    else
+    {
 
-	 $_SESSION['style_color'] = "green";
-}
-	 
+         $_SESSION['style_color'] = "green";
+    }
 
-if (isset($_SESSION['errorMsg'])) {
-	$outErrormsg = "Fehlermeldung: $_SESSION[errorMsg]";
-	$_SESSION['errorMsg'] = "";
-}
+    if (isset($_SESSION['errorMsg'])) {
+        $outErrormsg = "Fehlermeldung: $_SESSION[errorMsg]";
+        $_SESSION['errorMsg'] = "";
+    }
 }
 ?>
