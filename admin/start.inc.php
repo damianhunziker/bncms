@@ -1,10 +1,8 @@
 <?php
 error_reporting(E_WARNING);
 
-define('PATH', $_SERVER['DOCUMENT_ROOT']."/");
-define('RELATIVEPATH', "/");
-define('RELATIVEPATHAJAX', "/admin");
-define('RELATIVEPATHAPP', "");
+include ("../inc/configuration/backend-config.inc.php");
+
 date_default_timezone_set("UTC");
 
 include (PATH."/inc/configuration/database-settings.inc.php");

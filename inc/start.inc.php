@@ -1,10 +1,8 @@
 <?php
 //copyright by Damian Hunziker, Brand New Design";
-define('PATH',$_SERVER['DOCUMENT_ROOT']."/bncms");
-define('RELATIVEPATH',"/bncms");
-define('RELATIVEPATHAJAX',"/bncms");
-define('RELATIVEPATHAPP',"/");
-define('DOMAIN',"https://hu.de1.biz");
+
+include ("configuration/frontend-config.inc.php");
+
 $webuser = "webuser";
 
 if ($_GET['projectpath'] != "") {

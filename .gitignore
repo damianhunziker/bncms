@@ -10,5 +10,6 @@ file/
 .project
 .settings/
 
-/inc/configuration/database-settings.inc.php
 inc/configuration/database-settings.inc.php
+inc/configuration/backend-config.inc.php
+inc/configuration/frontend-config.inc.php
