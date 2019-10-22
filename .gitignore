@@ -1,15 +1,17 @@
-
 _notes/
 admin/backup/
 barcode.php
 file/
 /.buildpath
 /.project
-/.settings/ 
+
+/.settings/
 
 .buildpath
 .project
 .settings/
 
-/inc/configuration/database-settings.inc.php
 inc/configuration/database-settings.inc.php
+inc/configuration/backend-config.inc.php
+inc/configuration/frontend-config.inc.php
+

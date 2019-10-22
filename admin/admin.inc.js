@@ -20,8 +20,7 @@ jQuery.fn.textWidth = function(text, font) {
 			
             timer = setInterval(function() {
 										 
-                if ($(selector).is(":visible")) {
-					console.log(self);
+                if ($(selector).is(":visible")) {;
                     callback.call($(selector));
                     clearInterval(timer);
                 }
@@ -43,20 +42,14 @@ function validate(table, formid, projectpath) {
 	});
 	jQuery('#bu_'+formid).css('display','none');
 	jQuery('#lo_'+formid).css('display','block');
-	//console.log(userValues);
 	jQuery.ajax({
 		method: "POST",
 		url: RELATIVEPATH+"/ajax.php?validate="+table+"&formid="+formid+"&projectpath="+projectpath,
 		data: { 'userValues': encodeURIComponent(serialize(userValues)) },
 		success: function(msg) {
 			a = unserialize(urldecode(msg));
-			//alert(msg);
-			
-			//console.log(a);
 			for (var key in a) {
    				if (a.hasOwnProperty(key)) {
-					//console.log(a[key],key);
-					
 					jQuery('#val_'+formid+'_'+key).html(a[key]);
 					ds = 1;
 				}
@@ -81,13 +74,10 @@ function validate(table, formid, projectpath) {
 }
 
 function showPossibleRelations(tableId, users, div, path) {
-    //alert("hu");
-    //console.log(RELATIVEPATH+"/ajax.php?showPossibleRelations="+tableId+"&users="+encodeURIComponent(serialize(users))+"&path="+path);
-	jQuery.ajax({
+  jQuery.ajax({
 		method: "GET",
 		url: RELATIVEPATH+"/ajax.php?showPossibleRelations="+tableId+"&users="+encodeURIComponent(serialize(users))+"&path="+path,
 		success: function(msg) {
-		    console.log(msg);
 			jQuery("#"+div).html(msg);
 			jQuery(".darstellung_"+path).show();
 		}
@@ -152,14 +142,12 @@ function ntomAjaxSearch(e,relationId) {
 		var va = strrchr(e.value,',').replace(', ','');
 	else
 		var va = e.value;
-	alert(RELATIVEPATH+"/ajax.php?ntomAjaxSearch="+relationId+"&value="+va);
+
 	jQuery.ajax({
 		method: "GET",
 		url: RELATIVEPATH+"/ajax.php?ntomAjaxSearch="+relationId+"&value="+va,
 		success: function(msg) {
-			console.log(msg);
 			a = unserialize(urldecode(msg));
-			console.log(a);
 			var s = "";
 			var c = 0;
 			for (var key in a) {
@@ -449,8 +437,6 @@ function ajax_submit(id, variable, path, projectpath) {
 		sp[a[0]] = a[1];
 	}
 	arg_list = unserialize(urldecode(document.getElementById("arg_list_"+id).value));
-	//console.log(arg_list);
-	//document.getElementById("s_"+id).style.display="block";	
 	jQuery('#f_'+id+' #loading_overlay').css('height', jQuery('#f_'+id+' #loading_overall_table').outerHeight());
 	jQuery('#f_'+id+' #loading_overlay').css('width', jQuery('#f_'+id+' #loading_overall_table').outerWidth());
 	
@@ -470,9 +456,7 @@ function ajax_submit(id, variable, path, projectpath) {
     function(index, elem){  
         var input = jQuery(this).val();
 		var e = jQuery(elem);
-		//console.log(input);
 		//wegl&ouml;schen alter anfragen mit parameter
-		//condition = condition.replace(" AND "+ field+" LIKE \"%"+input+"%\","");
 		if (e.attr('id').indexOf("earch_") && input != '') {
 			sp[e.attr('id')] = input;
 		}
@@ -492,21 +476,16 @@ function ajax_submit(id, variable, path, projectpath) {
 	
 	if (arg_list[2] == "null")
 		arg_list[2] = "";
-	//if (condition)
-	//	arg_list[2] = arg_list[2] + condition;
 
 	arg_list[12] = serialize(sp); //searchParams
-	//console.log(arg_list); 
-	//alert( path);
-	//console.log(arg_list);
-		arg_list = new Array();
+
+	arg_list = new Array();
 	arg_list['id'] = id;
 	arg_list['sp'] = serialize(sp);
 	jQuery.ajax({
 	  method: "POST",
 	  url: path+"/ajax.php?projectpath=",
 	  success: function(msg) {  
-	  //alert(msg);
 			jQuery('#'+id).html(msg);
 			document.getElementById('l_'+id).style.display = 'none';
 		},
@@ -516,8 +495,8 @@ function ajax_submit(id, variable, path, projectpath) {
 
 function anschalten(div)
 {
-	if (document.getElementById(div)) {
-		jQuery( "#"+div ).toggle('slow'); 
+    if (document.getElementById(div)) {
+		jQuery( "#"+div ).fadeIn('slow');
 		document.getElementById('minus'+div).style.display = 'inline';
 		document.getElementById('plus'+div).style.display = 'none';
 	}
@@ -541,7 +520,6 @@ if (window.XMLHttpRequest) {
 
 function ajax_send_scrollpos(sPhpSelf, an, aus) {
 	pos = pageOffset();
-	
 	if (an) {
 		anschalten(an);
 	}
@@ -549,7 +527,6 @@ function ajax_send_scrollpos(sPhpSelf, an, aus) {
 		ausschalten(aus);
 	}
 	if (http != null) {
-	   console.log("save_scrollpos.php?an="+an+"&aus="+aus+"&scrollTop="+pos.top+"&scrollLeft="+pos.left+"&phpSelf="+sPhpSelf);
 	   http.open("GET", "save_scrollpos.php?an="+an+"&aus="+aus+"&scrollTop="+pos.top+"&scrollLeft="+pos.left+"&phpSelf="+sPhpSelf, true);
 	   http.send(null);
 	}
@@ -575,7 +552,7 @@ function pageOffset(win)
     }
     return pos;
 }
-window.addEvent('domready', function() {
+/*window.addEvent('domready', function() {
 	var status = {
 		'true': 'open',
 		'false': 'close'
@@ -616,7 +593,7 @@ window.addEvent('domready', function() {
 	myVerticalSlide.addEvent('complete', function() {
 		$('vertical_status').set('html', status[myVerticalSlide.open]);
 	});
-});
+});*/
 //Paging
 /*window.addEvent('domready', function(){
 	var scroll2 = new Scroller('container', {area: 30, velocity: 2});

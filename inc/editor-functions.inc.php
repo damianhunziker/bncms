@@ -10,7 +10,7 @@ function checkPermission($aPermission, $sUser, $sUserGroup="") {
         return false;
 }
 function checkBannedIPs() {
-	$q = "SELECT * FROM bncms_banned_ips WHERE ip = '$_SERVER[REMOTE_ADDR]'";
+	$q = "SELECT * FROM bncms_banned_ips WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'";
 	$a = q($q,"",1);
 	if (count($a))
 		exit();
@@ -119,10 +119,10 @@ function editRelationVisibility() {
 	$q = "SELECT * FROM conf_tables WHERE is_assign_table != 'yes'";
 	$aTables = q($q);
 	foreach ($aTables as $k => $v) {
-		$md5 = md5($v[id].rand(0,111111111111111111));
+		$md5 = md5($v['id'].rand(0,111111111111111111));
         /*$q = "SELECT * FROM bncms_user";
         $a = dbQuery($q,"",1);
-        $of = "<select multiple='multiple' size='".count($a)."'  onchange=' showPossibleRelations(\"$v[id]\",jQuery(this).val(),\"$md5\",\"$path\",1)'>";
+        $of = "<select multiple='multiple' size='".count($a)."'  onchange=' showPossibleRelations(\"$v['id']\",jQuery(this).val(),\"$md5\",\"$path\",1)'>";
 
         foreach ($a as $k2 => $v2)	{
             if (is_array($aUsers)) {
@@ -135,19 +135,19 @@ function editRelationVisibility() {
             $of .= "<option $s>$v2[username]</option>";
         }*/
 
-		//$path = $v[id];
+		//$path = $v['id'];
 
-        $of = generateUserDropdown("", $v[users], ' onchange="showPossibleRelations(\''.$v[id].'\',jQuery(this).val(),\''.$md5.'\',\''.$path.'\',1)" ');
+        $of = generateUserDropdown("", $v[users], ' onchange="showPossibleRelations(\''.$v['id'].'\',jQuery(this).val(),\''.$md5.'\',\''.$path.'\',1)" ');
         //$of = pre($v,1);
 
         $aUsers = unserialize($v[users]);
 		if (is_array($aUsers))
-			$s = showPossibleRelations($v[id], $aUsers, $path);
+			$s = showPossibleRelations($v['id'], $aUsers, $path);
 		else
 			$s = "";
 		$of .= "</select><br><br><div id='$md5' class='$path'>".$s."</div>"; 
-		$o .= displayVisibilityButtons(formTableName($v[id]), $v[id], $v[name]." ".$v[id]);
-		$o .= "<div class=\"table_overall\" id='".$v[id]."' style='display:none;width:95%'>$of</div>";	
+		$o .= displayVisibilityButtons(formTableName($v['id']), $v['id'], $v[name]." ".$v['id']);
+		$o .= "<div class=\"table_overall\" id='".$v['id']."' style='display:none;width:95%'>$of</div>";	
 	}
 	
 	echo $o;
@@ -321,7 +321,7 @@ function showPossibleRelations($tableId, $users, $path) {
 			$q = "SELECT * FROM conf_tables WHERE id_relation = '$ntomRelation'";
 			$aAssignTable = q($q);
 			//pre($aAssignTable);
-			$tableId = $aAssignTable[id];
+			$tableId = $aAssignTable['id'];
 		} else {
 			preg_match("/\-([0-9]+)$/",$path,$t);
 			$iR = $t[1];
@@ -336,25 +336,25 @@ function showPossibleRelations($tableId, $users, $path) {
 
 		$aS = getTableProperties($tableId);
         //pre($aS);
-		$sS = formTableName($aS[id]);
+		$sS = formTableName($aS['id']);
 		if (is_array($aRel[NToM][$tableId]))
 		foreach ($aRel[NToM][$tableId] as $k => $v) {
 			if (!strpos($path."-", "-".$v[relationId]."-")) { //Relation die in dieser Abfolge einmal gewählt wurde nicht wieder zur Auswahl anzeigen
 				
 				$aT = getTableProperties($v[destTable]);
-				$sT = formTableName($aT[id]);
+				$sT = formTableName($aT['id']);
 				$md5 = md5($tableId.rand(0,111111111111111111));
 				
 				$om = "<tr><td valign=top><b>$sS <=o=> $sT (".formTableName($v[assignTable]).")</b>";
 				$om .= "</td><td valign=top>";
-				$om .= showVisibilitySelect($aT[id], $users, $path."-".$v[relationId]."-a", $md5);
+				$om .= showVisibilitySelect($aT['id'], $users, $path."-".$v[relationId]."-a", $md5);
 				$om .= "</tr>"; 
 				$q = "SELECT * FROM conf_relation_visibility WHERE path = '$path-$v[relationId]'";
 				$a = q($q);
 				//$om .= pre($a[users],1).count(unserialize($a[users]));
 				
 				$om .= "<tr><td colspan=2>";
-				$om .= showNextLayer($path."-".$v[relationId]."-a",$md5, $users, $aT[id]);
+				$om .= showNextLayer($path."-".$v[relationId]."-a",$md5, $users, $aT['id']);
 				$om .= "</td></tr>";
 			}
 		}
@@ -368,14 +368,14 @@ function showPossibleRelations($tableId, $users, $path) {
 			//$o .= "strpos($path-,-$sI-)"; 
 			//$o .= strpos($path."-", "-".$sI."-");
 			if (!strpos($path."-", "-".$sI."-")) { //Relation die in dieser Abfolge einmal gewählt wurde nicht wieder zur Auswahl anzeigen
-				$sT = formTableName($aT[id]);
+				$sT = formTableName($aT['id']);
 				$md5 = md5($tableId.rand(0,111111111111111111));
 				$oa .= "<tr><td valign=top><b>$sS: ".formFieldName($tableId, $assignmentField)." => $sT </b>";
 				$oa .= "</td><td valign=top>";
-				$oa .= showVisibilitySelect($aT[id], $users, $path."-".$sI, $md5);
+				$oa .= showVisibilitySelect($aT['id'], $users, $path."-".$sI, $md5);
 				$oa .= "</tr>"; 
 				$oa .= "<tr><td colspan=2>";
-				$oa .= showNextLayer($path."-".$sI,$md5, $users, $aT[id]);
+				$oa .= showNextLayer($path."-".$sI,$md5, $users, $aT['id']);
 				$oa .= "</td></tr>";
 			}
 		}
@@ -388,14 +388,14 @@ function showPossibleRelations($tableId, $users, $path) {
 					$aT = getTableProperties($targetTable);
 					$sI = getNTo1RelationId($sourceTable,$assignmentField,$targetTable);
 					if (!strpos($path."-", "-".$sI."-")) { //Relation die in dieser Abfolge einmal gewählt wurde nicht wieder zur Auswahl anzeigen
-						$sT = formTableName($aT[id]); 
+						$sT = formTableName($aT['id']); 
 						$md5 = md5($tableId.rand(0,111111111111111111));
 						$oi .= "<tr><td valign=top><b>$sS <= $sT: ".formFieldName($targetTable, $assignmentField)."</b>";
 						$oi .= "</td><td valign=top>";
-						$oi .= showVisibilitySelect($aT[id], $users, $path."-".$sI, $md5);
+						$oi .= showVisibilitySelect($aT['id'], $users, $path."-".$sI, $md5);
 						$oi .= "</tr>"; 
 						$oi .= "<tr><td colspan=2>";
-						$oi .= showNextLayer($path."-".$sI,$md5, $users, $aT[id]);
+						$oi .= showNextLayer($path."-".$sI,$md5, $users, $aT['id']);
 						$oi .= "</td></tr>";
 					}
 				}
@@ -413,9 +413,16 @@ function prepareManualFieldProperties($aManualFieldProperties) {
 	//muss wenn nto1 type hat die Relationen Konfig gleich ins Array lesen, geht ja aus der Feldkonfiguration hervor
 	//pre($aManualFieldProperties);
 	foreach ($aManualFieldProperties as $table => $value) {
+	    
+	    $errorLevel = error_level_tostring(error_reporting(), ',');
+	    
+	    error_reporting(E_ALL & ~E_NOTICE && ~E_WARNING);
+	    ini_set('display_errors', 1);
+	    ini_set('display_startup_errors', 1);
+	    
 		foreach ($value['fields'] as $field => $value2) {
 			
-			if ($value2['type'] == "nto1") {
+			if (@$value2['type'] == "nto1") {
 			
 				$c++;
 				$aManualFieldProperties['bncms_relations'][$value2['relationId']]['type'] = 'nto1';
@@ -425,6 +432,8 @@ function prepareManualFieldProperties($aManualFieldProperties) {
 				$aManualFieldProperties['bncms_relations'][$value2['relationId']]['nto1SourceField'] = $field;
 			}
 		}
+		
+		error_reporting($errorLevel);
 	}
 	return $aManualFieldProperties;
 }
@@ -432,24 +441,25 @@ function getNTo1RelationId($targetTable,$assignmentField,$sourceTable,$aManualFi
 
 	//Ist manuell konfiguriert?
 	//pre($aManualFieldProperties["relations"] );
-	foreach ($aManualFieldProperties["bncms_relations"] as $k => $v) {
-		//echo "$v[nto1TargetTable] == $targetTable and $v[nto1SourceTable] == $sourceTable and $v[nto1SourceField] == $assignmentField $k";
-		if ($v['nto1TargetTable'] == $targetTable and 
-		$v['nto1SourceTable'] == $sourceTable and 
-		$v['nto1SourceField'] == $assignmentField) {
-			return $k;
-		}
-	}
+    if (isset($aManualFieldProperties["bncms_relations"]))
+        foreach ($aManualFieldProperties["bncms_relations"] as $k => $v) {
+            //echo "$v[nto1TargetTable] == $targetTable and $v[nto1SourceTable] == $sourceTable and $v[nto1SourceField] == $assignmentField $k";
+            if ($v['nto1TargetTable'] == $targetTable and
+            $v['nto1SourceTable'] == $sourceTable and
+            $v['nto1SourceField'] == $assignmentField) {
+                return $k;
+            }
+        }
 	
 	if (!is_numeric($targetTable)) {
 		$a = getTableProperties($targetTable);
-		if ($a[id])
-			$targetTable = $a[id];
+		if ($a['id'])
+			$targetTable = $a['id'];
 	}
 	if (!is_numeric($sourceTable)) {
 		$a = getTableProperties($sourceTable);
-		if ($a[id])
-			$sourceTable = $a[id];
+		if ($a['id'])
+			$sourceTable = $a['id'];
 	}
 	if (is_numeric($assignmentField)) {
 		$a = getFieldProperties($targetTable,$assignmentField);
@@ -458,8 +468,8 @@ function getNTo1RelationId($targetTable,$assignmentField,$sourceTable,$aManualFi
 	
 	$q = "SELECT * FROM conf_relations WHERE nto1TargetTable = '$targetTable' AND nto1SourceTable='$sourceTable' AND nto1SourceField = '$assignmentField'";
 	$a = q($q);
-	$a[id];
-	return $a[id];
+	$a['id'];
+	return $a['id'];
 	
 }
 
@@ -584,18 +594,18 @@ function getPrice($id_product, $id_title) {
 	$out = "
 <div id=\"plus".$instance."\" style=\"display:block;\" class=\"$s plus\" $onm>
 	<nobr>
-	<a id=\"a$arrSched[id]\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '".$instance.urlencode($queryString)."');\" title=\"$altText\" >
+	<a id=\"a$arrSched['id']\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '".$instance.urlencode($queryString)."');\" title=\"$altText\" >
 	<img src=\"$iconClose\"></a>&nbsp;
-	<a id = \"a$arrSched[id]\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '".$instance.urlencode($queryString)."', '');\" title=\"$altText\" >
+	<a id = \"a$arrSched['id']\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '".$instance.urlencode($queryString)."', '');\" title=\"$altText\" >
 	$text
 	</a>
 	</nobr>
 </div>
 <div id=\"minus".$instance."\" style=\"display:none; clear:both\" class=\"$s minus\" $onm>
 	<nobr>
-	<a id=\"b$arrSched[id]\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '', '".$instance.$queryString."');\" title=\"$altText\">
+	<a id=\"b$arrSched['id']\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '', '".$instance.$queryString."');\" title=\"$altText\">
 	<img src=\"$iconOpen\"></a>&nbsp;
-	<a id=\"b$arrSched[id]\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '', '".$instance.$queryString."');\" title=\"$altText\" >
+	<a id=\"b$arrSched['id']\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '', '".$instance.$queryString."');\" title=\"$altText\" >
 	$text
 	</a>
 	</nobr>
@@ -610,10 +620,12 @@ function getPrice($id_product, $id_title) {
 }*/
 function displayVisibilityButtons($text, $instance, $altText="", $simple=0, $iconOpen="", $iconClose="") {
 	global $sBeforeAjaxQueryString;
-	if (strpos($_SERVER[REQUEST_URI], "ajax.php")) 
+
+	if (strpos($_SERVER['REQUEST_URI'], "ajax.php")) 
 		$requesturi = urlencode($sBeforeAjaxQueryString);
 	else 
-		$requesturi = urlencode($_SERVER[REQUEST_URI]);	
+		$requesturi = urlencode($_SERVER['REQUEST_URI']);
+
 	if ($simple) {
 		$s = "table_overall_simple";
 		if ($text)
@@ -630,8 +642,8 @@ function displayVisibilityButtons($text, $instance, $altText="", $simple=0, $ico
 	if (!$iconClose)
 		$iconClose = RELATIVEPATH."/image/icons/folder-close-$_SESSION[style_color].gif";
 		
-	$out = "<div id=\"plus".$instance."\" style=\"display:inline;\" class=\"$s plus\" $onm><nobr><a id=\"a$arrSched[id]\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '".$instance.urlencode($queryString)."');\" title=\"$altText\" ><img src=\"$iconClose\"></a>$sp<a id = \"a$arrSched[id]\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '".$instance.urlencode($queryString)."', '');\" title=\"$altText\" >$text</a></nobr></div><div id=\"minus".$instance."\" style=\"display:none; clear:both\" class=\"$s minus\" $onm><nobr><a id=\"b$arrSched[id]\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '', '".$instance.$queryString."');\" title=\"$altText\"><img src=\"$iconOpen\"></a>$sp<a id=\"b$arrSched[id]\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '', '".$instance.$queryString."');\" title=\"$altText\" >$text</a></nobr></div>";
-	
+	$out = "<div id=\"plus".$instance."\" style=\"display:inline;\" class=\"$s plus\" $onm><nobr><a id=\"a" . @$arrSched['id'] . "\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '".$instance.urlencode(@$queryString)."');\" title=\"$altText\" ><img src=\"$iconClose\"></a>$sp<a id = \"a" . @$arrSched['id'] . "\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '".$instance.urlencode(@$queryString)."', '');\" title=\"$altText\" >$text</a></nobr></div><div id=\"minus".$instance."\" style=\"display:none; clear:both\" class=\"$s minus\" $onm><nobr><a id=\"b" . @$arrSched['id'] . "\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '', '".$instance.@$queryString."');\" title=\"$altText\"><img src=\"$iconOpen\"></a>$sp<a id=\"b" . @$arrSched['id'] . "\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '', '".$instance.@$queryString."');\" title=\"$altText\" >$text</a></nobr></div>";
+
 	if ($text != "") {
 		return "$out";
 	} else {
@@ -729,11 +741,47 @@ function overwriteRights($aManualFieldProperties) {
 		}
 	}
 }
+
+function error_level_tostring($intval, $separator = ',')
+{
+    $errorlevels = array(
+        E_ALL => 'E_ALL',
+        E_USER_DEPRECATED => 'E_USER_DEPRECATED',
+        E_DEPRECATED => 'E_DEPRECATED',
+        E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
+        E_STRICT => 'E_STRICT',
+        E_USER_NOTICE => 'E_USER_NOTICE',
+        E_USER_WARNING => 'E_USER_WARNING',
+        E_USER_ERROR => 'E_USER_ERROR',
+        E_COMPILE_WARNING => 'E_COMPILE_WARNING',
+        E_COMPILE_ERROR => 'E_COMPILE_ERROR',
+        E_CORE_WARNING => 'E_CORE_WARNING',
+        E_CORE_ERROR => 'E_CORE_ERROR',
+        E_NOTICE => 'E_NOTICE',
+        E_PARSE => 'E_PARSE',
+        E_WARNING => 'E_WARNING',
+        E_ERROR => 'E_ERROR');
+    $result = '';
+    foreach($errorlevels as $number => $name)
+    {
+        if (($intval & $number) == $number) {
+            $result .= ($result != '' ? $separator : '').$name; }
+    }
+    return $result;
+}
+
 function overwriteRelations($aManualFieldProperties) {
 	//Überschreiben mit manuellen Feldeigenschaften
 	global $aRel;
 	//pre($aManualFieldProperties['bncms_relations']);
-	foreach ($aManualFieldProperties['bncms_relations'] as $k => $v) {
+	
+	$errorLevel = error_level_tostring(error_reporting(), ',');
+	
+	error_reporting(E_ALL & ~E_NOTICE && ~E_WARNING);
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	
+	foreach (@$aManualFieldProperties['bncms_relations'] as $k => $v) {
 		if ($v['type'] == 'nto1')
 			$aRel['NTo1'][$v['nto1SourceTable']][$v['nto1SourceField']] = $v['nto1TargetTable'];
 		if ($v['type'] == 'ntom') {
@@ -775,12 +823,16 @@ function overwriteRelations($aManualFieldProperties) {
 		}
 	}
 	//pre($aRel);
+	
+	error_reporting($errorLevel);
 }
+
+
 function returnTableAndId($tableOrId,$aManualFieldProperties) {
 	$aTableProperties = getTableProperties($tableOrId, $aManualFieldProperties);
 	if (is_numeric($tableOrId)) {
-		$table = $aTableProperties[name];
-		$tableId = $aTableProperties[id];
+		$table = $aTableProperties['name'];
+		$tableId = $aTableProperties['id'];
 	} else {
 		$table = $tableOrId;
 		$tableId = "";
@@ -908,8 +960,8 @@ function getAssignTableNToM($table1, $table2) {
 					return $content[assignTable];
 				$q = "SELECT id FROM conf_tables WHERE name = '$content[assignTable]'";
 				$a = dbQuery($q);
-				//echo $a[0][id];
-				return $a[0][id];
+				//echo $a[0]['id'];
+				return $a[0]['id'];
 				break;
 			}
 		}
@@ -986,7 +1038,7 @@ function getTableId($table) {
 	} else {
 		$q = "SELECT id FROM conf_tables WHERE name = '$table'";
 		$a = dbQuery($q);
-		return $a[0][id];
+		return $a[0]['id'];
 	}
 } 
 function getInputWidthFromLength($length, $is_numeric = 0) {
@@ -1058,7 +1110,6 @@ function resizeRatio($imgfile, $ratio, $index="") {
 	}
 	$thumb = ImageCreateTrueColor($newwidth,$newheight);
 	//$source = imagecreatefromjpeg($imgfile);
-	//error_reporting(E_ALL);
 	$source = call_user_func_array( "imagecreatefrom".$fileFormat, array($imgfile));
 	
 	imagecopyresampled($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $newwidth, $newheight);
@@ -1100,34 +1151,60 @@ function waterMark($fileInHD, $wmFile, $transparency = 50, $jpegQuality = 50, $m
 function displayFields($sTable="", $sComingFrom='') {
 	
 	if ($sTable != "")
+	{
 		$sQueryAdd = " WHERE id = '$sTable' ";
+	}
+	
+	error_reporting(0);
+	ini_set('display_errors', 0);
+	ini_set('display_startup_errors', 0);
+	
 	$query= "SELECT * FROM conf_tables ".$sQueryAdd." ORDER BY orderkey";
+	
+	error_reporting(E_ALL & ~E_NOTICE && ~E_WARNING);
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	
 	$aTables = dbQuery($query,"",1);
 	//print_r($_SESSION);
 	if (is_array($aTables)) {
 		foreach ($aTables as $key => $value) {
 			if (is_numeric($key)) {
-				if ($value[lang])
-					$ol = $value[lang];
+				if ($value['lang'])
+				{
+					$ol = $value['lang'];
+				}
 				else
-					$ol = $value[name];
-				$sOutput .= displayVisibilityButtons($ol,"onoff_".$value[id]."_".$sComingFrom);
-				$sOutput .= "<div class='table_overall' id='onoff_".$value[id]."_".$sComingFrom."' style='display:none;'>";
+				{
+					$ol = $value['name'];
+				}
+				
+				error_reporting(0);
+				ini_set('display_errors', 0);
+				ini_set('display_startup_errors', 0);
+				
+				$sOutput .= displayVisibilityButtons($ol,"onoff_".$value['id']."_".$sComingFrom);
+				
+				error_reporting(E_ALL & ~E_NOTICE && ~E_WARNING);
+				ini_set('display_errors', 1);
+				ini_set('display_startup_errors', 1);
+				
+				$sOutput .= "<div class='table_overall conf_editor' id='onoff_".$value['id']."_".$sComingFrom."' style='display:none;'>";
 		
-				$query ="SELECT * FROM conf_relations WHERE table1 = '$value[id]' or table2 = '$value[id]'";
+				$query ="SELECT * FROM conf_relations WHERE table1 = '" . $value['id'] . "' or table2 = '" . $value['id'] . "'";
 				$aRelations = dbQuery($query);
 				
 				
 				/*n zu m Relationen Konfigurationtabelle anzeigen*/
 				if (is_array($aRelations)) {
-					$sOutput .= "<div style='padding:10px'>".displayVisibilityButtons("n zu m Relationen $value[lang]","onoff_relation".$value[id],"",1);
-					$sOutput .= "</div><div id='onoff_relation$value[id]'  style='display:none;'>";
+					$sOutput .= "<div style='padding:10px'>".displayVisibilityButtons("n zu m Relationen $value[lang]","onoff_relation".$value['id'],"",1);
+					$sOutput .= "</div><div id='onoff_relation" . $value['id'] . "' class='ntom' style='display:none;'>";
 					$sOutput .= "<table>";
 					//echo "<pre>";
 					//print_r($aRelations);
 					/*Kopfzeile*/
 					$sOutput .= "<tr class=\"table_head\">";
-					$sOutput .= "<td class=\"table_sidebar\"><a href=\"edit_fields.php?relation=ntom&id_table=".$value[id]."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER[PHP_SELF]."');\" target=\"_blank\" title=\"n zu m Relation erstellen\"><img src=\"".RELATIVEPATH."/image/icons/add-folder-$_SESSION[style_color].gif\"></a></td><td class=\"table_sidebar\"></td><td class=\"table_sidebar\"></td>";
+					$sOutput .= "<td class=\"table_sidebar\"><a href=\"edit_fields.php?relation=ntom&id_table=".$value['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"n zu m Relation erstellen\"><img src=\"".RELATIVEPATH."/image/icons/add-folder-$_SESSION[style_color].gif\"></a></td><td class=\"table_sidebar\"></td><td class=\"table_sidebar\"></td>";
 					
 					foreach ($aRelations[0] as $key3 => $value3) {
 						if ($key3 != "id") 
@@ -1145,16 +1222,16 @@ function displayFields($sTable="", $sComingFrom='') {
 							$query="SELECT * FROM conf_tables WHERE name = '$value2[name]'";
 							$aAssignTable=dbQuery($query);
 							//echo "<tr><td>asd";
-							//print_r($aAssignTable[0][id]);
+							//print_r($aAssignTable[0]['id']);
 							//echo "</td></tr>";
 							//print_r($value2);
 							
-							$sOutPutAssignTable = displayFields($aAssignTable[0][id], $value[name]."-".$value[id]);
+							$sOutPutAssignTable = displayFields($aAssignTable[0]['id'], $value[name]."-".$value['id']);
 							$sOutput .= "<tr>
-							<td class=\"table_sidebar\"><a href=\"edit_fields.php?relation=ntom&editRelation=true&id_relation=$value2[id]&id_table=".$value[id]."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER[PHP_SELF]."');\" target=\"_blank\" title=\"n zu m Relation bearbeiten\"><img src=\"".RELATIVEPATH."/image/icons/edit-page-$_SESSION[style_color].gif\"></a></td>
+							<td class=\"table_sidebar\"><a href=\"edit_fields.php?relation=ntom&editRelation=true&id_relation=" . $value2['id'] . "&id_table=" . $value['id'] . "\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"n zu m Relation bearbeiten\"><img src=\"".RELATIVEPATH."/image/icons/edit-page-" . $_SESSION['style_color'] . ".gif\"></a></td>
 							
-							<td class=\"table_sidebar\"><a href=\"edit_fields.php?relation=ntom&id_relation=$value2[id]&deleteRelation=true\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER[PHP_SELF]."');\" target=\"_blank\" title=\"Relation entfernen\"><img src=\"".RELATIVEPATH."/image/icons/delete-page-$_SESSION[style_color].gif\"></a></td>
-							<td class=\"table_sidebar\"><a href=\"edit_fields.php?id=new&id_table=".$aAssignTable[0][id]."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER[PHP_SELF]."');\" target=\"_blank\" title=\"Feld erstellen\"><img src=\"".RELATIVEPATH."/image/icons/add-page-$_SESSION[style_color].gif\"></a></td>";
+							<td class=\"table_sidebar\"><a href=\"edit_fields.php?relation=ntom&id_relation=" . $value2['id'] . "&deleteRelation=true\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Relation entfernen\"><img src=\"".RELATIVEPATH."/image/icons/delete-page-" . $_SESSION['style_color'] . ".gif\"></a></td>
+							<td class=\"table_sidebar\"><a href=\"edit_fields.php?id=new&id_table=".$aAssignTable[0]['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Feld erstellen\"><img src=\"".RELATIVEPATH."/image/icons/add-page-" . $_SESSION['style_color'] . ".gif\"></a></td>";
 							foreach ($value2 as $k => $v) {
 								if ($k == "table1" or $k == "table2") {
 									$t = getTableProperties($v);
@@ -1177,17 +1254,17 @@ function displayFields($sTable="", $sComingFrom='') {
 					$sOutput .= "</table></div>";
 				} 
 				$sOutput .= "<table>";
-				//echo "SELECT * FROM conf_fields WHERE table = '$value[id]'";
-				$aFields = dbQuery("SELECT * FROM conf_fields WHERE id_table = '$value[id]' ORDER BY mysql_order ASC","",1);
+				//echo "SELECT * FROM conf_fields WHERE table = '$value['id']'";
+				$aFields = dbQuery("SELECT * FROM conf_fields WHERE id_table = '" . $value['id'] . "' ORDER BY mysql_order ASC","",1);
 				//todo reparieren alle felder l&ouml;schen die keine tabelle mehr haben nach l&ouml;schung der tabelle
 				
-				if ($value[is_assign_table] != "yes") {
+				if ($value['is_assign_table'] != "yes") {
 					$sOutput .= "<tr class=\"table_head\"><td colspan=\"5\" class=\"table_head\">";
-					$sOutput .= "<a href=\"edit_fields.php?id=new&id_table=".$value[id]."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER[PHP_SELF]."');\" target=\"_blank\" title=\"Feld erstellen\"><img src=\"".RELATIVEPATH."/image/icons/add-page-$_SESSION[style_color].gif\"></a>
-					&nbsp;<a href=\"edit_fields.php?removeTable=true&id=".$value[id]."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER[PHP_SELF]."');\" target=\"_self\" title=\"Tabelle l&ouml;schen\"><img src=\"".RELATIVEPATH."/image/icons/delete-page-red.gif\"></a>
-					&nbsp;<a href=\"edit_fields.php?editTable=true&id=".$value[id]."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER[PHP_SELF]."');\" target=\"_self\" title=\"Tabelle &auml;ndern\"><img src=\"".RELATIVEPATH."/image/icons/edit-page-$_SESSION[style_color].gif\"></a>
-					&nbsp;<a href=\"edit_fields.php?duplicateTable=true&id=".$value[id]."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER[PHP_SELF]."');\" target=\"_self\" title=\"Tabelle duplizieren\"><img src=\"".RELATIVEPATH."/image/icons/duplicate-$_SESSION[style_color].gif\"></a>
-					&nbsp;<a href=\"edit_fields.php?relation=ntom&id_table=".$value[id]."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER[PHP_SELF]."');\" target=\"_self\" title=\"n zu m Relation erstellen\"><img src=\"".RELATIVEPATH."/image/icons/add-folder-$_SESSION[style_color].gif\"></a></td></tr>";
+					$sOutput .= "<a href=\"edit_fields.php?id=new&id_table=".$value['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Feld erstellen\"><img src=\"".RELATIVEPATH."/image/icons/add-page-$_SESSION[style_color].gif\"></a>
+					&nbsp;<a href=\"edit_fields.php?removeTable=true&id=".$value['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_self\" title=\"Tabelle l&ouml;schen\"><img src=\"".RELATIVEPATH."/image/icons/delete-page-red.gif\"></a>
+					&nbsp;<a href=\"edit_fields.php?editTable=true&id=".$value['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_self\" title=\"Tabelle &auml;ndern\"><img src=\"".RELATIVEPATH."/image/icons/edit-page-$_SESSION[style_color].gif\"></a>
+					&nbsp;<a href=\"edit_fields.php?duplicateTable=true&id=".$value['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_self\" title=\"Tabelle duplizieren\"><img src=\"".RELATIVEPATH."/image/icons/duplicate-$_SESSION[style_color].gif\"></a>
+					&nbsp;<a href=\"edit_fields.php?relation=ntom&id_table=".$value['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_self\" title=\"n zu m Relation erstellen\"><img src=\"".RELATIVEPATH."/image/icons/add-folder-$_SESSION[style_color].gif\"></a></td></tr>";
 				}
 				$sOutput .= "<tr class=\"table_head\">
 				<td></td>
@@ -1224,8 +1301,8 @@ function displayFields($sTable="", $sComingFrom='') {
 								$field_id = $fieldcontent;
 							}
 						}
-						$sOutput .= "<tr><td valign=top class=\"table_sidebar\"><a href=\"edit_fields.php?id=$field_id&id_table=$value[id]\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER[PHP_SELF]."');\" target=\"_blank\" title=\"Feld &auml;ndern\"><img src=\"".RELATIVEPATH."/image/icons/edit-$_SESSION[style_color].gif\"></a></td>
-						<td valign=\"top\" class=\"table_sidebar\"><a href=\"edit_fields.php?id=$field_id&delete=true&id_table=$value[id]\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER[PHP_SELF]."');\" target=\"_blank\" title=\"Feld l&ouml;schen\"><img src=\"".RELATIVEPATH."/image/icons/delete-page-$_SESSION[style_color].gif\"></a></td>
+						$sOutput .= "<tr><td valign=top class=\"table_sidebar\"><a href=\"edit_fields.php?id=$field_id&id_table=" . $value['id'] . "\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Feld &auml;ndern\"><img src=\"".RELATIVEPATH."/image/icons/edit-$_SESSION[style_color].gif\"></a></td>
+						<td valign=\"top\" class=\"table_sidebar\"><a href=\"edit_fields.php?id=$field_id&delete=true&id_table=" . $value['id'] . "\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Feld l&ouml;schen\"><img src=\"".RELATIVEPATH."/image/icons/delete-page-$_SESSION[style_color].gif\"></a></td>
 						".$sOutputContent."<td valign=top></td></tr>";
 					}
 				}
@@ -1244,12 +1321,12 @@ function editField() {
 		$_POST[id_table] = $_GET[id_table];
 	if (!$_GET[id_table]) 
 		$_GET[id_table] = $_GET[id_table];
-	if ($_GET[id] =="new") {
+	if ($_GET['id'] =="new") {
 	//echo "INSERT INTO conf_fields SET id_table = '$_GET[id_table]'";
 		dbQuery("INSERT INTO conf_fields SET id_table = '$_GET[id_table]'");
-		$_GET[id] = mysqli_insert_id($DB);
+		$_GET['id'] = mysqli_insert_id($DB);
 	}
-	$q = "SELECT * FROM conf_fields WHERE id = '$_GET[id]'";
+	$q = "SELECT * FROM conf_fields WHERE id = '" . $_GET['id'] . "'";
 	$aFields= dbQuery($q);	
 
 	foreach ($aFields[0] as $fieldname => $fieldcontent) {	
@@ -1430,13 +1507,13 @@ function editField() {
 				$sOutputContent .= "<br /><select name=\"save_nto1TargetTable\"  onChange=\"form.submit();\">";
 				
 				foreach ($aTables as $key => $value) {
-					if ($value[id] == $aFields[0]['nto1TargetTable']) {
+					if ($value['id'] == $aFields[0]['nto1TargetTable']) {
 						$selected = "selected";
 						$sActualnto1TargetTable = $aFields[0]['nto1TargetTable'];
 					} else {
 						$selected = "";
 					}
-					$sOutputContent .= "<option value=\"$value[id]\" $selected>-> Table: $value[name]</option>";
+					$sOutputContent .= "<option value=\"" . $value['id'] . "\" $selected>-> Table: " . $value['name'] . "</option>";
 				}
 				$sOutputContent .= "</select>";
 				$query ="SELECT name, id FROM conf_fields WHERE id_table = '$sActualnto1TargetTable'";
@@ -1445,11 +1522,11 @@ function editField() {
 				//$sOutputContent .= "<option value=\"id\">-> Field: id</option>";
 				if (is_array($aTargetFields)) {
 					foreach ($aTargetFields as $key => $value) {
-							if ($value[id] == $aFields[0]['nto1TargetField']) 
+							if ($value['id'] == $aFields[0]['nto1TargetField']) 
 								$selected = "selected";
 							else 
 								$selected = "";
-							$sOutputContent .= "<option value=\"$value[id]\" $selected>-> Field: $value[name]</option>";
+							$sOutputContent .= "<option value=\"" . $value['id'] . "\" $selected>-> Field: " . $value[name] . "</option>";
 					}
 				}
 				$sOutputContent .= "</select>";
@@ -1525,7 +1602,7 @@ function editField() {
 	}
 	//print_r($_GET);
 	//if ($field_id == 0)
-	$field_id = $_GET[id];
+	$field_id = $_GET['id'];
 	echo $sOutput .= "
 	<script>
 	function su() {
@@ -1548,7 +1625,7 @@ function editField() {
 function saveField() {
 	global $DB;
 	$_GET[id_table] = $_POST[id_table];
-	$_GET[id] = $_POST[field_id];
+	$_GET['id'] = $_POST[field_id];
 	$a = mysqlFieldPropsForType($_POST[save_type]);
 	$mysqlType = strtolower($a[0]);
 	if ($a[1])
@@ -1562,7 +1639,7 @@ function saveField() {
 		$a = q($q);
 		$aF = getFieldProperties($_POST[save_nto1TargetTable], $_POST[save_nto1TargetField]);
 		if (count($a)) {
-			$q = "UPDATE conf_relations SET type = 'nto1', 
+		    $q = "UPDATE conf_relations SET type = 'nto1', 
 			nto1TargetTable = '$_POST[save_nto1TargetTable]', 
 			nto1TargetField = '$aF[name]', 
 			nto1SourceTable = '$_POST[id_table]', 
@@ -1604,24 +1681,24 @@ function deleteField() {
 			if (Check == false) {
 				window.close();
 			 } else {
-				window.location.href='edit_fields.php?confirmed=true&id=$_GET[id]';
+				window.location.href=\"edit_fields.php?confirmed=true&id=\"" . $_GET['id'] . ";
 			 }
 			</script>";
 	} else {
-		$query="DELETE FROM conf_fields WHERE id = '$_GET[id]'";
+		$query="DELETE FROM conf_fields WHERE id = '" . $_GET['id']. "'";
 		dbQuery($query);
 		echo "<script type=\"text/javascript\">window.opener.location.reload()</script>";
 		echo "<script type=\"text/javascript\">window.close()</script>";
 	}
 }
 function backupMenu() {
-	echo "<a href=\"backup.php?action=save\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER[PHP_SELF]."');\" target=\"_blank\" title=\"Backup der Datenbank erstellen\"><img src=\"".RELATIVEPATH."/image/icons/download-page-".$_SESSION['style_color'].".gif\"></a><br /><br />";
+	echo "<a href=\"backup.php?action=save\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Backup der Datenbank erstellen\"><img src=\"".RELATIVEPATH."/image/icons/download-page-".$_SESSION['style_color'].".gif\"></a><br /><br />";
 	echo "<div><b>Datenbank Backup laden</b> alle Daten nach dem Datum der Sicherung gehen verloren.</div><br />";
 }
 function saveBackup($sButton="on") {
 	global $aDatabase;
-	$backupFile = "backup/".$dbname . date("d.m.Y-H-i-s")  . '.sql';
-	echo $command = "mysqldump --opt -h$aDatabase[host] -u$aDatabase[user] -p$aDatabase[password] $aDatabase[dbname] > $backupFile";
+	$backupFile = "backup/".@$dbname . date("d.m.Y-H-i-s")  . '.sql';
+	$command = "mysqldump --opt -h$aDatabase[host] -u$aDatabase[user] -p$aDatabase[password] $aDatabase[dbname] > $backupFile";
 	system($command, $fp);
 	if ($fp==0) echo "<div style=\"border:1px solid green; width:350px; padding:5px; color:green; font-weight:bold\">Datenbank gesichert unter $backupFile.</div>"; else echo "<div style=\"border:1px solid red; width:350px; padding:5px; color:red; font-weight:bold\">ACHTUNG: Datenbank konnte nicht gesichert werden unter $backupFile. Fehler: $fp</div>";
 	if ($sButton == "on") {
@@ -1632,10 +1709,10 @@ function saveBackup($sButton="on") {
 function loadBackup() {
 	global $aDatabase;
 	
-	if ($_GET['loadfile'] != "") {
+	if (@$_GET['loadfile'] != "") {
 		if ($_GET['confirmed'] != true) {
 			echo "<script type='text/javascript'>
-				Check = confirm('Wollen Sie wirklich die Sicherung ".$_GET[filename]." laden? Alle neueren '+unescape(\"%C4\")+'nderungen gehen verloren.');
+				Check = confirm('Wollen Sie wirklich die Sicherung ".$_GET[filename]." laden? Ein Backup des alten Stands wird erstellt.');
 				if (Check == false) {
 					window.close();
 				 } else {
@@ -1648,6 +1725,7 @@ function loadBackup() {
 				if ($entry != "." and $entry != ".." ) {
 					$countFiles++;
 					if ($countFiles == $_GET[loadfile]) {
+                        saveBackup();
 						$command = "mysql  -E -h$aDatabase[host] -u$aDatabase[user] -p$aDatabase[password] $aDatabase[dbname] < backup/".$entry;
 						system($command, $fp);
 						if ($fp==0) echo "<div style=\"border:1px solid green; width:350px; padding:5px; color:green; font-weight:bold\">Daten importiert von $entry.</div><br /><br />"; else echo "<div style=\"border:1px solid red; width:350px; padding:5px; color:red; font-weight:bold\">Es ist ein Fehler aufgetreten Fehler: $fp</div><br /><br />";
@@ -1662,11 +1740,12 @@ function loadBackup() {
 		
 	} 
 	$countFiles = 0;
-	$d = dir("backup");
+	$d = dir("backup"); //ToDo
+	
 	while (false !== ($entry = $d->read())) {
 		if ($entry != "." and $entry != ".." ) {
 			$countFiles++;
-			echo "<a href=\"backup.php?loadfile=$countFiles&action=load&filename=$entry\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER[PHP_SELF]."');\">".$entry." ".(round(filesize("backup/".$entry)/1024))." kB</a><br />";
+			echo "<a href=\"backup.php?loadfile=$countFiles&action=load&filename=$entry\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\">".$entry." ".(round(filesize("backup/".$entry)/1024))." kB</a><br />";
 			;
 		}
 	}
@@ -1705,11 +1784,11 @@ function editRelation() {
 		$sOutputContent .= "<option value=\"\">Tabelle w&auml;hlen</option>";
 		
 		foreach ($aTables as $key => $value) {
-			if ($_GET[ntomTargetTable] == $value[id] or $targetTable[name] == $value[name])
+			if ($_GET['ntomTargetTable'] == $value['id'] or $targetTable['name'] == $value['name'])
 				$s = "selected";
 			else 
 				$s = "";
-			$sOutputContent .= "<option value=\"$value[id]\" $s>Tabelle: $value[name]</option>";
+			$sOutputContent .= "<option value=\"" . $value['id'] . "\" $s>Tabelle: " . $value['name'] . "</option>";
 		}
 		$sOutputContent .= "</select>";
 		
@@ -1728,7 +1807,7 @@ function editRelation() {
 		$sOutputContent .= "</select><br>";
 		if ($_GET[aAssignColumns] or $_GET[id_relation]) {
 			if ($_GET[id_relation]) {
-				$aAssignColumns = getFieldProperties($aRel[0][id]);
+				$aAssignColumns = getFieldProperties($aRel[0]['id']);
 			}
 			$sOutputContent .= "<br> Feld der Zuweisungstabelle $_GET[assign_table], das die Urspungstabelle <b>$sourceTable[name]</b> anlinkt. <br><select name='assign_nto1field_source' $d>";
 			$sOutputContent .= "<option value=\"\">Feld w&auml;hlen</option>";
@@ -1775,7 +1854,7 @@ function editRelation() {
 				$s = "selected";
 			else
 				$s = "";
-			$sOutputContent .= "<option $s name=$a[id]>$a[username]</option>";
+			$sOutputContent .= "<option $s name=" . $a['id'] . ">" . $a['username'] . "</option>";
 		}
 		$sOutputContent .= "</select>"; 
 		
@@ -1789,7 +1868,7 @@ function editRelation() {
 				$s = "selected";
 			else
 				$s = "";
-			$sOutputContent .= "<option $s name=$a[id]>$a[username]</option>";
+			$sOutputContent .= "<option $s name=" . $a['id'] . ">" . $a[username] . "</option>";
 		}
 		$sOutputContent .= "</select>"; 
 		
@@ -1803,7 +1882,7 @@ function editRelation() {
 				$s = "selected";
 			else
 				$s = "";
-			$sOutputContent .= "<option $s name=$a[id]>$a[username]</option>";
+			$sOutputContent .= "<option $s name=" . $a['id'] . ">" . $a[username] . "</option>";
 		}
 		$sOutputContent .= "</select>"; 
 		
@@ -1817,7 +1896,7 @@ function editRelation() {
 				$s = "selected";
 			else
 				$s = "";
-			$sOutputContent .= "<option $s name=$a[id]>$a[username]</option>";
+			$sOutputContent .= "<option $s name=" . $a['id'] . ">" . $a[username] . "</option>";
 		}
 		$sOutputContent .= "</select>"; 
 		
@@ -1841,7 +1920,7 @@ function editRelation() {
 		  Ansichtsart der Relation (ntomDisplayType), Ajax-Suche muss in der Relationskonfiguration von Quell- und Zieltabelle getrennt konfiguriert werden<br>";
 		 if ($aRel[0][ntomDisplayType] == "ajax") {
 		 	$sOutputContent .= "<select name='ntomAjaxDisplayTitleField'>";
-			$q = "SELECT * FROM conf_fields WHERE id_table = '$targetTable[id]'";
+			$q = "SELECT * FROM conf_fields WHERE id_table = '" . $targetTable['id'] . "'";
 			$a = dbQuery($q);
 			foreach ($a as $k => $v) {
 				if ($aRel[0][ntomAjaxDisplayTitleField] == $v[name])
@@ -1902,7 +1981,7 @@ function saveRelation() {
 				//Assignment Tabelle in Test-Struktur schreiben
 				$query="INSERT INTO conf_tables SET name = 'assign_".$aTable1[0][name]."_".$aTable2[0][name]."', is_assign_table = 'yes', id_relation = '".$id_relation."', conf_tables.insert = 'yes', columnNameOfId = 'id', editable = 'on'";
 				mysqli_query($DB, $query);
-				echo mysql_error();
+				echo mysqli_error($DB);
 				$idOfTable = mysqli_insert_id($DB);
 			
 				//todo aufr&auml;umen der felder deren relation nicht mehr existiert
@@ -1958,7 +2037,7 @@ function saveRelation() {
 					columnNameOfId = 'id', 
 					editable = 'on'";
 					mysqli_query($DB, $query);
-					echo mysql_error();
+					echo mysqli_error($DB);
 					$idOfTable = mysql_insert_id();
 					
 					//Assignment Felder in Test-Struktur eintragen
@@ -2018,9 +2097,9 @@ function deleteRelation() {
 		$aToDelete2 = dbQuery("SELECT * FROM conf_tables WHERE name = 'assign_".$aToDelete[0][name]."_".$aToDelete[1][name]."'");
 
 		foreach ($aToDelete2 as $key => $value) {	
-			$query="DELETE FROM conf_fields WHERE id_table = '".$value[id]."'";
+			$query="DELETE FROM conf_fields WHERE id_table = '".$value['id']."'";
 			dbQuery($query);
-			$query="DELETE FROM conf_tables WHERE id = '".$value[id]."'";
+			$query="DELETE FROM conf_tables WHERE id = '".$value['id']."'";
 			dbQuery($query);
 		}
 		$query="DELETE FROM conf_relations WHERE id = '$_GET[id_relation]'";
@@ -2085,7 +2164,7 @@ CREATE TABLE `".$aDatabase['dbname']."`.`$value[name]` (
 			//pre($aFields);
 			foreach ($aFields as $iFieldCount => $aFieldProperties) {
 				
-				if ($aFieldProperties[id_table] == $aTableProperties[id]) {
+				if ($aFieldProperties[id_table] == $aTableProperties['id']) {
 					//echo $aFieldProperties[name]."<br>";
 					$iDontMustWriteField = 0;
 					
@@ -2149,16 +2228,16 @@ CREATE TABLE `".$aDatabase['dbname']."`.`$value[name]` (
 			}
 			//Reihenfolge der Felder
 			//echo "<pre>";
-			$query="SELECT * FROM conf_fields WHERE id_table='$aTableProperties[id]'";
+			$query="SELECT * FROM conf_fields WHERE id_table='" . $aTableProperties['id'] . "'";
 			$aFieldsOfTable=dbQuery($query,"",1);
 			foreach ($aFieldsOfTable as $iFieldCount => $aFieldProperties) {
 				//print_r($aFieldProperties);
 				/*hole Feld mit letzttieferem Wert in mysql_order*/
 				$query="SELECT * FROM conf_fields WHERE 
-				id_table = '$aTableProperties[id]' 
+				id_table = '" . $aTableProperties['id'] . "' 
 				and mysql_order < '$aFieldProperties[mysql_order]'
 				ORDER by mysql_order DESC
-				LIMIT 1
+				LIMIT 1;
 				";
 				$aLowerField=dbQuery($query);
 				
@@ -2170,7 +2249,7 @@ CREATE TABLE `".$aDatabase['dbname']."`.`$value[name]` (
 				} else {
 					/*Hole alle Felder mit dem letztieferen Wert*/
 					$query="SELECT * FROM conf_fields WHERE 
-					id_table = '$aTableProperties[id]' 
+					id_table = '" . $aTableProperties['id'] . "' 
 					and mysql_order = '".$aLowerField[0][mysql_order]."'
 					";
 					$aLowerFields=dbQuery($query);
@@ -2203,7 +2282,7 @@ CREATE TABLE `".$aDatabase['dbname']."`.`$value[name]` (
 							//if ($aFieldProperties[name]	== "client_name")
 							//das nächste Feld zwischen welches und LastField eingefügt werden soll. Wenn selben mysql_order hat muss nicht position ändern, ansonsten würde es felder mit selben mysql_order immer neu ordnen
 							$nextField = $v[Field];
-							$nextFieldProp = getFieldProperties($aTableProperties[id], $nextField);
+							$nextFieldProp = getFieldProperties($aTableProperties['id'], $nextField);
 							if ($nextFieldProp[mysql_order] == $aFieldProperties[mysql_order]) {
 								$position_correct = 1;
 							}
@@ -2272,7 +2351,7 @@ CREATE TABLE `".$aDatabase['dbname']."`.`$value[name]` (
 		$iTestNotProvenAssign = 0;
 		if (is_array($aRelations))
 		foreach ($aRelations as $iCountRelation => $aRelationContent) {
-				if ($aRelationContent[type] == "ntom" and ( $aTableProperties[id] == $aRelationContent[table1] or $aTableProperties[id] == $aRelationContent[table2])) {
+				if ($aRelationContent[type] == "ntom" and ( $aTableProperties['id'] == $aRelationContent[table1] or $aTableProperties['id'] == $aRelationContent[table2])) {
 					$query="SELECT name FROM conf_tables WHERE id = '$aRelationContent[table1]'";
 					$aTableName1 = dbQuery($query);
 					$sTableName1 = $aTableName1[0][name];
@@ -2283,9 +2362,9 @@ CREATE TABLE `".$aDatabase['dbname']."`.`$value[name]` (
 					if (@in_array($sAssignTableName, $aMysqlListTables)) {
 					} else {
 						//print_r($aAlreadyDoneIds);
-						//echo "($aAlreadyDoneIds, $aRelationContent[id])";
-						if ($aRelationContent[id] != "") {
-							if (@in_array($aRelationContent[id], $aAlreadyDoneIds)) { 
+						//echo "($aAlreadyDoneIds, $aRelationContent['id'])";
+						if ($aRelationContent['id'] != "") {
+							if (@in_array($aRelationContent['id'], $aAlreadyDoneIds)) { 
 							} else {
 								
 								//Muss erstellen
@@ -2298,7 +2377,7 @@ CREATE TABLE `".$aDatabase['dbname']."`.`$value[name]` (
 								$iTestNotProvenAssign=1;
 								$aQueryStack[] = $query.";";
 								$iQueryAction++;
-								$aAlreadyDoneIds[] = $aRelationContent[id];
+								$aAlreadyDoneIds[] = $aRelationContent['id'];
 							}
 						}
 					}
@@ -2313,7 +2392,7 @@ CREATE TABLE `".$aDatabase['dbname']."`.`$value[name]` (
 			$aTableColumnNames = dbQuery("SHOW COLUMNS FROM $aTableProperties[name]","",1);
 			foreach ($aTableColumnNames as $iMysqlFieldCount => $aMysqlFieldProperties) {
 				if ($aMysqlFieldProperties[Field] != "id") {
-				 	$query = "SELECT * FROM conf_fields WHERE name = '$aMysqlFieldProperties[Field]' AND id_table = '".$aTableProperties[id]."'";
+				 	$query = "SELECT * FROM conf_fields WHERE name = '$aMysqlFieldProperties[Field]' AND id_table = '".$aTableProperties['id']."'";
 					$aFieldExists = dbQuery($query);
 					//pre($aFieldExists);
 					$q = "SELECT * FROM conf_tables WHERE name = '$aTableProperties[name]'";
@@ -2322,7 +2401,7 @@ CREATE TABLE `".$aDatabase['dbname']."`.`$value[name]` (
 					//pre($aTablesWithSameName);
 					if (is_array($aTablesWithSameName))
 					foreach ($aTablesWithSameName as $k => $v) {
-						 $query = "SELECT * FROM conf_fields WHERE name = '$aMysqlFieldProperties[Field]' AND id_table = '".$v[id]."'";
+						 $query = "SELECT * FROM conf_fields WHERE name = '$aMysqlFieldProperties[Field]' AND id_table = '".$v['id']."'";
 						 $aFieldExistsOtherTables = dbQuery($query);
 						 if (count($aFieldExistsOtherTables[0])) {
 						 	//Feld existiert in anderer konfigurierten Tabelle mit selben Tabellenname
@@ -2374,7 +2453,7 @@ CREATE TABLE `".$aDatabase['dbname']."`.`$value[name]` (
 		foreach ($aQueryStack as $key => $value) {
 			$sQueryStack .= $value."<br />";	
 		}
-		echo "<br><a href=\"edit_fields.php?sendQuerystack=true\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER[PHP_SELF]."');\" target=\"_blank\">Backup und Querystack abschicken</a><br /><br /><pre>".$sQueryStack."</pre>";
+		echo "<br><a href=\"edit_fields.php?sendQuerystack=true\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\">Backup und Querystack abschicken</a><br /><br /><pre>".$sQueryStack."</pre>";
 	} else {
 		echo "<br /><br />Querystack ist leer.<br />";
 	}
@@ -2496,8 +2575,8 @@ function sendDatabaseStructureStack() {
 		foreach ($_SESSION['aQueryStack'] as $key => $value) {
 			dbQuery($value);
 			echo "<br /><b>Der Query wird geschickt.</b><br /> ".$value;
-			if (mysql_error()) 
-				echo "<div style=\"color:red\"><b>".mysql_error()."</b></div>";
+			if (mysqli_error($DB)) 
+			    echo "<div style=\"color:red\"><b>".mysqli_error($DB)."</b></div>";
 			else 
 				echo "<div style=\"color:green\"><b>Keine Fehlermeldung</b></div>";
 		}
@@ -2564,7 +2643,7 @@ function getDatabaseStructure() {
 			$aMysqlFields = dbQuery($query,"",1);
 			foreach ($aFields as $iFieldCount => $aFieldProperties) {
 				//print_r($aFieldProperties);
-				if ($aFieldProperties[id_table] == $aTableProperties[id]) {
+				if ($aFieldProperties[id_table] == $aTableProperties['id']) {
 					$iFieldFound = 0;
 					//echo "<br>tabelle: ".$aTableProperties[name];
 					if (is_array($aMysqlFields)) {
@@ -2581,7 +2660,7 @@ function getDatabaseStructure() {
 								preg_match('/\((.+)\)/',$aMysqlFieldProperties[Type],$t); 
 								//print_r($t);
 								if ($aFieldProperties[length_values] !=  $t[1]) {
-									$sQueryStack[]="UPDATE conf_fields SET length_values = '".mysqli_real_escape_string($DB,$t[1])."' WHERE id = '$aFieldProperties[id]';\n";  
+									$sQueryStack[]="UPDATE conf_fields SET length_values = '".mysqli_real_escape_string($DB,$t[1])."' WHERE id = '" . $aFieldProperties['id'] . "';\n";  
 								//echo "<br />Feld '$aFieldProperties[name]' gefunden in '$aTableProperties[name]' ";	
 								echo "<br />Feld '$aFieldProperties[name]' in '$aTableProperties[name]' length_values ist falsch";
 									$iActionCount++;
@@ -2592,7 +2671,7 @@ function getDatabaseStructure() {
 										$nt = strtoupper(substr($aMysqlFieldProperties[Type],0,strpos($aMysqlFieldProperties[Type],"(")));
 									else
 										$nt = strtoupper($aMysqlFieldProperties[Type]);
-									$sQueryStack[]="UPDATE conf_fields SET mysql_type_bez = '".$nt."' WHERE id = '$aFieldProperties[id]';\n";  
+									$sQueryStack[]="UPDATE conf_fields SET mysql_type_bez = '".$nt."' WHERE id = '" . $aFieldProperties['id'] . "';\n";  
 								//echo "<br />Feld '$aFieldProperties[name]' gefunden in '$aTableProperties[name]' ";	
 									echo "<br />Feld '$aFieldProperties[name]' in '$aTableProperties[name]' mysql_type_bez ist falsch";
 									$iActionCount++;
@@ -2614,7 +2693,7 @@ function getDatabaseStructure() {
 									echo " Type ist falsch $aMysqlFieldProperties[Type] != $aFieldProperties[mysqlType]";
 
 									//type updaten in Test Datenbank
-									$sQueryStack[]="UPDATE conf_fields SET mysqlType = '".mysqli_real_escape_string($DB,$aMysqlFieldProperties[Type])."' WHERE id = '$aFieldProperties[id]';\n";
+									$sQueryStack[]="UPDATE conf_fields SET mysqlType = '".mysqli_real_escape_string($DB,$aMysqlFieldProperties[Type])."' WHERE id = '" . $aFieldProperties['id'] . "';\n";
 									$iActionCount++;
 									$iNotProvenFieldProperties=1;
 								} else {
@@ -2640,7 +2719,7 @@ function getDatabaseStructure() {
 				foreach ($aMysqlFields as $iMysqlFieldsCount => $aMysqlFieldsProperties) {
 					$iFoundField=0;
 					foreach ($aFields as $iFieldCount => $aFieldProperties) {
-						if ($aFieldProperties[id_table] == $aTableProperties[id]) {
+						if ($aFieldProperties[id_table] == $aTableProperties['id']) {
 							if ($aFieldProperties['name'] == $aMysqlFieldsProperties['Field']) {
 								$iFoundField=1;
 							}
@@ -2653,7 +2732,7 @@ function getDatabaseStructure() {
 							//print_r($aMysqlFieldsProperties);
 							$sNewType = getTypeFromMysqlProps($aMysqlFieldsProperties[Type], $aMysqlFieldsProperties[Field]);
 							echo "<div style=\"color:red\">Feld '$aMysqlFieldsProperties[Field]' nicht gefunden in '$aTableProperties[name]'</div>";
-							$sQueryStack[]="INSERT INTO conf_fields SET id_table = '$aTableProperties[id]', name='$aMysqlFieldsProperties[Field]', mysqlType='".mysqli_real_escape_string($DB,$aMysqlFieldsProperties[Type])."' ;\n";
+							$sQueryStack[]="INSERT INTO conf_fields SET id_table = '" . $aTableProperties['id'] . "', name='" . $aMysqlFieldsProperties[Field] . "', mysqlType='".mysqli_real_escape_string($DB,$aMysqlFieldsProperties[Type])."' ;\n";
 							$iActionCount++;
 							$iNotProvenFieldProperties=1;
 						//}
@@ -2673,7 +2752,7 @@ function getDatabaseStructure() {
 					$aId1 = dbQuery($query,"",1);
 					$query="SELECT id FROM conf_tables WHERE name = '$aAssignTableName[2]'";
 					$aId2 = dbQuery($query,"",1);
-					$query="SELECT * FROM conf_relations WHERE type = 'ntom' and (table1 = '".$aId1[0][id]."' or table2 = '".$aId1[0][id]."') and (table1 = '".$aId2[0][id]."' or table2 = '".$aId2[0][id]."')";
+					$query="SELECT * FROM conf_relations WHERE type = 'ntom' and (table1 = '".$aId1[0]['id']."' or table2 = '".$aId1[0]['id']."') and (table1 = '".$aId2[0]['id']."' or table2 = '".$aId2[0]['id']."')";
 					$aConfRelations=dbQuery($query,"",1);
 					//print_r($aConfRelations);
 					//echo count($aConfRelations);
@@ -2681,7 +2760,7 @@ function getDatabaseStructure() {
 					if (!is_array($aConfRelations)) {
 						//muzss erstellen
 						$iNotProvenNtom=1;
-						$sQueryStack[]="INSERT INTO conf_relations SET type = 'ntom', table1='".$aId1[0][id]."', table2='".$aId2[0][id]."';\n";
+						$sQueryStack[]="INSERT INTO conf_relations SET type = 'ntom', table1='".$aId1[0]['id']."', table2='".$aId2[0]['id']."';\n";
 					}
 				}
 			}
@@ -2694,7 +2773,7 @@ function getDatabaseStructure() {
 			$query="SHOW COLUMNS FROM ".$aTableProperties[name];
 			$aMysqlFields = dbQuery($query,"",1);
 			foreach ($aFields as $iFieldCount => $aFieldProperties) {
-				if ($aFieldProperties[id_table] == $aTableProperties[id]) {
+				if ($aFieldProperties[id_table] == $aTableProperties['id']) {
 					if (is_array($aMysqlFields)) {
 						$iFieldFound=0;
 						foreach ($aMysqlFields as $key => $value) {
@@ -2704,7 +2783,7 @@ function getDatabaseStructure() {
 						}
 						if ($iFieldFound==0) {
 							$iNotProvenDelete=1;
-							$sQueryStack[]="DELETE FROM conf_fields WHERE id = '$aFieldProperties[id]'; \n";
+							$sQueryStack[]="DELETE FROM conf_fields WHERE id = '" . $aFieldProperties['id'] . "'; \n";
 						}
 					}
 				}
@@ -2729,12 +2808,13 @@ function getDatabaseStructure() {
 		foreach ($sQueryStack as $key => $value) {
 			echo $value;
 			dbQuery($value,"",1);
-			echo mysql_error();
+			echo mysqli_error($DB);
 		}
 		echo "</pre>";
 	}
 }
 function generateUserDropdown($sNameSelect, $sSelectedUsers, $sAddToSelect="", $aDisplayedUsers="") {
+
     $re = "<input type='hidden' name='".$sNameSelect."' value=''><select multiple name=\"".$sNameSelect."[]\" $sAddToSelect >";
     //echo $sSelectedUsers;
 	if (!is_array($sSelectedUsers))
@@ -2745,7 +2825,7 @@ function generateUserDropdown($sNameSelect, $sSelectedUsers, $sAddToSelect="", $
     $q = "SELECT * FROM bncms_user_groups";
     $aAllUserGroups = q($q,"",1);
     foreach ($aAllUserGroups as $k => $vUserGroup){
-        $q = "SELECT * FROM bncms_user WHERE gruppe = '$vUserGroup[id]'";
+        $q = "SELECT * FROM bncms_user WHERE gruppe = '" . $vUserGroup['id'] . "'";
         $aAllUsers = q($q, "", 1);
     	//Nur Gruppe anzeigen wenn in DisplayedUsers Array oder wenn DisplayUsers leer
         //checken ob Benutzername von Gruppe aktiv ist und dann Gruppe auch anzeigen
@@ -2767,7 +2847,6 @@ function generateUserDropdown($sNameSelect, $sSelectedUsers, $sAddToSelect="", $
                 $s = "";
             $re .= "<option $s >$vUserGroup[name]</option>";
 
-
             foreach ($aAllUsers as $k => $vUser) {
                 if (in_array($vUser[username], $aSelectedUsers))
                     $s = "selected";
@@ -2786,10 +2865,10 @@ function generateUserDropdown($sNameSelect, $sSelectedUsers, $sAddToSelect="", $
     return $re .= "</select>";
 }
 function editTable() {
-	$query="SELECT * FROM conf_tables WHERE id = '$_GET[id]'";
+	$query="SELECT * FROM conf_tables WHERE id = '" . $_GET['id'] . "'";
 	$aTableConf=dbQuery($query);
 	echo "<h2>Tabellen Eigenschaften ".$aTableConf[0][name]."</h2>";
-	echo "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">";
+	echo "<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">";
 	echo "<div>mySQL Tabellenname: <input type=\"text\" name=\"table_name\" value=\"".$aTableConf[0][name]."\">";
 	echo "<br />Angezeigter Name: <input type=\"text\" name=\"table_lang\" value=\"".$aTableConf[0][lang]."\">"; 
 	echo "<br />Spaltenname der Prim&auml;ren ID: <input type=\"text\" name=\"table_columnNameOfId\" value=\"".$aTableConf[0][columnNameOfId]."\">";
@@ -2802,9 +2881,9 @@ function editTable() {
 	echo "<br />Standartsortierung: ";
 
 	echo "<input type='hidden' name='table_sort_order' value=''><select  name=\"table_sort_order\"><option></option>";
-	$q = "SELECT * FROM conf_fields WHERE id_table = '$_GET[id]'";
+	$q = "SELECT * FROM conf_fields WHERE id_table = '" . $_GET['id']. "'";
 	$a = q($q);
-	$aF = $aTableConf[0][sort_order];
+	$aF = $aTableConf[0]['sort_order'];
 	foreach ($a as $k => $v)	{
 		if ($v[name] == $aF)
 			$s = "selected";
@@ -2817,9 +2896,9 @@ function editTable() {
 	echo "<br />Standartsortierung Aufsteigend / Absteigend: ";
 
 	echo "<input type='hidden' name='table_sort_order_ascdesc' value=''><select  name=\"table_sort_order_ascdesc\"><option></option>";
-	if ($aTableConf[0][sort_order_ascdesc] == "asc")
+	if ($aTableConf[0]['sort_order_ascdesc'] == "asc")
 		$sa = "selected";
-	if ($aTableConf[0][sort_order_ascdesc] == "desc")
+	if ($aTableConf[0]['sort_order_ascdesc'] == "desc")
 		$sd = "selected";	
 	echo "<option value=asc $sa>Aufsteigend</option>";
 	echo "<option value=desc $sd>Absteigend</option>";
@@ -2858,8 +2937,8 @@ function editTable() {
 		$c = "";
 	echo "<input type='checkbox' name='table_actualize' $c>"; 
 	
-	if ($_GET[id] != "") 
-		echo "<input type=\"hidden\" name=\"id\" value=\"$_GET[id]\" >";
+	if ($_GET['id'] != "") 
+		echo "<input type=\"hidden\" name=\"id\" value=\"" . $_GET['id'] . "\" >";
 	echo "<br /><br /><br><input type=\"Submit\" class='submit' value=\"Speichern\"></div>";
 	echo "</form>";
 }
@@ -2898,7 +2977,7 @@ function saveTable() {
 	if ($_POST['id'] == "") {
 		$query = "INSERT INTO conf_tables SET $queryAdd";
 	} else { 
-		$query = "UPDATE conf_tables SET $queryAdd WHERE id = '$_POST[id]'";
+		$query = "UPDATE conf_tables SET $queryAdd WHERE id = '" . $_POST['id'] . "'";
 	}
 
 	dbQuery($query);
@@ -2912,11 +2991,11 @@ function removeTable() {
 			if (Check == false) {
 				window.close();
 			 } else {
-				window.location.href='edit_fields.php?removeTable=true&confirmed=true&id=$_GET[id]';
+				window.location.href='edit_fields.php?removeTable=true&confirmed=true&id=" . $_GET['id']. "';
 			 }
 			</script>";
 	} else {
-		$query="DELETE FROM conf_tables WHERE id = '$_GET[id]'";
+		$query="DELETE FROM conf_tables WHERE id = '" . $_GET['id'] . "'";
 		dbQuery($query);
 		echo "<script type=\"text/javascript\">window.opener.location.reload()</script>";
 		echo "<script type=\"text/javascript\">window.close()</script>";
@@ -2924,9 +3003,9 @@ function removeTable() {
 }
 function duplicateTable() {
 	global $DB;
-	$query="SELECT * FROM conf_fields WHERE id_table = '$_GET[id]'";
+	$query="SELECT * FROM conf_fields WHERE id_table = '" . $_GET['id'] . "'";
 	$aFieldsDest=dbQuery($query);
-	$query="SELECT * FROM conf_tables WHERE id = '$_GET[id]'";
+	$query="SELECT * FROM conf_tables WHERE id = '" . $_GET['id']. "'";
 	$aTableDest=dbQuery($query);
 	$sNewTableName = $aTableDest[0][lang ]." Kopie";
 	while (count($aTablesCount[0]) > 0) {
@@ -2964,11 +3043,11 @@ function duplicateTable() {
 //todo tabellennamen d&uuml;rfen keine underscores und so enthalten
 function getAssignmentTableName($table1, $table2) {
 	global $aRel;
-	foreach ($aRel[NToM] as $k => $v) {
+	foreach ($aRel['NToM'] as $k => $v) {
 		if ($k == $table1) {
 			foreach ($v as $k2 => $v2) {
-				if ($v2[destTable] == $table2) {
-					return $v2[assignTable];
+				if ($v2['destTable'] == $table2) {
+					return $v2['assignTable'];
 				}
 			}
 		}
@@ -2976,11 +3055,11 @@ function getAssignmentTableName($table1, $table2) {
 }
 function getAssignmentFieldNames($table1, $table2) {
 	global $aRel;
-	foreach ($aRel[NToM] as $k => $v)
+	foreach ($aRel['NToM'] as $k => $v)
 		if ($k == $table1)
 			foreach ($v as $k2 => $v2)
-				if ($v2[destTable] == $table2)
-					return array("sourceFieldname" => $v2[sourceFieldname], "destFieldname" => $v2[destFieldname]);
+				if ($v2['destTable'] == $table2)
+					return array("sourceFieldname" => $v2['sourceFieldname'], "destFieldname" => $v2['destFieldname']);
 }
 function generateStructureGif() {
 	global $aTable, $aRel;

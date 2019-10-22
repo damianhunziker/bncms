@@ -12,7 +12,8 @@ foreach ($aTable as $key => $value) {
 		}
 	}
 }
-//Überschreiben mit manuellen Tabelleneingeschaften
+
+//Ãœberschreiben mit manuellen Tabelleneingeschaften
 if (is_array($aManualFieldProperties))
 foreach ($aManualFieldProperties as $k => $v) {
 	foreach ($v as $k2 => $v2) {
@@ -23,4 +24,5 @@ foreach ($aManualFieldProperties as $k => $v) {
 		}
 	}
 }
+
 ?>

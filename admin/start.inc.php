@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_WARNING);
 
 /** @license bncms
  *
@@ -9,27 +10,21 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-ini_set("display_errors","1"); 
-error_reporting(E_NONE);
-
-define(PATH,$_SERVER['DOCUMENT_ROOT']."/bncms");
-define(RELATIVEPATH,"/bncms");
-define(RELATIVEPATHAJAX,"/bncms/admin");
-define(RELATIVEPATHAPP,"");
+include ("../inc/configuration/backend-config.inc.php");
 
 date_default_timezone_set("UTC");
 
-//error_reporting(E_ERROR);
 include (PATH."/inc/configuration/database-settings.inc.php");
 $DB = mysqli_connect($aDatabase['host'],$aDatabase['user'],$aDatabase['password'],$aDatabase['dbname']);
+
 if (mysqli_connect_errno()) {
   echo "Failed to connect to MySQL: " . mysqli_connect_error();
 }
+
 include (PATH."/inc/db-functions.inc.php");
 include (PATH."/inc/functions.inc.php");
 include (PATH."/inc/editor-functions.inc.php");
 include (PATH."/inc/display-functions.inc.php");
-//checkBannedIPs();
 session_set_cookie_params(30*24*60*60, RELATIVEPATHAJAX);
 session_start();
 
@@ -38,25 +33,26 @@ dbQuery("SET NAMES utf8");
 include (PATH."/inc/configuration/table-rights.inc.php");
 include (PATH."/inc/configuration/table-relations.inc.php");
 include (PATH."/inc/configuration/table-properties.inc.php");
+//checkBannedIPs();
 
 if (file_exists(PATH."/admin/project_config.php")) {
 	include (PATH."/admin/project_config.php");
 }
 
-if ($_POST['username'] and $_POST['password'] and !$_POST['savePost'] and $_POST['username'] != "webuser") {
-    $query="SELECT bncms_user.*,  bncms_user_groups.name FROM bncms_user, bncms_user_groups WHERE bncms_user.gruppe = bncms_user_groups.id AND BINARY bncms_user.username = '".e($_POST[username])."' and BINARY bncms_user.password = '".md5($_POST['password'])."' and (bncms_user_groups.name = 'Administratoren' or bncms_user_groups.name  = 'Redakteure')";
+if ($_POST['username'] and $_POST['password'] and !@$_POST['savePost'] and $_POST['username'] != "webuser") {
+    $query="SELECT bncms_user.*,  bncms_user_groups.name FROM bncms_user, bncms_user_groups WHERE bncms_user.gruppe = bncms_user_groups.id AND BINARY bncms_user.username = '".e($_POST['username'])."' and BINARY bncms_user.password = '".md5($_POST['password'])."' and (bncms_user_groups.name = 'Administratoren' or bncms_user_groups.name  = 'Redakteure')";
+
     $arr = dbQuery($query);
-    $_SESSION[user] = $_POST[username];
-    $_SESSION[userGroup] = $arr["name"];
+    $_SESSION['user'] = $_POST['username'];
+    $_SESSION['userGroup'] = $arr["name"];
     if (is_array($arr)) {
         $_SESSION['user_allowed'] = 1;
     }
     echo "<script>window.location.href='index.php';</script>";
     exit();
 }
-if ($_GET[logout] == true) {
+if (@$_GET['logout'] == true) {
 	$_SESSION = "";
-	//session_unregister();
 	$_SESSION['user_allowed'] = 0;	
 }
 if ($_SESSION['user_allowed'] != 1) {
@@ -74,15 +70,12 @@ if ($_SESSION['user_allowed'] != 1) {
 <script type="text/javascript">
 		window.addEvent('domready', function(){
 			var scroll2 = new Scroller('container', {area: 30, velocity: 2});
-			
-			// container
 			$('container').addEvent('mouseover', scroll2.start.bind(scroll2));
 			$('container').addEvent('mouseout', scroll2.stop.bind(scroll2));
 			
 		}); 
 	</script>
 <script type="text/javascript">
-
 </script>
 <script language="javascript">
 var wstat
@@ -159,12 +152,15 @@ transform:rotate(-<?php echo rand(10,20) ?>deg translate3d(0px,0px,1px); /* W3C 
 	<?php
 	die();
 } else {
-
+	
     if (isset($_GET['style_color']))
+    {
         $_SESSION['style_color'] = $_GET['style_color'];
-
-    //if (!isset($_SESSION['style_color']))
+    }
+    else
+    {
          $_SESSION['style_color'] = "green";
+    }
 
     if (isset($_SESSION['errorMsg'])) {
         $outErrormsg = "Fehlermeldung: $_SESSION[errorMsg]";

@@ -56,7 +56,6 @@ jQuery( ".ntom_autocomplete" ).bind( "keydown", function( event ) {
     jQuery.getJSON( RELATIVEPATH+"/ajax.php?ntomAjaxSearch="+ntomid+"&value="+term, {
         term: extractLast( request.term )
       }, function( data, status, xhr ) {
-	  //console.log(data);
       cache[ term ] = data;
       response( data );
     });
@@ -74,7 +73,6 @@ if (self.is(":visible")) {
         } else {
 		   timer = setInterval(function() {
                 if ($(selector).is(":visible")) {
-				console.log(self);
             callback.call($(selector));
             clearInterval(timer);
         }
@@ -101,7 +99,6 @@ if (e.value.indexOf(',') > 0)
 		method: "GET",
 		url: RELATIVEPATH+"/ajax.php?ntomAjaxSearch="+relationId+"&value="+va,
 		success: function(msg) {
-			console.log(msg);
 			a = unserialize(urldecode(msg));
 			console.log(a);
 			var s = "";
@@ -180,7 +177,6 @@ function ajax_send_scrollpos(sPhpSelf, an, aus) {
 		ausschalten(aus);
 	}
 	if (http != null) {
-	   console.log(RELATIVEPATH+"/admin/save_scrollpos.php?an="+an+"&aus="+aus+"&scrollTop="+pos.top+"&scrollLeft="+pos.left+"&phpSelf="+sPhpSelf);
 	   http.open("GET", RELATIVEPATH+"/admin/save_scrollpos.php?an="+an+"&aus="+aus+"&scrollTop="+pos.top+"&scrollLeft="+pos.left+"&phpSelf="+sPhpSelf, true);
 	   http.send(null);
 	}
@@ -459,7 +455,6 @@ if (variable) {
 	sp[a[0]] = a[1];
 }
 arg_list = unserialize(urldecode(document.getElementById("arg_list_"+id).value));
-//console.log(arg_list);
 //document.getElementById("s_"+id).style.display="block";	
 jQuery('#f_'+id+' #loading_overlay').css('height', jQuery('#f_'+id+' #loading_overall_table').outerHeight());
 jQuery('#f_'+id+' #loading_overlay').css('width', jQuery('#f_'+id+' #loading_overall_table').outerWidth());
@@ -477,7 +472,6 @@ jQuery('.c'+id).each(
  function(index, elem){  
 var input = jQuery(this).val();
 	var e = jQuery(elem);
-	//console.log(input);
 	//wegl&ouml;schen alter anfragen mit parameter
 	//condition = condition.replace(" AND "+ field+" LIKE \"%"+input+"%\","");
 	if (e.attr('id').indexOf("earch_") && input != '') {
@@ -502,9 +496,6 @@ if (arg_list[2] == "null")
 //	arg_list[2] = arg_list[2] + condition;
 
 arg_list[12] = serialize(sp); //searchParams
-//console.log(arg_list); 
-//alert( path); 
-//console.log(arg_list);
 arg_list = new Array();
 arg_list['id'] = id;
 arg_list['sp'] = serialize(sp);
@@ -512,7 +503,6 @@ jQuery.ajax({
   method: "POST",
   url: path+"/ajax.php?projectpath=",
   success: function(msg) {  
-  //alert(msg);
 		jQuery('#'+id).html(msg);
 		document.getElementById('l_'+id).style.display = 'none';
 	},
@@ -534,7 +524,6 @@ function anschalten(div)
 
 function ausschalten(div)
 {
-//setze_scrollposition();
 	if (document.getElementById('minus'+div)) {
 		jQuery( "#"+div ).fadeOut(); 
 		//document.getElementById(div).style.display = 'none';

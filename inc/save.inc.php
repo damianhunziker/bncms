@@ -1,6 +1,6 @@
-<?
+<?php
 
-if ($_GET['repairDB'] != "") {
+if (@$_GET['repairDB'] != "") {
 	//todo lösche nzu1 zuweisungen die keine felder mehr haben, macht sonst unnötig relationen
 	
 	//n:1 Reparieren
@@ -70,7 +70,7 @@ if ($_GET['repairDB'] != "") {
 }
 
 
-if ($_GET['action'] == "delete") {
+if (@$_GET['action'] == "delete") {
 	
 	if (is_numeric($_GET[table])) {
 		$aT = getTableProperties($_GET[table]);
@@ -89,7 +89,7 @@ if ($_GET['action'] == "delete") {
 	</script>";
 }
 
-if ($_GET['action'] == "delFromSession") {
+if (@$_GET['action'] == "delFromSession") {
 	//Testen ob eine n:m relation besteht
 	/*$sAssignTable=getAssignTableNToM($_GET[table]);
 	if ($sAssignTable != "") {
@@ -153,7 +153,7 @@ if ($_POST) {
 		$_SESSION[assignTableName]="";
 	}
 }
-if ($_POST['execFilter'] != "") {
+if (@$_POST['execFilter'] != "") {
 	$_SESSION['NTo1Filter'][$_POST['execFilter']] = $_POST['NTo1Filter'];
 }
 /*if (@$_POST['savePost'] == "on") {
@@ -497,7 +497,7 @@ if (@$_POST['savePost'] == "on") {
 							WHERE `".getIdName($_POST[table])."`='$_POST[id]'";
 							//echo "<br>";
 							dbQuery($query);
-							echo mysql_error();
+							echo mysqli_error($DB);
 						}
 					} else  {
 						echo "<br>Feldname $key nicht gefunden in Tabelle $_POST[table].";
@@ -517,7 +517,7 @@ if (@$_POST['savePost'] == "on") {
 			echo "<script type='text/javascript'>window.history.back()</script>";
 	}
 }	
-if ($_GET['duplicate'] == true) {
+if (@$_GET['duplicate'] == true) {
 	$tn = getTableProperties($_GET[table]);
 	$query="SELECT * FROM $tn[name] WHERE id = '$_GET[id]'";
 	$aDestId=dbQuery($query);
@@ -557,10 +557,10 @@ if ($_GET['duplicate'] == true) {
 }
 
 //tempRights säubern
-if ($_SESSION[tempRights]) {
-	foreach($_SESSION[tempRights] as $k => $v) {
+if (@$_SESSION['tempRights']) {
+	foreach($_SESSION['tempRights'] as $k => $v) {
 		if (($v[ts] + (6*60*60)) < time()) {
-			unset($_SESSION[tempRights][$k]);
+			unset($_SESSION['tempRights'][$k]);
 		}
 	}
 }

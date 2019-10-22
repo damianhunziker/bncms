@@ -1,4 +1,4 @@
-<?
+<?php
 include("inc/start.inc.php");
 
 $q = $_SESSION[$_GET[f]][export][query];
