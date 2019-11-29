@@ -612,8 +612,6 @@ wstat.focus();
 }
 
 
-<!-- PreLoad Wait - Script -->
-<!-- This script and more from http://www.rainbow.arch.scriptmania.com 
 
 function waitPreloadPage() { //DOM
 if (document.getElementById){

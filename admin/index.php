@@ -95,7 +95,6 @@ if($z != 1)
 	echo "Dem Benutzer sind keine Tabellen zugewiesen."; 
 ?>
 </div>
-</div>
 <?php include ("../inc/layer_visibility.inc.php"); ?>
 </body>
 </html>

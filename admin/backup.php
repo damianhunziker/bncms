@@ -5,9 +5,9 @@ include("start.inc.php");
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="style-admin.css" rel="stylesheet" type="text/css">
-<link href="style-admin-<?php echo $_SESSION[style_color]?>.css" rel="stylesheet" type="text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="style-admin.css" rel="stylesheet" type="text/css" />
+<link href="style-admin-<?php echo $_SESSION[style_color]?>.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="../jquery.js"></script>
 <script type="text/javascript" src="../lib/jquery-visible-master/jquery.visible.js"></script>
 <script>RELATIVEPATH = '<?php echo RELATIVEPATH?>';</script>
@@ -46,7 +46,7 @@ function opwin(url, name) {
 <title>Edit Fields</title>
 </head>
 
-<body onLoad="waitPreloadPage();">
+<body onload="waitPreloadPage();">
 
 <?php include("loading.inc.php");?>
 <!--<img src="../image/logo-middle-<?php echo $_SESSION['style_color'];?>.jpg"> -->
@@ -61,7 +61,6 @@ if ($_GET['action'] == "save") {
 	loadBackup();
 }
 ?>
-</div>
 </div>
 <?php include ("../inc/layer_visibility.inc.php"); ?>
 </body>

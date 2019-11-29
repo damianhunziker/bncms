@@ -100,7 +100,7 @@ function opwin(url, name) {
 <BODY onLoad="waitPreloadPage();">
 
 <?php include("loading.inc.php");?>
-</div><h1>Datensatz bearbeiten </h1>
+<h1>Datensatz bearbeiten </h1>
 <?php
 /*if ($_GET['duplicate'] == true) {
 	$query="SELECT * FROM $_GET[table] WHERE id = '$_GET[id]'";
