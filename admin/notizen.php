@@ -64,7 +64,6 @@ $a = mysqli_fetch_array(mysqli_query($DB, $q));?>
 <br /><input type="submit" />
 </form>
 </div>
-</div>
 <?php include ("../inc/layer_visibility.inc.php"); ?>
 </body>
 </html>

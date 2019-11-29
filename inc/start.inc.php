@@ -141,7 +141,7 @@ $(function() {
 </head>
 
 <BODY onLoad="waitPreloadPage();">
-</DIV><h1>Datensatz bearbeiten </h1>
+<h1>Datensatz bearbeiten </h1>
 <?php
 if ($_GET['duplicate'] == true) {
 	$query="SELECT * FROM ".e($_GET[table])." WHERE id = '".e($_GET[id])."'";

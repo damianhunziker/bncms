@@ -62,7 +62,6 @@ if ($_GET['action'] == "save") {
 }
 ?>
 </div>
-</div>
 <?php include ("../inc/layer_visibility.inc.php"); ?>
 </body>
 </html>

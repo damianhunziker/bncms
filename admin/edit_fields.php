@@ -94,7 +94,6 @@ if(@$_GET['removeTable']) {
 }
 ?>
 </div>
-</div>
 <?php include ("../inc/layer_visibility.inc.php"); ?>
 </body>
 </html>
