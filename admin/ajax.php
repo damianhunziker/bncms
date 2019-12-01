@@ -77,7 +77,7 @@ if ($_GET['saveTitleIcon']) {
 	$a = dbQuery($q);
 	$tt = getTableProperties($a['nto1TargetTable']);
 	$sf = getFieldProperties($a['nto1SourceTable'],$a['nto1SourceField']);
-	$q = "SELECT ".$sf['nto1DropdownTitleField']." title FROM ".$tt['name']." WHERE ".$sf['nto1DropdownTitleField']." LIKE '%".e($_GET[value])."%'  ORDER BY ".$sf['nto1DropdownTitleField']."";
+	$q = "SELECT ".$sf['nto1DropdownTitleField']." title FROM ".$tt['name']." WHERE ".$sf['nto1DropdownTitleField']." LIKE '%".e($_GET['value'])."%'  ORDER BY ".$sf['nto1DropdownTitleField']."";
 	$a = dbQuery($q);
 	$r = array();
 	foreach ($a as $k => $v) 

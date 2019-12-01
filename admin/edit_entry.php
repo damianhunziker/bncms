@@ -104,7 +104,8 @@ function opwin(url, name) {
 <?php
 /*if ($_GET['duplicate'] == true) {
 	$query="SELECT * FROM $_GET[table] WHERE id = '$_GET[id]'";
-	$aDestId=dbQuery($query);
+	$aDestId=
+dbQuery($query);
 	$query="SELECT id FROM conf_tables WHERE name = '$_GET[table]'";
 	$aTableId=dbQuery($query);
 	$query="SELECT * FROM conf_fields WHERE id_table = '".$aTableId[0][id]."' and type='image'";

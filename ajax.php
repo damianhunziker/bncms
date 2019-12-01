@@ -15,7 +15,7 @@ if ($_GET['ntomAjaxSearch']) {
 	$a = getRelationPropertiesById($_GET['nto1AjaxSearch'], $_SESSION['aManualFieldProperties']['displayTable'][$_GET['formid']]);
 	$tt = getTableProperties($a['nto1TargetTable'], $_SESSION['aManualFieldProperties'][displayTable][$_GET['formid']]);
 	$sf = getFieldProperties($a['nto1SourceTable'], $a['nto1SourceField'], $_SESSION['aManualFieldProperties']['displayTable'][$_GET['formid']]);
-	$q = "SELECT ".$sf['nto1DropdownTitleField']." title FROM ".$tt['name']." WHERE ".$sf['nto1DropdownTitleField']." LIKE '%".e($_GET[value])."%'  ORDER BY ".$sf['nto1DropdownTitleField']."";
+	$q = "SELECT ".$sf['nto1DropdownTitleField']." title FROM ".$tt['name']." WHERE ".$sf['nto1DropdownTitleField']." LIKE '%".e($_GET['value'])."%'  ORDER BY ".$sf['nto1DropdownTitleField']."";
 	$a = dbQuery($q);
 	$r = array();
 	foreach ($a as $k => $v) 
@@ -81,13 +81,13 @@ if ($_GET['ntomAjaxSearch']) {
 			$er[$k] .= "Bitte mindestens ".$val_min_length." Zeichen verwenden. "; 
 		}
 		if ($a['validation_unique'] == "on") {
-			$q = "SELECT * FROM $_GET['validate'] WHERE $k = '$v'";
+			$q = "SELECT * FROM ".e($_GET['validate'])." WHERE $k = '$v'";
 			$r = mysqli_query($DB, $q);
 			if (mysqli_num_rows($r) > 0)
 				$er[$k] .= "Wert ist bereits vorhanden. "; 
 		}
 		if (is_numeric($a['length_values']) and strlen($v) > $a['length_values']) {
-			$q = "SELECT * FROM ".e($_GET[validate])." WHERE $k = '$v'";
+			$q = "SELECT * FROM ".e($_GET['validate'])." WHERE $k = '$v'";
 			$r = mysqli_query($DB, $q);
 			if (mysqli_num_rows($r) > 0)
 			$er[$k] .= "Max. ".$a['length_values']." Zeichen ";

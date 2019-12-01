@@ -1323,10 +1323,10 @@ function editField() {
 		$_GET[id_table] = $_GET[id_table];
 	if ($_GET['id'] =="new") {
 	//echo "INSERT INTO conf_fields SET id_table = '$_GET[id_table]'";
-		dbQuery("INSERT INTO conf_fields SET id_table = '$_GET[id_table]'");
+		dbQuery("INSERT INTO conf_fields SET id_table = '".e($_GET['id_table'])."'");
 		$_GET['id'] = mysqli_insert_id($DB);
 	}
-	$q = "SELECT * FROM conf_fields WHERE id = '" . $_GET['id'] . "'";
+	$q = "SELECT * FROM conf_fields WHERE id = '" . e($_GET['id']) . "'";
 	$aFields= dbQuery($q);	
 
 	foreach ($aFields[0] as $fieldname => $fieldcontent) {	
@@ -1634,24 +1634,24 @@ function saveField() {
 	$_POST[save_mysqlType] = $mysqlType;
 	//echo "<pre>";
 	if ($_POST[save_type] == 'nto1') {
-		$id = getNTo1RelationId($_POST[save_nto1TargetTable], $_POST[save_name], $_POST[id_table]);
-		$q = "SELECT * FROM conf_relations WHERE id='$id' ";
+		$id = getNTo1RelationId($_POST['save_nto1TargetTable'], $_POST['save_name'], $_POST['id_table']);
+		$q = "SELECT * FROM conf_relations WHERE id='$id'";
 		$a = q($q);
-		$aF = getFieldProperties($_POST[save_nto1TargetTable], $_POST[save_nto1TargetField]);
+		$aF = getFieldProperties($_POST['save_nto1TargetTable'], $_POST['save_nto1TargetField']);
 		if (count($a)) {
 		    $q = "UPDATE conf_relations SET type = 'nto1', 
-			nto1TargetTable = '$_POST[save_nto1TargetTable]', 
+			nto1TargetTable = '".e($_POST['save_nto1TargetTable'])."', 
 			nto1TargetField = '$aF[name]', 
-			nto1SourceTable = '$_POST[id_table]', 
-			nto1SourceField = '$_POST[save_name]' 
+			nto1SourceTable = '".e($_POST['id_table'])."', 
+			nto1SourceField = '".e($_POST['save_name'])."' 
 			WHERE id='$id' ";
 			$a = q($q);
 		} else {
 			$q = "INSERT INTO conf_relations SET type = 'nto1', 
-			nto1TargetTable = '$_POST[save_nto1TargetTable]', 
+			nto1TargetTable = '".e($_POST['save_nto1TargetTable'])."', 
 			nto1TargetField = '$aF[name]', 
-			nto1SourceTable = '$_POST[id_table]', 
-			nto1SourceField = '$_POST[save_name]' ";
+			nto1SourceTable = '".e($_POST['id_table'])."', 
+			nto1SourceField = '".e($_POST['save_name'])."' ";
 			$a = q($q);
 		}
 	}
@@ -1660,13 +1660,13 @@ function saveField() {
 		if (is_array($value))
 			$value = serialize($value);
 		if (strstr($key, "save_") and $key != "field_id") {
-			$query = "UPDATE conf_fields SET ".str_replace("save_","",$key)." = '".e($value)."', id_table = '$_POST[id_table]' WHERE id ='$_POST[field_id]'";
+			$query = "UPDATE conf_fields SET ".str_replace("save_","",$key)." = '".e($value)."', id_table = '".e($_POST['id_table'])."' WHERE id ='".e($_POST['field_id'])."'";
 			//echo "<br /> normal".$query;
 			dbQuery($query);
 		}
 		if (strstr($key,"checkbox_") and $key != "field_id") {//off modus checkboxen
 			if ($_POST['save_'.str_replace("checkbox_","",$key)] != "on") {
-				$query = "UPDATE conf_fields SET ".str_replace("checkbox_","",$key)." = 'off', id_table = '$_POST[id_table]' WHERE id ='$_POST[field_id]'";
+				$query = "UPDATE conf_fields SET ".str_replace("checkbox_","",$key)." = 'off', id_table = '".e($_POST['id_table'])."' WHERE id ='".e($_POST['field_id'])."'";
 				//echo "<br />checkbox ".$query;
 				dbQuery($query);
 			}
@@ -1685,7 +1685,7 @@ function deleteField() {
 			 }
 			</script>";
 	} else {
-		$query="DELETE FROM conf_fields WHERE id = '" . $_GET['id']. "'";
+		$query="DELETE FROM conf_fields WHERE id = '" . e($_GET['id']). "'";
 		dbQuery($query);
 		echo "<script type=\"text/javascript\">window.opener.location.reload()</script>";
 		echo "<script type=\"text/javascript\">window.close()</script>";
@@ -1754,9 +1754,9 @@ function loadBackup() {
 function editRelation() {
 	global $aDatabase;
 
-	if ($_GET[relation] == "ntom") {
-		if ($_GET[id_relation]) {
-			$q = "SELECT * FROM conf_relations WHERE id = '$_GET[id_relation]'";
+	if ($_GET['relation'] == "ntom") {
+		if ($_GET['id_relation']) {
+			$q = "SELECT * FROM conf_relations WHERE id = '".e($_GET['id_relation'])."'";
 			$aRel = dbQuery($q);
 			$d = " disabled";
 		}
@@ -1767,7 +1767,7 @@ function editRelation() {
 		} else {
 			$sourceTable = getTableProperties($_GET[id_table]);
 			$targetTable = getTableProperties($_GET[ntomTargetTable]);
-			$query ="SELECT name, id FROM conf_tables WHERE id != '$_GET[id_table]' and is_assign_table != 'yes'";
+			$query ="SELECT name, id FROM conf_tables WHERE id != '".e($_GET['id_table'])."' and is_assign_table != 'yes'";
 		}
 		$aTables = dbQuery($query,'',1);
 		
@@ -1945,15 +1945,15 @@ function saveRelation() {
 		if ($_POST[id_relation]) {
 			//update
 			echo $query="UPDATE conf_relations SET
-			seperateColumns = '$_POST[seperateColumns]',
-			users = '".serialize($_POST[users])."',
-			editors = '".serialize($_POST[editors])."',
-			deletors = '".serialize($_POST[deletors])."',
-			addors = '".serialize($_POST[addors])."',
-			ntomDisplayType = '".$_POST[ntomDisplayType]."',
-			ntomAjaxDisplayTitleField = '".$_POST[ntomAjaxDisplayTitleField]."',
-			ntomAjaxDisplayMinSelections = '".$_POST[ntomAjaxDisplayMinSelections]."'
-			WHERE id = '$_POST[id_relation]'";
+			seperateColumns = '".e($_POST['seperateColumns'])."',
+			users = '".serialize($_POST['users'])."',
+			editors = '".serialize(['editors'])."',
+			deletors = '".serialize($_POST['deletors'])."',
+			addors = '".serialize($_POST['addors'])."',
+			ntomDisplayType = '".e($_POST['ntomDisplayType'])."',
+			ntomAjaxDisplayTitleField = '".e($_POST['ntomAjaxDisplayTitleField'])."',
+			ntomAjaxDisplayMinSelections = '".e($_POST['ntomAjaxDisplayMinSelections'])."'
+			WHERE id = '".e($_POST['id_relation'])."'";
 			dbQuery($query);
 			
 			echo "<script type=\"text/javascript\">window.opener.location.reload();</script>";
@@ -1962,19 +1962,19 @@ function saveRelation() {
 		} else {
 			//insert
 			if (!$_POST[assign_table]) {
-				$query="SELECT name FROM conf_tables WHERE id = '$_POST[id_table]'";
+				$query="SELECT name FROM conf_tables WHERE id = '".e($_POST['id_table'])."'";
 				$aTable1=dbQuery($query);
-				$query="SELECT name FROM conf_tables WHERE id = '$_POST[ntomTargetTable]'";
+				$query="SELECT name FROM conf_tables WHERE id = '".e($_POST['ntomTargetTable'])."'";
 				$aTable2=dbQuery($query);
 				//Relation erstellen
-				$query="INSERT INTO conf_relations SET type = 'ntom', table1='$_POST[id_table]', table2='$_POST[ntomTargetTable]', name = 'assign_".$aTable1[0][name]."_".$aTable2[0][name]."' , ntomAssignFieldTable1='id_".$aTable1[0][name]."', ntomAssignFieldTable2='id_".$aTable2[0][name]."',
+				$query="INSERT INTO conf_relations SET type = 'ntom', table1='".e($_POST['id_table'])."', table2='".e($_POST['ntomTargetTable'])."', name = 'assign_".$aTable1[0][name]."_".$aTable2[0][name]."' , ntomAssignFieldTable1='id_".$aTable1[0][name]."', ntomAssignFieldTable2='id_".$aTable2[0][name]."',
 				users = '".serialize($_POST[users])."',
 				editors = '".serialize($_POST[editors])."',
 				deletors = '".serialize($_POST[deletors])."',
 				addors = '".serialize($_POST[addors])."',
-				ntomDisplayType = '".$_POST[ntomDisplayType]."',
-				ntomAjaxDisplayTitleField = '".$_POST[ntomAjaxDisplayTitleField]."',
-				ntomAjaxDisplayMinSelections = '".$_POST[ntomAjaxDisplayMinSelections]."'";
+				ntomDisplayType = '".e($_POST[ntomDisplayType])."',
+				ntomAjaxDisplayTitleField = '".e($_POST[ntomAjaxDisplayTitleField])."',
+				ntomAjaxDisplayMinSelections = '".e($_POST[ntomAjaxDisplayMinSelections])."'";
 				dbQuery($query);   
 				$id_relation = mysqli_insert_id($DB);
 				
@@ -2003,24 +2003,24 @@ function saveRelation() {
 					//Relation erstellen
 					$query="INSERT INTO conf_relations SET 
 					type = 'ntom', 
-					table1='$_POST[id_table]', 
-					table2='$_POST[ntomTargetTable]', 
-					name='$_POST[assign_table]', 
-					ntomAssignFieldTable1='$_POST[assign_nto1field_source]', 
-					ntomAssignFieldTable2='$_POST[assign_nto1field_target]',
+					table1='".e($_POST['id_table'])."', 
+					table2='".e($_POST['ntomTargetTable'])."', 
+					name='".e($_POST['assign_table'])."', 
+					ntomAssignFieldTable1='".e($_POST['assign_nto1field_source'])."', 
+					ntomAssignFieldTable2='".e($_POST['assign_nto1field_target'])."',
 					users = '".serialize($_POST[users])."',
 					editors = '".serialize($_POST[editors])."',
 					deletors = '".serialize($_POST[deletors])."',
 					addors = '".serialize($_POST[addors])."',
-					ntomDisplayType = '".$_POST[ntomDisplayType]."',
-					ntomAjaxDisplayTitleField = '".$_POST[ntomAjaxDisplayTitleField]."',
-					ntomAjaxDisplayMinSelections = '".$_POST[ntomAjaxDisplayMinSelections]."'";
+					ntomDisplayType = '".e($_POST[ntomDisplayType])."',
+					ntomAjaxDisplayTitleField = '".e($_POST[ntomAjaxDisplayTitleField])."',
+					ntomAjaxDisplayMinSelections = '".e($_POST[ntomAjaxDisplayMinSelections])."'";
 					dbQuery($query);   
 					$id_relation = mysql_insert_id();
 					
-					$query="SELECT name FROM conf_tables WHERE id = '$_POST[id_table]'";
+					$query="SELECT name FROM conf_tables WHERE id = '".e($_POST['id_table'])."'";
 					$aTable1=dbQuery($query);
-					$query="SELECT name FROM conf_tables WHERE id = '$_POST[ntomTargetTable]'";
+					$query="SELECT name FROM conf_tables WHERE id = '".e($_POST['ntomTargetTable'])."'";
 					$aTable2=dbQuery($query);
 	
 					//todo columnNameOfId von assignment Table
@@ -2029,7 +2029,7 @@ function saveRelation() {
 					
 					
 					$query="INSERT INTO conf_tables SET 
-					name = '$_POST[assign_table]', 
+					name = '".e($_POST['assign_table'])."', 
 					is_assign_table = 'yes', 
 					id_relation = '".mysql_insert_id()."',
 					conf_tables.insert = 'yes',
@@ -2045,10 +2045,10 @@ function saveRelation() {
 					$t = getMysqlType($_POST[assign_table], $_POST[assign_nto1field_source]);
 					//todo aufr&auml;umen der felder deren relation nicht mehr existiert
 					$query="INSERT INTO conf_fields SET 
-					mysqlType = '".mysqli_real_escape_string($DB,$t)."', 
+					mysqlType = '".e($t)."', 
 					unchangeable = 'yes', 
 					type = 'nto1', 
-					name = '$_POST[assign_nto1field_source]',  
+					name = '".e($_POST['assign_nto1field_source'])."',  
 					id_table = '$idOfTable', 
 					nto1TargetTable = '$sourceTable[name]', 
 					nto1TargetField = '".getIdName($sourceTable[name])."' ";
@@ -2057,10 +2057,10 @@ function saveRelation() {
 					$targetTable = getTableProperties($_POST[ntomTargetTable]);
 					$t = getMysqlType($_POST[assign_table], $_POST[assign_nto1field_target]);
 					$query="INSERT INTO conf_fields SET 
-					mysqlType = '".mysqli_real_escape_string($DB,$t)."', 
+					mysqlType = '".e($t)."', 
 					unchangeable = 'yes', 
 					type = 'nto1', 
-					name = '$_POST[assign_nto1field_target]',  
+					name = '".e($_POST['assign_nto1field_target'])."',  
 					id_table = '$idOfTable', 
 					nto1TargetTable = '$targetTable[name]', 
 					nto1TargetField = '".getIdName($targetTable[name])."' ";
@@ -2092,7 +2092,7 @@ function deleteRelation() {
 			 }
 			</script>";
 	} else {
-		$query="SELECT * FROM conf_relations as r, conf_tables as t WHERE (r.table1 = t.id or r.table2 = t.id ) and r.id = '$_GET[id_relation]'";
+		$query="SELECT * FROM conf_relations as r, conf_tables as t WHERE (r.table1 = t.id or r.table2 = t.id ) and r.id = '".e($_GET['id_relation'])."'";
 		$aToDelete = dbQuery($query);
 		$aToDelete2 = dbQuery("SELECT * FROM conf_tables WHERE name = 'assign_".$aToDelete[0][name]."_".$aToDelete[1][name]."'");
 
@@ -2102,7 +2102,7 @@ function deleteRelation() {
 			$query="DELETE FROM conf_tables WHERE id = '".$value['id']."'";
 			dbQuery($query);
 		}
-		$query="DELETE FROM conf_relations WHERE id = '$_GET[id_relation]'";
+		$query="DELETE FROM conf_relations WHERE id = '".e($_GET['id_relation'])."'";
 		dbQuery($query);
 		echo "<script type=\"text/javascript\">window.opener.location.reload()</script>";
 		echo "<script type=\"text/javascript\">window.close()</script>";
@@ -2865,7 +2865,7 @@ function generateUserDropdown($sNameSelect, $sSelectedUsers, $sAddToSelect="", $
     return $re .= "</select>";
 }
 function editTable() {
-	$query="SELECT * FROM conf_tables WHERE id = '" . $_GET['id'] . "'";
+	$query="SELECT * FROM conf_tables WHERE id = '" . e($_GET['id']) . "'";
 	$aTableConf=dbQuery($query);
 	echo "<h2>Tabellen Eigenschaften ".$aTableConf[0][name]."</h2>";
 	echo "<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">";
@@ -2881,11 +2881,11 @@ function editTable() {
 	echo "<br />Standartsortierung: ";
 
 	echo "<input type='hidden' name='table_sort_order' value=''><select  name=\"table_sort_order\"><option></option>";
-	$q = "SELECT * FROM conf_fields WHERE id_table = '" . $_GET['id']. "'";
+	$q = "SELECT * FROM conf_fields WHERE id_table = '" . e($_GET['id']). "'";
 	$a = q($q);
 	$aF = $aTableConf[0]['sort_order'];
 	foreach ($a as $k => $v)	{
-		if ($v[name] == $aF)
+		if ($v['name'] == $aF)
 			$s = "selected";
 		else
 			$s = ""; 
@@ -2963,7 +2963,7 @@ function saveTable() {
 		if (strpos("a".$k, "table_") == 1) {
 			if (is_array($v))
 				$v = serialize($v);
-			$queryAdd .= " ".str_replace("table_","",$k)." = '".mysqli_real_escape_string($DB,$v)."', ";
+			$queryAdd .= " ".str_replace("table_","",$k)." = '".e($v)."', ";
 		} 
 	}
 	if (!$_POST['table_export_xls'])
@@ -2977,7 +2977,7 @@ function saveTable() {
 	if ($_POST['id'] == "") {
 		$query = "INSERT INTO conf_tables SET $queryAdd";
 	} else { 
-		$query = "UPDATE conf_tables SET $queryAdd WHERE id = '" . $_POST['id'] . "'";
+		$query = "UPDATE conf_tables SET $queryAdd WHERE id = '" . e($_POST['id']) . "'";
 	}
 
 	dbQuery($query);
@@ -2995,7 +2995,7 @@ function removeTable() {
 			 }
 			</script>";
 	} else {
-		$query="DELETE FROM conf_tables WHERE id = '" . $_GET['id'] . "'";
+		$query="DELETE FROM conf_tables WHERE id = '" . e($_GET['id']) . "'";
 		dbQuery($query);
 		echo "<script type=\"text/javascript\">window.opener.location.reload()</script>";
 		echo "<script type=\"text/javascript\">window.close()</script>";
@@ -3003,9 +3003,9 @@ function removeTable() {
 }
 function duplicateTable() {
 	global $DB;
-	$query="SELECT * FROM conf_fields WHERE id_table = '" . $_GET['id'] . "'";
+	$query="SELECT * FROM conf_fields WHERE id_table = '" . e($_GET['id']) . "'";
 	$aFieldsDest=dbQuery($query);
-	$query="SELECT * FROM conf_tables WHERE id = '" . $_GET['id']. "'";
+	$query="SELECT * FROM conf_tables WHERE id = '" . e($_GET['id']). "'";
 	$aTableDest=dbQuery($query);
 	$sNewTableName = $aTableDest[0][lang ]." Kopie";
 	while (count($aTablesCount[0]) > 0) {
@@ -3020,7 +3020,7 @@ function duplicateTable() {
 			$value = $sNewTableName;
 		} 
 		if ($key != "id") {
-			$query.=" `$key` = '".mysqli_real_escape_string($DB,$value)."', ";
+			$query.=" `$key` = '".e($value)."', ";
 		}
 	}
 	$query=preg_replace('/(, )$/im','',$query);
@@ -3028,12 +3028,11 @@ function duplicateTable() {
 	
 	$iNewTableId=mysqli_insert_id($DB);
 	foreach ($aFieldsDest as $key2 => $value2) {
-		$value2[id_table] = $iNewTableId; 
+		$value2['id_table'] = $iNewTableId;
 		$query="INSERT INTO conf_fields SET ";
 		foreach ($value2 as $key => $value) {
-			
 			if ($key != "id") {
-				$query.=" $key = '".mysqli_real_escape_string($DB,$value)."', ";
+				$query.=" $key = '".e($value)."', ";
 			}
 		}
 		$query=preg_replace('/(, )$/im','',$query);

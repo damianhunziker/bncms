@@ -97,7 +97,7 @@ if (@$_GET['action'] == "delFromSession") {
 		$query="DELETE FROM  $_GET[table] WHERE $aIdentifierNToM[0] = '$_GET[id]'";
 		dbQuery($query);
 	}*/
-	$query="DELETE FROM ".e($_GET[table])." WHERE ".getIdName($_GET[table])." = '$_GET[id]'";
+	$query="DELETE FROM ".e($_GET['table'])." WHERE ".getIdName($_GET['table'])." = '".e($_GET['id'])."'";
 	dbQuery($query);
 	echo "<script type='text/javascript'>window.opener.location.reload()</script>";
 	echo "<script type='text/javascript'>window.close();</script>";
@@ -139,8 +139,8 @@ if ($_POST) {
 					//$value = @strip_tags($value);
 					
 					$query="UPDATE $aAssignTable[name] 
-					SET $k = '".mysqli_real_escape_string($DB, $value)."'
-					WHERE ".getIdName($_SESSION[assignTableName])." = '$aKey[0]'";
+					SET ".e($k)." = '".e($value)."'
+					WHERE ".getIdName($_SESSION[assignTableName])." = '".e($aKey[0])."'";
 					dbQuery($query);
 					//hardcode
 					$lastkey = $aKey[0];
@@ -331,7 +331,7 @@ if (@$_POST['savePost'] == "on") {
 			//if (!$_POST[id]) {
 				$_POST[id] = getNextAutoincrementValue($_POST[table]);
 			//}
-			$query="INSERT INTO $_POST[table] SET $_POST[columnNameOfId] = '$_POST[id]'";
+			$query="INSERT INTO ".e($_POST['table'])." SET ".e($_POST['columnNameOfId'])." = '".e($_POST['id'])."'";
 			dbQuery($query);
 			//$_POST[id]=mysql_insert_id();
 		}
@@ -339,12 +339,12 @@ if (@$_POST['savePost'] == "on") {
 			
 			foreach ($_POST[deleteFile] as $k =>  $v) {
 				
-				$query="SELECT $k FROM $_POST[table] WHERE ".getIdName($_POST[table])." = '$_POST[id]'";
+				$query="SELECT $k FROM ".e($_POST['table'])." WHERE ".getIdName($_POST['table'])." = '".e($_POST['id'])."'";
 				$aImagePaths = dbQuery($query);
 				
 				@unlink(PATH."/".$aImagePaths[0][$k]);
 				@unlink(PATH."/th_".$aImagePaths[0][$k]);
-				$query="UPDATE $_POST[table] SET $k = '' WHERE ".getIdName($_POST[table])." = '$_POST[id]'";
+				$query="UPDATE ".e($_POST['table'])." SET ".e($k)." = '' WHERE ".getIdName($_POST[table])." = '".e($_POST['id'])."'";
 				dbQuery($query);
 
 			}
@@ -362,7 +362,7 @@ if (@$_POST['savePost'] == "on") {
 						echo "error moveulpoadedfile";
 					} 
 					$i = getIdName($_POST[table]);
-					$query="SELECT $k FROM $_POST[table] WHERE $i = '$_POST[id]'";
+					$query="SELECT $k FROM ".e($_POST['table'])." WHERE $i = '".e($_POST['id'])."'";
 					$aImagePaths = dbQuery($query);
 					@unlink(PATH."/".$aImagePaths[0][$k]);
 					@unlink(PATH."/th_".$aImagePaths[0][$k]);
@@ -392,7 +392,7 @@ if (@$_POST['savePost'] == "on") {
 						//thumb
 						resize(PATH.'/file/'.$addFilename.$filename, "200");
 					}
-					$query="UPDATE $_POST[table] SET $k = 'file/".$addFilename.$filename."' WHERE $i = '$_POST[id]'";
+					$query="UPDATE ".e($_POST['table'])." SET $k = 'file/".$addFilename.$filename."' WHERE $i = '".e($_POST['id'])."'";
 					dbQuery($query);
 				}
 			}
@@ -409,10 +409,10 @@ if (@$_POST['savePost'] == "on") {
 			$aAssignmentFieldNames = getAssignmentFieldNames($_POST[table1], $_POST[table2]);
 	
 			if ($_POST[action] == "new") {
-				$query = "INSERT INTO $sAssignmentTableName SET $aAssignmentFieldNames[sourceFieldname] = '".$_POST["id_".$_POST[table1]]."', $aAssignmentFieldNames[destFieldname] = '".$_POST["id_".$_POST[table2]]."'";
+				$query = "INSERT INTO $sAssignmentTableName SET $aAssignmentFieldNames[sourceFieldname] = '".e($_POST["id_".e($_POST['table1'])])."', $aAssignmentFieldNames[destFieldname] = '".e($_POST["id_".e($_POST['table2'])])."'";
 				dbQuery($query);
 			} else {
-				$query = "UPDATE $sAssignmentTableName SET SET $aAssignmentFieldNames[sourceFieldname] = '".$_POST["id_".$_POST[table1]]."', $aAssignmentFieldNames[destFieldname] = '".$_POST["id_".$_POST[table2]]."' WHERE id = '$_POST[id]'";
+				$query = "UPDATE $sAssignmentTableName SET SET $aAssignmentFieldNames[sourceFieldname] = '".e($_POST["id_".e($_POST['table1'])])."', $aAssignmentFieldNames[destFieldname] = '".e($_POST["id_".e($_POST['table2'])])."' WHERE id = '".e($_POST['id'])."'";
 				dbQuery($query);
 			}
 		} else {
@@ -458,10 +458,10 @@ if (@$_POST['savePost'] == "on") {
 							$a = dbQuery($q);
 							//pre($a);
 							$aP = getTableProperties($_POST[table]);
-							$q = "SELECT * FROM ".$aRelation[0][name]." WHERE ".$aRelation[0][ntomAssignFieldTable1]." = '".$_POST[$aP[columnNameOfId]]."' AND ".$aRelation[0][ntomAssignFieldTable2]." = '".$a[0][$aT[columnNameOfId]]."'";
+							$q = "SELECT * FROM ".$aRelation[0][name]." WHERE ".$aRelation[0][ntomAssignFieldTable1]." = '".e($_POST[$aP['columnNameOfId']])."' AND ".$aRelation[0][ntomAssignFieldTable2]." = '".$a[0][$aT[columnNameOfId]]."'";
 							$aS = dbQuery($q);
 							if (!count($aS)) {
-								$q = "INSERT INTO ".$aRelation[0][name]." SET ".$aRelation[0][ntomAssignFieldTable1]." = '".$_POST[$aP[columnNameOfId]]."', ".$aRelation[0][ntomAssignFieldTable2]." = '".$a[0][$aT[columnNameOfId]]."'";
+								$q = "INSERT INTO ".$aRelation[0][name]." SET ".$aRelation[0][ntomAssignFieldTable1]." = '".e($_POST[$aP['columnNameOfId']])."', ".$aRelation[0][ntomAssignFieldTable2]." = '".$a[0][$aT[columnNameOfId]]."'";
 								dbQuery($q);
 							}
 							//exit();
@@ -486,15 +486,15 @@ if (@$_POST['savePost'] == "on") {
 					
 					//Sicherheit wenn länger als 50 Zeichen kein leerzeichen vorkommt füge es ein
 					//$value = preg_replace("/([^ ]{50,51})/",'$1 ',$value);
-					$query="SELECT `$key` FROM `$_POST[table]` WHERE `".getIdName($_POST[table])."`='$_POST[id]'";
+					$query="SELECT `$key` FROM `".e($_POST['table'])."` WHERE `".getIdName($_POST['table'])."`='".e($_POST['id'])."'";
 				
 					
 						$aTest=dbQuery($query);
 					if (is_array($aTest)) {
-						if (@!in_array($key,$aRightsUnchangeable[$_POST[tableId]])) {
-							$query="UPDATE `$_POST[table]` 
-							SET `$key` = '".($value)."'
-							WHERE `".getIdName($_POST[table])."`='$_POST[id]'";
+						if (@!in_array($key,$aRightsUnchangeable[$_POST['tableId']])) {
+							$query="UPDATE `".e($_POST['table'])."` 
+							SET `".e($key)."` = '".e($value)."'
+							WHERE `".getIdName($_POST['table'])."`='".e($_POST['id'])."'";
 							//echo "<br>";
 							dbQuery($query);
 							echo mysqli_error($DB);
@@ -519,9 +519,9 @@ if (@$_POST['savePost'] == "on") {
 }	
 if (@$_GET['duplicate'] == true) {
 	$tn = getTableProperties($_GET[table]);
-	$query="SELECT * FROM $tn[name] WHERE id = '$_GET[id]'";
+	$query="SELECT * FROM $tn[name] WHERE id = '".e($_GET['id'])."'";
 	$aDestId=dbQuery($query);
-	$query="SELECT id FROM conf_tables WHERE name = '$_GET[table]'";
+	$query="SELECT id FROM conf_tables WHERE name = '".e($_GET['table'])."'";
 	$aTableId=dbQuery($query);
 	$query="SELECT * FROM conf_fields WHERE id_table = '".$aTableId[0][id]."' and type='image'";
 	$aImageFields = dbQuery($query);

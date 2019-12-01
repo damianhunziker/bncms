@@ -10,13 +10,14 @@ if (@$_POST['savePost'] == "on") {
 			if ($aProp[$_POST[table]][$key] == "password")
 				$value = md5($value);
 			//Test ob feld existiert
-			$query="SELECT $key FROM $_POST[table] WHERE $_POST[columnNameOfId]='$_POST[id]'";
+            //muss prepared statement machen
+			$query="SELECT $key FROM ".e($_POST['table'])." WHERE ".e($_POST['columnNameOfId'])."='".e($_POST['id'])."'";
 			$aTest=dbQuery($query);
 			if (is_array($aTest)) {
-				if (@!in_array($key,$aRightsUnchangeable[$_POST[table]])) {
-					$query="UPDATE $_POST[table] 
-					SET $key = '$value'
-					WHERE $_POST[columnNameOfId]='$_POST[id]'";
+				if (@!in_array($key,$aRightsUnchangeable[$_POST['table']])) {
+					$query="UPDATE ".e($_POST['table'])."
+					SET ".e($key)." = '".e($value)."'
+					WHERE ".e($_POST['columnNameOfId'])." = '".e($_POST['id'])."'";
 					dbQuery($query);
 				}
 			} else  {
