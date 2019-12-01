@@ -1751,6 +1751,24 @@ function loadBackup() {
 	}
 	$d->close();
 }
+function getUserDropdown($name, $title) {
+    global $aDatabase;
+    
+    $re .= $title;
+    $re .= "<select multiple name=\"users[]\">";
+    $aUsers = unserialize($aRel[0][$name]);
+    $q = "SELECT * FROM bncms_user";
+    $r = dbQuery($q,"",1);
+    foreach ($r as $k => $a){
+        if (in_array($a[username], $aUsers))
+            $s = "selected";
+        else
+            $s = "";
+        $re .= "<option $s name=" . $a['id'] . ">" . $a['username'] . "</option>";
+    }
+    $re .= "</select>";
+    return $re;
+}
 function editRelation() {
 	global $aDatabase;
 
@@ -1843,22 +1861,13 @@ function editRelation() {
 			}
 			$sOutputContent .= "</select><br>";
 		}
-		
-		$sOutputContent .= "<br /><br>Sichtbar f&uuml;r die Benutzer:<br>";
-		$sOutputContent .= "<select multiple name=\"users[]\">";
-		$aUsers = unserialize($aRel[0][users]);
-		$q = "SELECT * FROM bncms_user";
-		$r = dbQuery($q,"",1);
-		foreach ($r as $k => $a){
-			if (in_array($a[username], $aUsers))
-				$s = "selected";
-			else
-				$s = "";
-			$sOutputContent .= "<option $s name=" . $a['id'] . ">" . $a['username'] . "</option>";
-		}
-		$sOutputContent .= "</select>"; 
-		
-		$sOutputContent .= "<br /><br>Editieren k&ouml;nnen die Benutzer:<br>";
+
+        $sOutputContent .= returnUserDropdown('users', "<br /><br>Sichtbar f&uuml;r die Benutzer:<br>" );
+        /*$sOutputContent .= returnUserDropdown('editors', "<br /><br>Editieren k&ouml;nnen die Benutzer:<br>" );
+        $sOutputContent .= returnUserDropdown('deletors', "<br /><br>L&ouml;schen k&ouml;nnen die Benutzer:<br>" );
+        $sOutputContent .= returnUserDropdown('addors', "<br /><br>Hinzuf&uuml;gen k&ouml;nnen die Benutzer:<br>" );
+
+        $sOutputContent .= "<br /><br>Editieren k&ouml;nnen die Benutzer:<br>";
 		$sOutputContent .= "<select multiple name=\"editors[]\">";
 		$aEditors = unserialize($aRel[0][editors]);
 		$q = "SELECT * FROM bncms_user";
@@ -1870,7 +1879,7 @@ function editRelation() {
 				$s = "";
 			$sOutputContent .= "<option $s name=" . $a['id'] . ">" . $a[username] . "</option>";
 		}
-		$sOutputContent .= "</select>"; 
+		$sOutputContent .= "</select>";
 		
 		$sOutputContent .= "<br /><br>L&ouml;schen k&ouml;nnen die Benutzer:<br>";
 		$sOutputContent .= "<select multiple name=\"deletors[]\">";
@@ -1885,7 +1894,7 @@ function editRelation() {
 			$sOutputContent .= "<option $s name=" . $a['id'] . ">" . $a[username] . "</option>";
 		}
 		$sOutputContent .= "</select>"; 
-		
+
 		$sOutputContent .= "<br /><br>Hinzuf&uuml;gen k&ouml;nnen die Benutzer:<br>";
 		$sOutputContent .= "<select multiple name=\"addors[]\">";
 		$aAddors = unserialize($aRel[0][addors]);
@@ -1899,8 +1908,8 @@ function editRelation() {
 			$sOutputContent .= "<option $s name=" . $a['id'] . ">" . $a[username] . "</option>";
 		}
 		$sOutputContent .= "</select>"; 
-		
-				
+		*/
+
 		if ($_GET[id_relation]) {
 			$sOutputContent .= "<input type='hidden' name='id_relation' value='$_GET[id_relation]'>";
 			if ($aRel[0][seperateColumns] == "on")
