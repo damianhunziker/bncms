@@ -1,6 +1,10 @@
 <?php
 //copyright by Damian Hunziker, Brand New Design";
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL & ~E_NOTICE /* & ~E_WARNING */);
+
 include ("configuration/frontend-config.inc.php");
 $webuser = "webuser";
 
@@ -35,24 +39,6 @@ include (PATH."/inc/configuration/table-properties.inc.php");
 if ($_SESSION[errorMsg]) {
 	$outErrormsg = "Fehlermeldung: $_SESSION[errorMsg]";
 	$_SESSION['errorMsg'] = "";
-}
-
-$query="
-SELECT * FROM text as a, site as b 
-WHERE b.url = '".str_replace("/","", $_SERVER['PHP_SELF'])."'
-AND b.id = a.id_site";
-
-$aText = dbQuery($query);
-
-if (is_array($aText)) {
-	foreach ($aText as $key => $value) {
-		if ($value['place'] == "header") {
-			$sHeader = $value['html'];
-		}
-		if ($value['place'] == "footer") {
-			$sFooter = $value['html'];
-		}
-	}
 }
 
 if (!$_SESSION['style_color'])
