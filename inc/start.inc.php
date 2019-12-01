@@ -189,7 +189,7 @@ displayRow(
 ?>
 </body>
 </html>
-<?
+<?php
 exit();
 }	
 ?>
