@@ -1,6 +1,6 @@
 <?php
 
-$q = "SELECT gruppe FROM bncms_user WHERE username = '$_SESSION[user]'";
+$q = "SELECT gruppe FROM bncms_user WHERE username = '".e($_SESSION['user'])."'";
 $a = dbQuery($q);
 $q = "SELECT * FROM bncms_user_groups WHERE id = '$a[gruppe]'";
 $aUserGroup = q($q);

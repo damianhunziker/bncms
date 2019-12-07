@@ -332,8 +332,8 @@ function displayTable(
     //pre($searchParams);
     //Liest suchparameter in Sitzung
     if (is_array($searchParams)) {
-        if ($searchParams[place])
-            $_SESSION[aActiveSearchesRelations][$searchParams[place]][$searchParams[page_table]] = $searchParams;
+        if ($searchParams['place'])
+            $_SESSION['aActiveSearchesRelations'][$searchParams['place']][$searchParams['page_table']] = $searchParams;
     }
 
     //limit von conf_tables nehmen
@@ -379,8 +379,8 @@ function displayTable(
     //pre($_SESSION[aActiveSearchesRelations]);
     //Erstellt Suchfilter ab den aktiven Suchfeldern für Relationen
     //pre($_SESSION[aActiveSearchesRelations]);
-    if (is_array($_SESSION[aActiveSearchesRelations])) {
-        foreach ($_SESSION[aActiveSearchesRelations] as $sPlace => $aActiveTable) {
+    if (is_array($_SESSION['aActiveSearchesRelations'])) {
+        foreach ($_SESSION['aActiveSearchesRelations'] as $sPlace => $aActiveTable) {
             //echo "$sPlace == $place";
             if ($sPlace == $place) {
                 foreach ($aActiveTable as $sActiveTable => $sessionsp) {
@@ -473,7 +473,7 @@ function displayTable(
     }
     //echo $orderSql;
     //nimm standart sortierung und limit aus conf_tables
-    if (!$orderSql and $aTableProp[sort_order]) {
+    if (!$orderSql and $aTableProp['sort_order']) {
         $orderSql = " $table.$aTableProp[sort_order] $aTableProp[sort_order_ascdesc] ";
     }
 
@@ -1275,7 +1275,7 @@ jQuery(function() {
                         and $_GET[id]
                         and $row[$columnNameOfId]) {
                         //Einh&auml;ngepunkt EditRow Assignmenttabelle
-                        $query = "SELECT * FROM conf_tables WHERE name = 'assign_$_GET[table]_$table' or name = 'assign_" . $table . "_" . $_GET[table] . "'";
+                        $query = "SELECT * FROM conf_tables WHERE name = 'assign_".e($_GET['table'])."_$table' or name = 'assign_" . $table . "_" . e($_GET['table']) . "'";
                         $aAssignTable = dbQuery($query);
                         $op .= "</tr><tr><td colspan=\"10\">";
                         $op .= displayTable(
@@ -1398,18 +1398,18 @@ function displayAssignRow($columnNameOfId, $id, $table, $sourceTableName, $actio
 </tr>
 
 ";
-    $query = "SELECT * FROM $_GET[sourceTable] WHERE id = '$_GET[idValue]'";
+    $query = "SELECT * FROM ".e($_GET['sourceTable'])." WHERE id = '".e($_GET['idValue'])."'";
     $aSourceData = dbQuery($query);
     foreach ($aSourceData[0] as $key => $content) {
         $sSourceData .= $content . ", ";
     }
     $out .= "<tr><td>id_$_GET[sourceTable]<input type=\"hidden\" name=\"id_$_GET[sourceTable]\" value=\"" . $_GET["idValue"] . "\"></td><td>$sSourceData</td></tr>";
-    $query = "SELECT * FROM $_GET[destTable]";
+    $query = "SELECT * FROM ".e($_GET['destTable']);
     $aDestData = dbQuery($query);
     $sDestData .= "<select name=\"id_$_GET[destTable]\">";
     foreach ($aDestData as $count => $content) {
         //print_r($content);
-        $i = getIdName($_GET[destTable], $aManualFieldProperties);
+        $i = getIdName($_GET['destTable'], $aManualFieldProperties);
         $sDestData .= "<option value=\"" . $content[$i] . "\">";
         foreach ($content as $countField => $contentField) {
             $sDestData .= $contentField . ", ";
@@ -1699,8 +1699,8 @@ $os
                 $a = dbQuery($q);
                 if (count($a))
                     foreach ($a as $k1 => $v1) {
-                        if ($v1[$v[destFieldname]] != 0) {
-                            $q = "SELECT * FROM $aTargetTable[name] WHERE id = '" . $v1[$v[destFieldname]] . "'";
+                        if ($v1[$v['destFieldname']] != 0) {
+                            $q = "SELECT * FROM $aTargetTable[name] WHERE id = '" . $v1[$v['destFieldname']] . "'";
                             $aD = dbQuery($q);
                             $r .= $aD[0][name] . ", ";
                         }
@@ -2504,7 +2504,7 @@ function displayNTo1InputRelation(
         $aRelation = getRelationPropertiesById($cr, $aManualFieldProperties);
         //pre($row);
         //pre($aRelation);
-        $query = "SELECT " . getIdName(getNameFromTableString($linkingTable), $aManualFieldProperties) . " FROM " . getNameFromTableString($linkingTable) . " WHERE $linkingField = '" . $row[$aRelation[nto1TargetField]] . "'";
+        $query = "SELECT " . getIdName(getNameFromTableString($linkingTable), $aManualFieldProperties) . " FROM " . getNameFromTableString($linkingTable) . " WHERE $linkingField = '" . $row[$aRelation['nto1TargetField']] . "'";
         $RS5 = dbQuery($query);
         //echo pre($RS5,1);
         if (count($RS5) > 0) {
@@ -2601,7 +2601,7 @@ function displayNTo1OutputRelation(
         $aFieldProp = getFieldProperties($tableOrId, $field, $aManualFieldProperties);
         $aTargetField = getFieldProperties($aFieldProp[nto1TargetTable], $aFieldProp[nto1TargetField]);
 
-        $query = " SELECT * FROM " . getNameFromTableString($aRel['NTo1'][$tableOrId][$field]) . " WHERE " . $aTargetField[name] . " = '$content' ";
+        $query = " SELECT * FROM " . getNameFromTableString($aRel['NTo1'][$tableOrId][$field]) . " WHERE " . $aTargetField['name'] . " = '$content' ";
         $RS = dbQuery($query);
         if (count($RS) > 0) {
 
