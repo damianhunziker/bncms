@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="18b81081-15dc-49bb-bfbf-1d07cbf25e18" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/bncms/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/bncms/ajax.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bncms/inc/editor-functions.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/bncms/inc/editor-functions.inc.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bncms/inc/start.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/bncms/inc/start.inc.php" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution>
+      <executable />
+    </execution>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/bncms" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="C:\Program Files (x86)\EasyPHP-Devserver-17-2\eds-www\.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1SIg7L6J8nCm6PLM6LewaMNxiVX" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Program Files (x86)\EasyPHP-Devserver-17-2\eds-www" />
+      <recent name="C:\Program Files (x86)\EasyPHP-Devserver-17-2\eds-www\inc\configuration" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Program Files (x86)\EasyPHP-Devserver-17-2\eds-www" />
+      <recent name="C:\Program Files (x86)\EasyPHP-Devserver-17-2\eds-www\inc\configuration" />
+      <recent name="C:\Program Files (x86)\EasyPHP-Devserver-17-2\eds-www\inc" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="18b81081-15dc-49bb-bfbf-1d07cbf25e18" name="Default Changelist" comment="" />
+      <created>1571256355254</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1571256355254</updated>
+      <workItem from="1571256356452" duration="6200000" />
+      <workItem from="1571264607774" duration="3455000" />
+      <workItem from="1571343857803" duration="4304000" />
+      <workItem from="1571559498384" duration="7279000" />
+      <workItem from="1571691321853" duration="1408000" />
+      <workItem from="1571760553401" duration="4207000" />
+      <workItem from="1574187746382" duration="87000" />
+      <workItem from="1574657269033" duration="43000" />
+      <workItem from="1575225658396" duration="12613000" />
+      <workItem from="1575415776790" duration="860000" />
+      <workItem from="1575582892320" duration="509000" />
+      <workItem from="1575584807517" duration="563000" />
+      <workItem from="1575732831842" duration="833000" />
+      <workItem from="1575735220709" duration="826000" />
+      <workItem from="1575743549584" duration="1541000" />
+      <workItem from="1575746005007" duration="4233000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
