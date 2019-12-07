@@ -25,8 +25,16 @@ include (PATH."/inc/db-functions.inc.php");
 include (PATH."/inc/functions.inc.php");
 include (PATH."/inc/editor-functions.inc.php");
 include (PATH."/inc/display-functions.inc.php");
-session_set_cookie_params(30*24*60*60, RELATIVEPATHAJAX);
+
+// Vorher:
+//session_set_cookie_params(30*24*60*60, RELATIVEPATHAJAX);
+//session_start();
+
+// Nachher:
 session_start();
+$_SESSION['PHPSESSID'] = session_id();
+session_set_cookie_params(30*24*60*60, RELATIVEPATHAJAX);
+
 
 dbQuery("SET NAMES utf8");
 
@@ -41,63 +49,27 @@ if (file_exists(PATH."/admin/project_config.php")) {
 
 if ($_POST['username'] and $_POST['password'] and !@$_POST['savePost'] and $_POST['username'] != "webuser") {
     $query="SELECT bncms_user.*,  bncms_user_groups.name FROM bncms_user, bncms_user_groups WHERE bncms_user.gruppe = bncms_user_groups.id AND BINARY bncms_user.username = '".e($_POST['username'])."' and BINARY bncms_user.password = '".md5($_POST['password'])."' and (bncms_user_groups.name = 'Administratoren' or bncms_user_groups.name  = 'Redakteure')";
-
     $arr = dbQuery($query);
     $_SESSION['user'] = $_POST['username'];
     $_SESSION['userGroup'] = $arr["name"];
+    
     if (is_array($arr)) {
         $_SESSION['user_allowed'] = 1;
     }
+    
     echo "<script>window.location.href='index.php';</script>";
-    exit();
+    exit;
 }
 if (@$_GET['logout'] == true) {
-	$_SESSION = "";
-	$_SESSION['user_allowed'] = 0;	
+    session_destroy();
 }
+
 if ($_SESSION['user_allowed'] != 1) {
 ?>
-<script>jQuery('body').html("");</script>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>DB-Editor</title><script>RELATIVEPATH = '<?php echo RELATIVEPATHAJAX?>';</script>
-<script type="text/javascript" src="../jquery.js"></script>
-<script type="text/javascript" src="../lib/jquery-visible-master/jquery.visible.js"></script>
-<script type="text/javascript" src="admin.inc.js"></script>
-<script type="text/javascript" src="scroller/mootools.svn.js"></script>
-<script type="text/javascript">
-		window.addEvent('domready', function(){
-			var scroll2 = new Scroller('container', {area: 30, velocity: 2});
-			$('container').addEvent('mouseover', scroll2.start.bind(scroll2));
-			$('container').addEvent('mouseout', scroll2.stop.bind(scroll2));
-			
-		}); 
-	</script>
-<script type="text/javascript">
-</script>
-<script language="javascript">
-var wstat
-var ns4up = (document.layers) ? 1 : 0
-var ie4up = (document.all) ? 1 : 0
-var xsize = screen.width
-var ysize = screen.height
-var breite=xsize
-var hoehe=ysize
-var xpos=(xsize-breite)
-var ypos=(ysize-hoehe)
-function opwin(url, name) {
-alert(name);
-	wstat=window.open(url,name,"scrollbars=yes,status=no,toolbar=no,location=no,directories=no,resizable=yes,menubar=no,width="+breite+",height="+hoehe+",screenX="+xpos+",screenY="+ypos+",top="+ypos+",left="+xpos)
-	wstat.focus();
-}
-</script>
-<link href="style-admin.css" rel="stylesheet" type="text/css">
-<link href="style-admin-<?php echo $_SESSION[style_color]?>.css" rel="stylesheet" type="text/css">
-</head>
 
-<body onLoad="waitPreloadPage();">
 <style>
 .container {
   display: table;
@@ -133,9 +105,46 @@ margin-bottom:20px;
 transform:rotate(-<?php echo rand(10,20) ?>deg translate3d(0px,0px,1px); /* W3C */ 
 }
 </style>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>DB-Editor</title><script>RELATIVEPATH = '<?php echo RELATIVEPATHAJAX?>';</script>
+<script type="text/javascript" src="../jquery.js"></script>
+<script type="text/javascript" src="../lib/jquery-visible-master/jquery.visible.js"></script>
+<script type="text/javascript" src="admin.inc.js"></script>
+<script type="text/javascript" src="scroller/mootools.svn.js"></script>
+<script type="text/javascript">
+		window.addEvent('domready', function() {
+			var scroll2 = new Scroller('container', {area: 30, velocity: 2});
+			$('container').addEvent('mouseover', scroll2.start.bind(scroll2));
+			$('container').addEvent('mouseout', scroll2.stop.bind(scroll2));
+		});
+</script>
+<script type="text/javascript">
+</script>
+<script language="javascript">
+var wstat
+var ns4up = (document.layers) ? 1 : 0
+var ie4up = (document.all) ? 1 : 0
+var xsize = screen.width
+var ysize = screen.height
+var breite=xsize
+var hoehe=ysize
+var xpos=(xsize-breite)
+var ypos=(ysize-hoehe)
+function opwin(url, name) {
+alert(name);
+	wstat=window.open(url,name,"scrollbars=yes,status=no,toolbar=no,location=no,directories=no,resizable=yes,menubar=no,width="+breite+",height="+hoehe+",screenX="+xpos+",screenY="+ypos+",top="+ypos+",left="+xpos)
+	wstat.focus();
+}
+</script>
+<link href="style-admin.css" rel="stylesheet" type="text/css">
+<link href="style-admin-<?php echo $_SESSION['style_color']?>.css" rel="stylesheet" type="text/css">
+</head>
+
+<body onLoad="waitPreloadPage();">
 <div class="container">
   <div class="helper">
-    <div class="content"><div style=''><!--stuff-->
+    <div class="content"><div style=''>
 <?php	echo "<img src='../image/login.png' style='opacity:0.8'>"; 
 	echo "<div style='position:absolute; margin-top:-304px;margin-left:115px; text-align:center'><br /><br />";
 	echo "<form action=\"index.php\" method=\"post\">";
@@ -147,6 +156,7 @@ transform:rotate(-<?php echo rand(10,20) ?>deg translate3d(0px,0px,1px); /* W3C 
 	?>
 	</div>
   </div>
+</div>
 </div>
 </body></html>
 	<?php

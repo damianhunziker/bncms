@@ -3,163 +3,198 @@
 //Datenbank-Funktionen
 //copyright Damian Hunziker info@wide-design.ch
 
-//install
-//$q = "DROP TABLE text";
-//mysqli_query($DB,$q);
+$q = "
+CREATE TABLE IF NOT EXISTS `bncms_banned_ips` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `ip` CHAR(45) NOT NULL,
+  UNIQUE KEY(`ip`)
+)
+ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
+";
 
-$q = "CREATE TABLE IF NOT EXISTS `bncms_banned_ips` (
-    `id` int(10) unsigned NOT NULL auto_increment,
-    `ip` varchar(50) NOT NULL default '',
-    PRIMARY KEY  (`id`)
-)";
 mysqli_query($DB,$q);
 
-$q = "CREATE TABLE IF NOT EXISTS `conf_tables` (
-    `id` int(10) unsigned NOT NULL auto_increment,
-    `name` varchar(50) NOT NULL default '',
-    `columnNameOfId` varchar(64) NOT NULL default '',
-	`lang` varchar(50) NOT NULL default '0',
-	`insert` varchar(10) NOT NULL default '0', 
-	`mysql_condition` varchar(255) NOT NULL default '0',
-	`orderkey` decimal(3,2) NOT NULL default '0',
-	`color` varchar(10) NOT NULL default '0',
-	`users` text NOT NULL,
-	`editors` text NOT NULL,
-	`deletors` text NOT NULL,
-	`addors` text NOT NULL,
-	`is_assign_table` varchar(5) NOT NULL default '',
-	`id_relation` int(10) unsigned NOT NULL,
-	`editable` varchar(250) NOT NULL default '',
-	`sort_order` varchar(50) NOT NULL,
-	`sort_order_ascdesc`  set('','asc','desc') NOT NULL,
-    `entries_per_page` int(5) NOT NULL DEFAULT '10',
-	`export_xls` SET('','on','off') NOT NULL,
-	`export_csv` SET('','on','off') NOT NULL,
-	`actualize` SET('','on','off') NOT NULL,
-    PRIMARY KEY  (`id`)
-);
+$q = "
+CREATE TABLE IF NOT EXISTS `conf_tables` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(50) NOT NULL DEFAULT '',
+  `columnNameOfId` VARCHAR(64) NOT NULL DEFAULT '',
+  `lang` VARCHAR(50) NOT NULL DEFAULT '0',
+  `insert` VARCHAR(10) NOT NULL DEFAULT '0', 
+  `mysql_condition` VARCHAR(255) NOT NULL DEFAULT '0',
+  `orderkey` DECIMAL(3,2) NOT NULL DEFAULT '0',
+  `color` VARCHAR(10) NOT NULL DEFAULT '0',
+  `users` TEXT NOT NULL,
+  `editors` TEXT NOT NULL,
+  `deletors` TEXT NOT NULL,
+  `addors` TEXT NOT NULL,
+  `is_assign_table` VARCHAR(5) NOT NULL DEFAULT '',
+  `id_relation` INT(11) NOT NULL,
+  `editable` VARCHAR(250) NOT NULL default '',
+  `sort_order` VARCHAR(50) NOT NULL,
+  `sort_order_ascdesc`  SET('','asc','desc') NOT NULL,
+  `entries_per_page` INT(5) NOT NULL DEFAULT '10',
+  `export_xls` SET('','on','off') NOT NULL,
+  `export_csv` SET('','on','off') NOT NULL,
+  `actualize` SET('','on','off') NOT NULL
+)
+ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
 ";
-mysqli_query($DB,$q) or exit(mysqli_error($DB));
-$q = "CREATE TABLE IF NOT EXISTS `conf_fields` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `title` varchar(250) NOT NULL,
-  `type` varchar(255) NOT NULL DEFAULT 'textfield',
-  `mysql_order` decimal(3,2) NOT NULL DEFAULT '0.00',
-  `unchangeable` varchar(250) DEFAULT NULL,
-  `hidden` varchar(250) DEFAULT NULL,
-  `id_table` int(5) NOT NULL DEFAULT '0',
-  `mysqlType` varchar(250) NOT NULL DEFAULT '0',
-  `mysql_type_bez` varchar(250) NOT NULL,
-  `length_values` varchar(250) NOT NULL,
-  `nto1TargetField` varchar(15) NOT NULL,
-  `nto1TargetTable` varchar(35) NOT NULL,
-  `validation_required` set('','on','off') NOT NULL,
-  `validation_unique` set('','on','off') NOT NULL,
-  `validation_min_length` int(5) NOT NULL,
-  `nto1DisplayType` varchar(20) NOT NULL,
-  `nto1DropdownTitleField` varchar(50) NOT NULL,
-  `processing` varchar(30) NOT NULL,
-  `min_height` int(6) NOT NULL,
-  `min_width` int(6) NOT NULL,
-  `max_height` int(6) NOT NULL,
-  `max_width` int(6) NOT NULL,
-  PRIMARY KEY (`id`)
-) ";
-mysqli_query($DB,$q) or exit(mysqli_error($DB));
-$q = "CREATE TABLE IF NOT EXISTS `conf_relations` (
-    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `type` varchar(10) NOT NULL DEFAULT '0',
-  `table1` int(5) NOT NULL DEFAULT '0',
-  `table2` int(5) NOT NULL DEFAULT '0',
-  `ntomAssignFieldTable1` varchar(255) NOT NULL DEFAULT '',
-  `ntomAssignFieldTable2` varchar(255) NOT NULL DEFAULT '',
-  `seperateColumns` set('','on','off') NOT NULL DEFAULT '',
-  `users` text NOT NULL,
-  `editors` text NOT NULL,
-  `deletors` text NOT NULL,
-  `addors` text NOT NULL,
-  `ntomDisplayType` varchar(20) NOT NULL,
-  `ntomAjaxDisplayTitleField` varchar(50) NOT NULL,
-  `ntomAjaxDisplayMinSelections` int(5) NOT NULL,
-  `nto1TargetField` varchar(100) NOT NULL,
-  `nto1TargetTable` int(5) NOT NULL,
-  `nto1SourceField` varchar(100) NOT NULL,
-  `nto1SourceTable` int(5) NOT NULL,
-  PRIMARY KEY (`id`)
 
-)";
 mysqli_query($DB,$q) or exit(mysqli_error($DB));
-$q = "CREATE TABLE IF NOT EXISTS  `conf_relation_visibility` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `path` varchar(255) NOT NULL,
-  `users` varchar(100) NOT NULL,
-  `icon` varchar(100) NOT NULL,
-  `title` varchar(100) NOT NULL,
-  `showWithEditIcons` set('Separat','Normal','Beides') NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `path` (`path`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;";
-mysqli_query($DB,$q) or exit(mysqli_error($DB));
-$q = "CREATE TABLE IF NOT EXISTS `bncms_user` (
-    `id` int(10) unsigned NOT NULL auto_increment,
-    `username` varchar(50) NOT NULL default '',
-	`password` varchar(50) NOT NULL default '',
-	`notizen` text NOT NULL,
-	`gruppe` int(5) NOT NULL DEFAULT '0', 
-    PRIMARY KEY  (`id`),
-    UNIQUE KEY (`username`) 
-)";
+$q = "
+CREATE TABLE IF NOT EXISTS `conf_fields` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL DEFAULT '',
+  `title` VARCHAR(250) NOT NULL,
+  `type` VARCHAR(255) NOT NULL DEFAULT 'textfield',
+  `mysql_order` DECIMAL(3,2) NOT NULL DEFAULT '0.00',
+  `unchangeable` VARCHAR(250) DEFAULT NULL,
+  `hidden` VARCHAR(250) DEFAULT NULL,
+  `id_table` INT(11) NOT NULL,
+  `mysqlType` VARCHAR(250) NOT NULL DEFAULT '0',
+  `mysql_type_bez` VARCHAR(250) NOT NULL,
+  `length_values` VARCHAR(250) NOT NULL,
+  `nto1TargetField` VARCHAR(15) NOT NULL,
+  `nto1TargetTable` VARCHAR(35) NOT NULL,
+  `validation_required` SET('','on','off') NOT NULL,
+  `validation_unique` SET('','on','off') NOT NULL,
+  `validation_min_length` INT(11) NOT NULL,
+  `nto1DisplayType` VARCHAR(20) NOT NULL,
+  `nto1DropdownTitleField` VARCHAR(50) NOT NULL,
+  `processing` VARCHAR(30) NOT NULL,
+  `min_height` INT(11) NOT NULL,
+  `min_width` INT(11) NOT NULL,
+  `max_height` INT(11) NOT NULL,
+  `max_width` INT(11) NOT NULL,
+  FOREIGN KEY (`id_table`) REFERENCES conf_tables(`id`)
+    ON DELETE CASCADE 
+)
+ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
+";
+
 mysqli_query($DB,$q) or exit(mysqli_error($DB));
 
-$q = "CREATE TABLE IF NOT EXISTS `bncms_user_groups` (
-`id` int(20) NOT NULL,
-  `name` varchar(30) DEFAULT NULL,
-  `permit_configuration` set('','on','off') NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+$q = "
+CREATE TABLE IF NOT EXISTS `conf_relations` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL DEFAULT '',
+  `type` VARCHAR(10) NOT NULL DEFAULT '0',
+  `table1` INT(11) NOT NULL,
+  `table2` INT(11) NOT NULL,
+  `ntomAssignFieldTable1` VARCHAR(255) NOT NULL DEFAULT '',
+  `ntomAssignFieldTable2` VARCHAR(255) NOT NULL DEFAULT '',
+  `seperateColumns` SET('','on','off') NOT NULL DEFAULT '',
+  `users` TEXT NOT NULL,
+  `editors` TEXT NOT NULL,
+  `deletors` TEXT NOT NULL,
+  `addors` TEXT NOT NULL,
+  `ntomDisplayType` VARCHAR(20) NOT NULL,
+  `ntomAjaxDisplayTitleField` VARCHAR(50) NOT NULL,
+  `ntomAjaxDisplayMinSelections` INT(11) NOT NULL,
+  `nto1TargetField` VARCHAR(100) NOT NULL,
+  `nto1TargetTable` INT(11) NOT NULL,
+  `nto1SourceField` VARCHAR(100) NOT NULL,
+  `nto1SourceTable` INT(11) NOT NULL,
+  FOREIGN KEY (`table1`) REFERENCES conf_tables(`id`)
+    ON DELETE CASCADE,
+  FOREIGN KEY (`table2`) REFERENCES conf_tables(`id`)
+    ON DELETE CASCADE
+)
+ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
+";
+
 mysqli_query($DB,$q) or exit(mysqli_error($DB));
 
-$q = "SELECT * FROM bncms_user WHERE username = 'admin' ";
+$q = "
+CREATE TABLE IF NOT EXISTS `conf_relation_visibility` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `path` VARCHAR(255) NOT NULL,
+  `users` VARCHAR(100) NOT NULL,
+  `icon` VARCHAR(100) NOT NULL,
+  `title` VARCHAR(100) NOT NULL,
+  `showWithEditIcons` SET('Separat','Normal','Beides') NOT NULL,
+  UNIQUE KEY (`path`)
+) ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
+";
+
+mysqli_query($DB,$q) or exit(mysqli_error($DB));
+
+$q = "
+CREATE TABLE IF NOT EXISTS `bncms_user_groups` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(30) NOT NULL,
+  `permit_configuration` SET('', 'on', 'off') NOT NULL
+) ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
+";
+
+mysqli_query($DB,$q) or exit(mysqli_error($DB));
+
+
+$q = "
+CREATE TABLE IF NOT EXISTS `bncms_user` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `username` VARCHAR(32) NOT NULL DEFAULT '',
+  `password` VARCHAR(32) NOT NULL DEFAULT '',
+  `notizen` TEXT NOT NULL,
+  `gruppe` INT(11) NOT NULL,
+  UNIQUE KEY (`username`),
+  FOREIGN KEY (`gruppe`) REFERENCES bncms_user_groups(`id`) ON DELETE RESTRICT
+) ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
+";
+
+mysqli_query($DB,$q) or exit(mysqli_error($DB));
+
+
+
+$q = "SELECT * FROM bncms_user WHERE username = 'admin';";
 $res =mysqli_query($DB,$q);
 
 if (!mysqli_num_rows($res)) {
-
-    $q = "
-
+$q = "
 INSERT INTO `conf_tables` (`id`, `name`, `columnNameOfId`, `lang`, `insert`, `mysql_condition`, `orderkey`, `color`, `users`, `editors`, `deletors`, `addors`, `is_assign_table`, `id_relation`, `editable`, `sort_order`, `sort_order_ascdesc`, `entries_per_page`, `export_xls`, `export_csv`, `actualize`) VALUES
 (1, 'bncms_user', 'id', 'Benutzer', '0', '', '9.99', '', 'a:1:{i:0;s:15:\"Administratoren\";}', 'a:1:{i:0;s:15:\"Administratoren\";}', 'a:1:{i:0;s:15:\"Administratoren\";}', 'a:1:{i:0;s:15:\"Administratoren\";}', '', 0, '', '', '', 50, '', '', ''),
-(2, 'bncms_user_groups', 'id', 'Benutzergruppen', '0', '', '9.99', '', 'a:1:{i:0;s:15:\"Administratoren\";}', 'a:1:{i:0;s:15:\"Administratoren\";}', 'a:1:{i:0;s:15:\"Administratoren\";}', 'a:1:{i:0;s:15:\"Administratoren\";}', '', 0, '', '', '', 0, '', '', '');";
-    mysqli_query($DB,$q);
-    echo mysqli_error($DB);
+(2, 'bncms_user_groups', 'id', 'Benutzergruppen', '0', '', '9.99', '', 'a:1:{i:0;s:15:\"Administratoren\";}', 'a:1:{i:0;s:15:\"Administratoren\";}', 'a:1:{i:0;s:15:\"Administratoren\";}', 'a:1:{i:0;s:15:\"Administratoren\";}', '', 0, '', '', '', 0, '', '', '');
+";
 
-    $q = "INSERT INTO `bncms_user` (`id`, `username`, `password`, `notizen`, `gruppe`) VALUES
-(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '', 1),
-(2, 'webuser', '21232f297a57a5a743894a0e4a801fc3', '', ''),
-(3, 'redakteur', 'f1f5e247297b0133033cd5d34e057da6', '', 2);";
 mysqli_query($DB,$q);
-    echo mysqli_error($DB);
+echo mysqli_error($DB);
+
+
 
 $q = "INSERT INTO `bncms_user_groups` (`id`, `name`, `permit_configuration`) VALUES
 (1, 'Administratoren', 'on'),
-(2, 'Redakteure', 'off');";
+(2, 'Redakteure', 'off'),
+(3, 'Frontend', 'off');
+";
+
 mysqli_query($DB,$q);
-    echo mysqli_error($DB);
+echo mysqli_error($DB);
+
+$q = "
+INSERT INTO `bncms_user` (`id`, `username`, `password`, `notizen`, `gruppe`) VALUES
+  (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '', 1),
+  (2, 'redakteur', 'f1f5e247297b0133033cd5d34e057da6', '', 2),
+  (3, 'frontend', 'aca33b9c046b2a50b8c3c54cc0380de8', '', 3);
+";
+
+mysqli_query($DB,$q);
+echo mysqli_error($DB);
 
 $q = "
 INSERT INTO `conf_fields` (`id`, `name`, `title`, `type`, `mysql_order`, `unchangeable`, `hidden`, `id_table`, `mysqlType`, `mysql_type_bez`, `length_values`, `nto1TargetField`, `nto1TargetTable`, `validation_required`, `validation_unique`, `validation_min_length`, `nto1DisplayType`, `nto1DropdownTitleField`, `processing`, `min_height`, `min_width`, `max_height`, `max_width`) VALUES
-(1, 'id', '', 'textfield', 0.00, NULL, NULL, 1, 'int(10) unsigned', 'INT', '10', '', '', '', '', 0, '', '', '', 0, 0, 0, 0),
+(1, 'id', '', 'textfield', 0.00, NULL, NULL, 1, 'int(11)', 'INT', '10', '', '', '', '', 0, '', '', '', 0, 0, 0, 0),
 (2, 'username', '', 'textfield', 0.00, NULL, NULL, 1, 'varchar(50)', 'VARCHAR', '50', '', '', '', '', 0, '', '', '', 0, 0, 0, 0),
 (3, 'password', '', 'password', 0.00, '0', '0', 1, 'varchar(50)', 'VARCHAR', '50', '', 'b', 'off', 'off', 0, 'radio', '', '', 0, 0, 0, 0),
 (4, 'notizen', '', 'textfield', 0.00, NULL, NULL, 1, 'text', 'TEXT', '', '', '', '', '', 0, '', '', '', 0, 0, 0, 0),
-(5, 'gruppe', '', 'nto1', '0.00', '0', '0', 1, 'int(20)', 'INT', '5', '6', '2', 'off', 'off', 0, 'dropdown', 'name', '', 0, 0, 0, 0),
-(6, 'id', '', 'number', '0.00', '0', '0', 2, 'int(20)', '', '', '150', '1', 'off', 'off', 0, 'radio', 'orders_id', '', 0, 0, 0, 0),
+(5, 'gruppe', '', 'nto1', '0.00', '0', '0', 1, 'int(11)', 'INT', '5', '6', '2', 'off', 'off', 0, 'dropdown', 'name', '', 0, 0, 0, 0),
+(6, 'id', '', 'number', '0.00', '0', '0', 2, 'int(11)', '', '', '150', '1', 'off', 'off', 0, 'radio', 'orders_id', '', 0, 0, 0, 0),
 (7, 'name', '', 'textfield', '0.00', '0', '0', 2, 'varchar(250)', 'VARCHAR', '30', '1', '1', 'off', 'on', 0, 'radio', 'orders_id', '', 0, 0, 0, 0),
 (8, 'permit_configuration', 'Erlaube Konfiguration', 'checkbox', '0.00', '0', '0', 2, 'set(\'\', \'on\', \'off\')', '', '', '1', '1', 'off', 'off', 0, 'radio', 'orders_id', '', 0, 0, 0, 0);
 ";
-    mysqli_query($DB,$q);
-	echo mysqli_error($DB);
+
+mysqli_query($DB,$q);
+echo mysqli_error($DB);
 
 }
 
