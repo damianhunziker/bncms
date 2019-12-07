@@ -1077,11 +1077,11 @@ jQuery(function() {
                 $iNtoMFound = 0;
 
                 if (!is_numeric($key)) {
+
                     //Pr&uuml;fen ob Werte aus der Assignment Tabelle vorhanden sind
                     $fieldFromArray = "";
 
                     if (is_array($field)) {
-
                         //echo $sComingFromRelations;
 
                         $op .= "<td class=sidebar valign=top>";
@@ -1310,6 +1310,7 @@ jQuery(function() {
                 $test = 1;
 
                 $oa = generateRelatedContent(preg_replace("/-a$/", "", $sComingFromRelations), $tableOrId, $row, $sDisplayTableRecursivePathOut, $aNTo1TablePath, $arrTableColumnNames, $columnNameOfId, $iSwitchInColumnSeparat, $aManualFieldProperties, $ajaxExec);
+
                 //$op .= "$sComingFromRelations, $table, $tableId, $row, $sDisplayTableRecursivePathOut, $aNTo1TablePath, $arrTableColumnNames, $columnNameOfId, $iSwitchInColumnSeparat";
                 if ($oa)
                     $sideBarActive = 1;
@@ -2344,7 +2345,7 @@ function generateRelatedContent(
     //Anzeige der Relationen mit separaten Icons
     $q = "SELECT * FROM conf_relation_visibility WHERE path REGEXP '^$sComingFromRelations-[0-9]+$'  AND (showWithEditIcons = 'Separat' OR showWithEditIcons = 'Beides')";
     $a = q($q, "", 1);
-    getRelationVisibility($sComingFromRelations, $aManualFieldProperties);
+    //getRelationVisibility($sComingFromRelations, $aManualFieldProperties);
     //pre($a);
     if (count($a)) {
         foreach ($a as $k => $v) {

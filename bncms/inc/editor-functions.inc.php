@@ -1845,62 +1845,17 @@ function editRelation() {
 		}
 		
 		$sOutputContent .= "<br /><br>Sichtbar f&uuml;r die Benutzer:<br>";
-		$sOutputContent .= "<select multiple name=\"users[]\">";
-		$aUsers = unserialize($aRel[0][users]);
-		$q = "SELECT * FROM bncms_user";
-		$r = dbQuery($q,"",1);
-		foreach ($r as $k => $a){
-			if (in_array($a[username], $aUsers))
-				$s = "selected";
-			else
-				$s = "";
-			$sOutputContent .= "<option $s name=" . $a['id'] . ">" . $a['username'] . "</option>";
-		}
-		$sOutputContent .= "</select>"; 
-		
+        $sOutputContent .= generateUserDropdown("users", $aRel[0][users], "class='userDropdown'");
+
 		$sOutputContent .= "<br /><br>Editieren k&ouml;nnen die Benutzer:<br>";
-		$sOutputContent .= "<select multiple name=\"editors[]\">";
-		$aEditors = unserialize($aRel[0][editors]);
-		$q = "SELECT * FROM bncms_user";
-		$r = dbQuery($q,"",1);
-		foreach ($r as $k => $a){
-			if (in_array($a[username], $aEditors))
-				$s = "selected";
-			else
-				$s = "";
-			$sOutputContent .= "<option $s name=" . $a['id'] . ">" . $a[username] . "</option>";
-		}
-		$sOutputContent .= "</select>"; 
+        $sOutputContent .= generateUserDropdown("editors", $aRel[0][editors], "class='userDropdown'");
 		
 		$sOutputContent .= "<br /><br>L&ouml;schen k&ouml;nnen die Benutzer:<br>";
-		$sOutputContent .= "<select multiple name=\"deletors[]\">";
-		$aDeletors = unserialize($aRel[0][deletors]);
-		$q = "SELECT * FROM bncms_user";
-		$r = dbQuery($q,"",1);
-		foreach ($r as $k => $a){
-			if (in_array($a[username], $aDeletors))
-				$s = "selected";
-			else
-				$s = "";
-			$sOutputContent .= "<option $s name=" . $a['id'] . ">" . $a[username] . "</option>";
-		}
-		$sOutputContent .= "</select>"; 
+        $sOutputContent .= generateUserDropdown("deletors", $aRel[0][deletors], "class='userDropdown'");
 		
 		$sOutputContent .= "<br /><br>Hinzuf&uuml;gen k&ouml;nnen die Benutzer:<br>";
-		$sOutputContent .= "<select multiple name=\"addors[]\">";
-		$aAddors = unserialize($aRel[0][addors]);
-		$q = "SELECT * FROM bncms_user";
-		$r = dbQuery($q,"",1);
-		foreach ($r as $k => $a){
-			if (in_array($a[username], $aAddors))
-				$s = "selected";
-			else
-				$s = "";
-			$sOutputContent .= "<option $s name=" . $a['id'] . ">" . $a[username] . "</option>";
-		}
-		$sOutputContent .= "</select>"; 
-		
-				
+        $sOutputContent .= generateUserDropdown("addors", $aRel[0][addors], "class='userDropdown'");
+
 		if ($_GET[id_relation]) {
 			$sOutputContent .= "<input type='hidden' name='id_relation' value='$_GET[id_relation]'>";
 			if ($aRel[0][seperateColumns] == "on")

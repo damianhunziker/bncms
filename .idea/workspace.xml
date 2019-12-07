@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="18b81081-15dc-49bb-bfbf-1d07cbf25e18" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/bncms/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/bncms/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bncms/inc/editor-functions.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/bncms/inc/editor-functions.inc.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bncms/inc/start.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/bncms/inc/start.inc.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -88,7 +87,7 @@
       <workItem from="1575732831842" duration="833000" />
       <workItem from="1575735220709" duration="826000" />
       <workItem from="1575743549584" duration="1541000" />
-      <workItem from="1575746005007" duration="4233000" />
+      <workItem from="1575746005007" duration="10291000" />
     </task>
     <servers />
   </component>

@@ -90,4 +90,5 @@ include("bncms/inc/start.inc.php");
 <?php
 
 displayTable(3,"id");
+displayTable(4,"id");
 ?>

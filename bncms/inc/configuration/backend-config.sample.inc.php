@@ -1,6 +1,6 @@
 <?php
-define('PATH', $_SERVER['DOCUMENT_ROOT']."/");
-define('RELATIVEPATH', "");
-define('RELATIVEPATHAJAX', "/admin");
-define('RELATIVEPATHAPP', "");
+define('PATH', $_SERVER['DOCUMENT_ROOT']."/bncms/");
+define('RELATIVEPATH', "/bncms/");
+define('RELATIVEPATHAJAX', "/bncms/admin");
+define('RELATIVEPATHAPP', "/bncms/");
 ?>
