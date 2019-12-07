@@ -5,7 +5,7 @@
 
 $q = "
 CREATE TABLE IF NOT EXISTS `bncms_banned_ips` (
-  `id` INT(11) PRIMARY KEY,
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `ip` CHAR(45) NOT NULL,
   UNIQUE KEY(`ip`)
 )
@@ -16,7 +16,7 @@ mysqli_query($DB,$q);
 
 $q = "
 CREATE TABLE IF NOT EXISTS `conf_tables` (
-  `id` INT(11) PRIMARY KEY,
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(50) NOT NULL DEFAULT '',
   `columnNameOfId` VARCHAR(64) NOT NULL DEFAULT '',
   `lang` VARCHAR(50) NOT NULL DEFAULT '0',
@@ -44,7 +44,7 @@ ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
 mysqli_query($DB,$q) or exit(mysqli_error($DB));
 $q = "
 CREATE TABLE IF NOT EXISTS `conf_fields` (
-  `id` INT(11) PRIMARY KEY,
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(255) NOT NULL DEFAULT '',
   `title` VARCHAR(250) NOT NULL,
   `type` VARCHAR(255) NOT NULL DEFAULT 'textfield',
@@ -77,7 +77,7 @@ mysqli_query($DB,$q) or exit(mysqli_error($DB));
 
 $q = "
 CREATE TABLE IF NOT EXISTS `conf_relations` (
-  `id` INT(11) PRIMARY KEY,
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(255) NOT NULL DEFAULT '',
   `type` VARCHAR(10) NOT NULL DEFAULT '0',
   `table1` INT(11) NOT NULL,
@@ -108,7 +108,7 @@ mysqli_query($DB,$q) or exit(mysqli_error($DB));
 
 $q = "
 CREATE TABLE IF NOT EXISTS `conf_relation_visibility` (
-  `id` INT(11) PRIMARY KEY,
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `path` VARCHAR(255) NOT NULL,
   `users` VARCHAR(100) NOT NULL,
   `icon` VARCHAR(100) NOT NULL,
@@ -122,7 +122,7 @@ mysqli_query($DB,$q) or exit(mysqli_error($DB));
 
 $q = "
 CREATE TABLE IF NOT EXISTS `bncms_user_groups` (
-  `id` INT(11) PRIMARY KEY,
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(30) NOT NULL,
   `permit_configuration` SET('', 'on', 'off') NOT NULL
 ) ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
@@ -133,7 +133,7 @@ mysqli_query($DB,$q) or exit(mysqli_error($DB));
 
 $q = "
 CREATE TABLE IF NOT EXISTS `bncms_user` (
-  `id` INT(11) PRIMARY KEY,
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `username` VARCHAR(32) NOT NULL DEFAULT '',
   `password` VARCHAR(32) NOT NULL DEFAULT '',
   `notizen` TEXT NOT NULL,
