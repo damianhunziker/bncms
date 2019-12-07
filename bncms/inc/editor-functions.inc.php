@@ -1698,7 +1698,7 @@ function backupMenu() {
 function saveBackup($sButton="on") {
 	global $aDatabase;
 	$backupFile = "backup/".@$dbname . date("d.m.Y-H-i-s")  . '.sql';
-	$command = "mysqldump --opt -h$aDatabase[host] -u$aDatabase[user] -p$aDatabase[password] $aDatabase[dbname] > $backupFile";
+	echo $command = "mysqldump --opt -h$aDatabase[host] -u$aDatabase[user] -p$aDatabase[password] $aDatabase[dbname] > $backupFile";
 	system($command, $fp);
 	if ($fp==0) echo "<div style=\"border:1px solid green; width:350px; padding:5px; color:green; font-weight:bold\">Datenbank gesichert unter $backupFile.</div>"; else echo "<div style=\"border:1px solid red; width:350px; padding:5px; color:red; font-weight:bold\">ACHTUNG: Datenbank konnte nicht gesichert werden unter $backupFile. Fehler: $fp</div>";
 	if ($sButton == "on") {
