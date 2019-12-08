@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `conf_tables` (
   `editable` VARCHAR(250) NOT NULL default '',
   `sort_order` VARCHAR(50) NOT NULL,
   `sort_order_ascdesc`  SET('','asc','desc') NOT NULL,
-  `entries_per_page` INT(5) NOT NULL DEFAULT '10',
+  `entries_per_page` INT(11) NOT NULL DEFAULT '10',
   `export_xls` SET('','on','off') NOT NULL,
   `export_csv` SET('','on','off') NOT NULL,
   `actualize` SET('','on','off') NOT NULL
@@ -183,12 +183,12 @@ echo mysqli_error($DB);
 
 $q = "
 INSERT INTO `conf_fields` (`id`, `name`, `title`, `type`, `mysql_order`, `unchangeable`, `hidden`, `id_table`, `mysqlType`, `mysql_type_bez`, `length_values`, `nto1TargetField`, `nto1TargetTable`, `validation_required`, `validation_unique`, `validation_min_length`, `nto1DisplayType`, `nto1DropdownTitleField`, `processing`, `min_height`, `min_width`, `max_height`, `max_width`) VALUES
-(1, 'id', '', 'textfield', 0.00, NULL, NULL, 1, 'int(11)', 'INT', '10', '', '', '', '', 0, '', '', '', 0, 0, 0, 0),
+(1, 'id', '', 'textfield', 0.00, NULL, NULL, 1, 'INT(11)', 'INT', '10', '', '', '', '', 0, '', '', '', 0, 0, 0, 0),
 (2, 'username', '', 'textfield', 0.00, NULL, NULL, 1, 'varchar(50)', 'VARCHAR', '50', '', '', '', '', 0, '', '', '', 0, 0, 0, 0),
 (3, 'password', '', 'password', 0.00, '0', '0', 1, 'varchar(50)', 'VARCHAR', '50', '', 'b', 'off', 'off', 0, 'radio', '', '', 0, 0, 0, 0),
 (4, 'notizen', '', 'textfield', 0.00, NULL, NULL, 1, 'text', 'TEXT', '', '', '', '', '', 0, '', '', '', 0, 0, 0, 0),
-(5, 'gruppe', '', 'nto1', '0.00', '0', '0', 1, 'int(11)', 'INT', '5', '6', '2', 'off', 'off', 0, 'dropdown', 'name', '', 0, 0, 0, 0),
-(6, 'id', '', 'number', '0.00', '0', '0', 2, 'int(11)', '', '', '150', '1', 'off', 'off', 0, 'radio', 'orders_id', '', 0, 0, 0, 0),
+(5, 'gruppe', '', 'nto1', '0.00', '0', '0', 1, 'INT(11)', 'INT', '5', '6', '2', 'off', 'off', 0, 'dropdown', 'name', '', 0, 0, 0, 0),
+(6, 'id', '', 'number', '0.00', '0', '0', 2, 'INT(11)', '', '', '150', '1', 'off', 'off', 0, 'radio', 'orders_id', '', 0, 0, 0, 0),
 (7, 'name', '', 'textfield', '0.00', '0', '0', 2, 'varchar(250)', 'VARCHAR', '30', '1', '1', 'off', 'on', 0, 'radio', 'orders_id', '', 0, 0, 0, 0),
 (8, 'permit_configuration', 'Erlaube Konfiguration', 'checkbox', '0.00', '0', '0', 2, 'set(\'\', \'on\', \'off\')', '', '', '1', '1', 'off', 'off', 0, 'radio', 'orders_id', '', 0, 0, 0, 0);
 ";
