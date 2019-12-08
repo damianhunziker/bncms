@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `bncms_user` (
   `username` VARCHAR(32) NOT NULL DEFAULT '',
   `password` VARCHAR(32) NOT NULL DEFAULT '',
   `notizen` TEXT NOT NULL,
-  `gruppe` INT(11) NOT NULL,
+  `gruppe` INT(11),
   UNIQUE KEY (`username`),
   FOREIGN KEY (`gruppe`) REFERENCES bncms_user_groups(`id`) ON DELETE RESTRICT
 ) ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
@@ -164,8 +164,7 @@ echo mysqli_error($DB);
 
 $q = "INSERT INTO `bncms_user_groups` (`id`, `name`, `permit_configuration`) VALUES
 (1, 'Administratoren', 'on'),
-(2, 'Redakteure', 'off'),
-(3, 'Frontend', 'off');
+(2, 'Redakteure', 'off');
 ";
 
 mysqli_query($DB,$q);
@@ -175,7 +174,7 @@ $q = "
 INSERT INTO `bncms_user` (`id`, `username`, `password`, `notizen`, `gruppe`) VALUES
   (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '', 1),
   (2, 'redakteur', 'f1f5e247297b0133033cd5d34e057da6', '', 2),
-  (3, 'frontend', 'aca33b9c046b2a50b8c3c54cc0380de8', '', 3);
+  (3, 'webuser', 'aca33b9c046b2a50b8c3c54cc0380de8', '', null);
 ";
 
 mysqli_query($DB,$q);
