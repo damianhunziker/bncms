@@ -61,6 +61,7 @@ if ($_POST['username'] and $_POST['password'] and !@$_POST['savePost'] and $_POS
     exit;
 }
 if (@$_GET['logout'] == true) {
+    $_SESSION = null;
     session_destroy();
 }
 
