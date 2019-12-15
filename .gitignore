@@ -12,3 +12,10 @@ bncms/inc/configuration/frontend-config.inc.php
 
 .buildpath
 .project
+
+
+/.settings/
+/.idea/
+
+/.buildpath
+/.project
