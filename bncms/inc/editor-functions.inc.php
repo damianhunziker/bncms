@@ -1348,6 +1348,7 @@ function editField() {
 				$f = unserialize($fieldcontent);
 				$q = "SELECT * FROM bncms_user";
 				$a = dbQuery($q,"",1);
+				pre($f);
                 $sOutputContent .= "<td valign=\"top\" class=\"b\">".$fieldname."</td></tr><tr><td valign=\"top\">";
                 $sOutputContent .= generateUserDropdown("save_".$fieldname, $fieldcontent);
                 $sOutputContent .= "</td></tr><tr>";
@@ -2836,9 +2837,9 @@ function generateUserDropdown($sNameSelect, $sSelectedUsers, $sAddToSelect="", $
                     $s = "";
                 if (is_array($aDisplayedUsers)) {
                     if (in_array($vUser[username], $aDisplayedUsers))
-                        $re .= "<option $s >&nbsp;&nbsp;&nbsp;&nbsp;$vUser[username]</option>";
+                        $re .= "<option value='$vUser[username]' $s>&nbsp;&nbsp;&nbsp;&nbsp;$vUser[username]</option>";
                 } else {
-                    $re .= "<option $s >&nbsp;&nbsp;&nbsp;&nbsp;$vUser[username]</option>";
+                    $re .= "<option value='$vUser[username]' $s>&nbsp;&nbsp;&nbsp;&nbsp;$vUser[username]</option>";
                 }
             }
         }

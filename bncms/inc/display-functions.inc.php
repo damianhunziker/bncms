@@ -826,7 +826,7 @@ opwin('$ed.php?action=new&columnNameOfId=$columnNameOfId&table=$tableOrId','Edit
                     $of = $f[title];
                 else
                     $of = $column['Field'];
-                if ($isNToMDisplayEditEntry == "yes" and $aRelationProperties[seperateColumns] != "on")
+                if ($aRelationProperties[seperateColumns] != "on")
                     $op .= "<td class='td_sort $kc assign' valign=top>" . $of . "</td>";
                 $ofc++;
             }
@@ -1082,53 +1082,56 @@ jQuery(function() {
                     $fieldFromArray = "";
 
                     if (is_array($field)) {
-                        //echo $sComingFromRelations;
 
-                        $op .= "<td class=sidebar valign=top>";
-                        preg_match("/\-([0-9])+\-a$/", $sComingFromRelations, $t);
-                        //$q = "SELECT * FROM conf_relations WHERE id = '$t[1]'";
-                        //$ar = q($q);
-                        $ar = getRelationPropertiesById($t[1], $aManualFieldProperties);
-                        //pre($a);
-                        $q = "SELECT * FROM conf_tables WHERE name = '$ar[name]'";
-                        $b = q($q, "", 1);
-                        //pre($b);
-                        //todo muss das auflösen, es gibt zwei konfigurierte Relationen die beide auf die selbe zuordnungstabelle zeigen, es ist daher nicht möglich tableId zuverlässig zu holen, man weiss eigentlich nicht zu welcher Relation die angezeigten Einträge gehören
+                        if ($isNToMDisplayEditEntry != "yes") {
+                            //echo $sComingFromRelations;
+                            print_r($field);
+                            $op .= "<td class=sidebar valign=top>";
+                            preg_match("/\-([0-9])+\-a$/", $sComingFromRelations, $t);
+                            //$q = "SELECT * FROM conf_relations WHERE id = '$t[1]'";
+                            //$ar = q($q);
+                            $ar = getRelationPropertiesById($t[1], $aManualFieldProperties);
+                            //pre($a);
+                            $q = "SELECT * FROM conf_tables WHERE name = '$ar[name]'";
+                            $b = q($q, "", 1);
+                            //pre($b);
+                            //todo muss das auflösen, es gibt zwei konfigurierte Relationen die beide auf die selbe zuordnungstabelle zeigen, es ist daher nicht möglich tableId zuverlässig zu holen, man weiss eigentlich nicht zu welcher Relation die angezeigten Einträge gehören
 
-                        //anzeige relationen mit separaten icons
-                        $q = "SELECT * FROM conf_relation_visibility WHERE path REGEXP '^$sComingFromRelations-[0-9]+$'  AND (showWithEditIcons = 'Separat' OR showWithEditIcons = 'Beides')";
-                        $a = q($q, "", 1);
-                        //pre($a);
-                        if (count($a)) {
-                            foreach ($a as $k => $v) {
-                                //pre($v);
+                            //anzeige relationen mit separaten icons
+                            $q = "SELECT * FROM conf_relation_visibility WHERE path REGEXP '^$sComingFromRelations-[0-9]+$'  AND (showWithEditIcons = 'Separat' OR showWithEditIcons = 'Beides')";
+                            $a = q($q, "", 1);
+                            //pre($a);
+                            if (count($a)) {
+                                foreach ($a as $k => $v) {
+                                    //pre($v);
 
-                                //$op .= "div_".$ar[name]."-".$b[0][id]."_".$field[$b[0][columnNameOfId]]."_relations_".$sDisplayTableRecursivePathOut."_".$v[path];
-                                $op .= "<div class=sidebar-item id=\"icon_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_$ajaxExec\" style=\"display:none\">";
+                                    //$op .= "div_".$ar[name]."-".$b[0][id]."_".$field[$b[0][columnNameOfId]]."_relations_".$sDisplayTableRecursivePathOut."_".$v[path];
+                                    $op .= "<div class=sidebar-item id=\"icon_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_$ajaxExec\" style=\"display:none\">";
+                                    $op .= displayVisibilityButtons(
+                                        "",
+                                        "div_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_" . $ajaxExec,
+                                        $v[title],
+                                        1,
+                                        $v[icon]
+                                    );
+                                    $op .= "</div>";
+                                }
+                            }
+                            if ($showRelations == "yes") {
+                                $op .= "<div class=sidebar-item id=\"icon_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_$ajaxExec\" style=\"display:none\">";
                                 $op .= displayVisibilityButtons(
                                     "",
-                                    "div_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_" . $ajaxExec,
-                                    $v[title],
+                                    "div_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $ajaxExec,
+                                    "Relationen des Eintrags &ouml;ffnen",
                                     1,
-                                    $v[icon]
-                                );
-                                $op .= "</div>";
-                            }
-                        }
-                        if ($showRelations == "yes") {
-                            $op .= "<div class=sidebar-item id=\"icon_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_$ajaxExec\" style=\"display:none\">";
-                            $op .= displayVisibilityButtons(
-                                "",
-                                "div_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $ajaxExec,
-                                "Relationen des Eintrags &ouml;ffnen",
-                                1,
                                     "",
                                     "",
                                     $sBeforeAjaxQueryString
-                            );
-                            $op .= "</div>";
+                                );
+                                $op .= "</div>";
+                            }
+                            $op .= "</nobr></td>";
                         }
-                        $op .= "</nobr></td>";
 
 
                         $oa = generateRelatedContent($sComingFromRelations, $b[0][id], $field, $sDisplayTableRecursivePathOut, $aNTo1TablePath, $arrTableColumnNames, $b[0][columnNameOfId], $iSwitchInColumnSeparatAssignment, $aManualFieldProperties, $ajaxExec);

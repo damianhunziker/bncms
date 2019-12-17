@@ -1,6 +1,6 @@
 _notes/
 admin/backup/
-file/
+file/*
 
 bncms/inc/configuration/database-settings.inc.php
 bncms/inc/configuration/backend-config.inc.php
