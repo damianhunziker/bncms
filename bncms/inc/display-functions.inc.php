@@ -261,7 +261,8 @@ function displayTable(
 				print_r($t);*/
                 //exit();#
                 if (!$webuser) {
-                    echo "<script>window.location.reload();</script>";
+
+                    echo "<script>console.log('eventual logout -> reloading'); window.location.reload();</script>";
                     exit();
                 }
             }
@@ -304,7 +305,8 @@ function displayTable(
     } else
         $aPagingRecursivePath = array();
         //echo $ajaxExec." ";
-        $place = md5($ajaxExec . @implode("/", $aPagingRecursivePath));
+
+        $place = md5($rootId . @implode("/", $aPagingRecursivePath));
         //echo "<br>";
     if (strpos("a" . $table, "assign_") == 1) {
         $sIsAssignmentTable = "yes";
@@ -597,7 +599,7 @@ print_r($searchParams);
     $arrTableContent = $arrNewTableContent;
     if (@$sessionsp[order])
         $ot = $sessionsp[order];
-    $op .= "<form method='post' action='' id='f_" . $ajaxExec . "'><input type=hidden value='" . $arg_list . "' id=arg_list_" . $ajaxExec . "><input type=hidden id=page_table value='$table-$tableId' class='c" . $ajaxExec . "'>
+    $op .= "<form method='post' action='' id='f_" . $ajaxExec . "' onsubmit='return false;'><input type=hidden value='" . $arg_list . "' id=arg_list_" . $ajaxExec . "><input type=hidden id=page_table value='$table-$tableId' class='c" . $ajaxExec . "'>
 			<input type=hidden id=order name=order value='$ot' class='c" . $ajaxExec . "'>
 			<input type=hidden id=place value=$place class='c" . $ajaxExec . "'>";
     if ($aTableProp[export_xls] or $aTableProp[export_csv]) {
@@ -2817,5 +2819,35 @@ function buildLimit($place, $table, $tableId, $limit)
         $limitSql = "0," . $limit;
     $limitSql = preg_replace('/(\-[0-9]+),/', "0", $limitSql);
     return $limitSql;
+}
+
+function saveScrollpos() {
+    session_start();
+
+    if ($iPosParameters = strpos($_GET['phpSelf'], "?")) {
+        $_GET['phpSelf'] = substr($_GET['phpSelf'], 0, $iPosParameters);
+    }
+
+    $_SESSION['scrollPos'][$_GET['phpSelf']]['top'] = $_GET['scrollTop'];
+    $_SESSION['scrollPos'][$_GET['phpSelf']]['left'] = $_GET['scrollLeft'];
+    $aSessVisibleLayers = $_SESSION['aVisibleLayers'];
+    if ($_GET['an'] != "") {
+        if (!is_array($aSessVisibleLayers[$_GET['phpSelf']]))
+            $aSessVisibleLayers[$_GET['phpSelf']] = array();
+        array_push($aSessVisibleLayers[$_GET['phpSelf']], $_GET['an']);
+        $aSessVisibleLayers[$_GET['phpSelf']]=array_unique($aSessVisibleLayers[$_GET['phpSelf']]);
+    }
+
+    if ($_GET['aus'] != "") {
+        foreach ($aSessVisibleLayers[$_GET['phpSelf']] as $key => $value) {
+            if ($value != $_GET['aus']) {
+                if (!is_array($aTempSessVisibleLayers))
+                    $aTempSessVisibleLayers = array();
+                array_push($aTempSessVisibleLayers, $value);
+            }
+        }
+        $aSessVisibleLayers[$_GET['phpSelf']] = $aTempSessVisibleLayers;
+    }
+    $_SESSION['aVisibleLayers'] = $aSessVisibleLayers;
 }
 ?>
