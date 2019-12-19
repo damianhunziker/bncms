@@ -64,7 +64,13 @@ function createGetToken($v) {
 	return $v.$s."gtkn=".$link_id.$hi;
 }
 function checkGetToken() {
-	//Wenn gtkn nicht gesetzt ist aber abgefragtt wird heisst das, dass es eine Anfrage ausführt bei welcher das token schon entfert wurde, dh. schon ausgeführt wurde. Muss daher nicht noch einmal ausgeführt werden und auch kein hacklog eintrag machen weil, nachdem der Code ausgeführt wurde die Seite neu aufgerufen wird mit entferntem token. Muss aber deswegen bei allen gtkn vorgängen am Ende die Seite neu aufrufen mit gelöschtem token. Browser Historie einträge werden nur gemacht ohne token.
+	// Wenn gtkn nicht gesetzt ist aber abgefragt wird heisst das, dass es eine Anfrage ausführt
+    // bei welcher das token schon entfert wurde, dh. schon ausgeführt wurde. Muss daher nicht
+    // noch einmal ausgeführt werden und auch kein hacklog eintrag machen weil, nachdem der Code
+    // ausgeführt wurde die Seite neu aufgerufen wird mit entferntem token. Muss aber deswegen bei
+    // allen gtkn vorgängen am Ende die Seite neu aufrufen mit gelöschtem token. Browser Historie
+    // einträge werden nur gemacht ohne token.
+    // Todo Vorgang erneut testen, wurde getestet am 18. Dez. 2019 und hat funktioniert
 	if (!$_GET[gtkn])
 		return false;
 	if (in_array($_GET[gtkn], $_SESSION[allowed_get_tokens])) {
