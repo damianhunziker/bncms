@@ -529,7 +529,7 @@ function displayLightbox($id, $content) {
 }
 function packGlobals () {
 	global $sDisplayTableRecursivePath;
-	global $aNTo1TablePath;
+	global $aNTo1TablePath, $sBeforeAjaxQueryString, $rootId;
 	global $aPagingRecursivePath, $lastRowIdNToM, $lastTableNameNToM;
 
 	$aGlobal[aPagingRecursivePath] = $aPagingRecursivePath;
@@ -537,6 +537,8 @@ function packGlobals () {
 	$aGlobal[sDisplayTableRecursivePath] = $sDisplayTableRecursivePath;
 	$aGlobal[lastRowIdNToM] = $lastRowIdNToM;
 	$aGlobal[lastTableNameNToM] = $lastTableNameNToM;
+	$aGlobal[sBeforeAjaxQueryString] = $sBeforeAjaxQueryString;
+    $aGlobal[rootId] = $rootId;
 	return serialize($aGlobal);
 }
 function getIdFromTableString($id) {
