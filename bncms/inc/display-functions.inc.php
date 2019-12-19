@@ -980,11 +980,11 @@ jQuery(function() {
     if (is_array($arrTableContent)) {
         foreach ($arrTableContent as $key => $row) {
             if ($iZebra == 1) {
-                $sStyle = " td_zebra ";
-                $$iZebra = 0;
-            } else {
                 $sStyle = "";
-                $$iZebra = 1;
+                $iZebra = 0;
+            } else {
+                $sStyle = " td_zebra ";
+                $iZebra = 1;
             }
             $op .= "
 		<tr id=\"tr_" . $table . "-" . $tableId . "_" . $rowcount . "\" class=\"$sStyle tr_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "\" >";
@@ -1071,12 +1071,6 @@ jQuery(function() {
                     $sideBarActive = 1;
                 }
             }//if ($row[$columnNameOfId]) {
-
-            $iZebra = $iZebra + 1;
-            if ($iZebra > 1) {
-                $iZebra = 0;
-            }
-            //pre($row);
 
             foreach ($row as $key => $field) {
                 $iNtoMFound = 0;
