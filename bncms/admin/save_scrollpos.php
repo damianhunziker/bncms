@@ -1,5 +1,5 @@
 <?php
-//session_start();
+    session_start();
 //error_reporting(E_WARNING);
 
 ini_set('display_errors', 1);

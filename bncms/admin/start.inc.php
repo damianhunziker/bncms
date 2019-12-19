@@ -56,11 +56,11 @@ if ($_POST['username'] and $_POST['password'] and !@$_POST['savePost'] and $_POS
     if (is_array($arr)) {
         $_SESSION['user_allowed'] = 1;
     }
-    
     echo "<script>window.location.href='index.php';</script>";
     exit;
 }
 if (@$_GET['logout'] == true) {
+    $_SESSION = null;
     session_destroy();
 }
 
