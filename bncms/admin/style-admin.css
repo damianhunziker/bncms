@@ -6,6 +6,9 @@ input, select, textarea {
     border-top: 1px solid #666 !important;
     border-left: 1px solid #666 !important;
 }
+input:focus, select:focus, textarea:focus {
+    outline: 0 none;
+}
 textarea {
     min-width: 350px;
     min-height: 200px;

@@ -595,9 +595,9 @@ function getPrice($id_product, $id_title) {
 	if ($iconOpen and !$iconClose)
 		$iconClose = $iconOpen;
 	if (!$iconOpen)
-		$iconOpen = RELATIVEPATH."/image/icons/folder-open-$_SESSION[style_color].gif";
+		$iconOpen = RELATIVEPATH."/image/icons/folder-open-$_SESSION[icon_color].gif";
 	if (!$iconClose)
-		$iconClose = RELATIVEPATH."/image/icons/folder-close-$_SESSION[style_color].gif";
+		$iconClose = RELATIVEPATH."/image/icons/folder-close-$_SESSION[icon_color].gif";
 
 	$out = "
 <div id=\"plus".$instance."\" style=\"display:block;\" class=\"$s plus\" $onm>
@@ -646,9 +646,9 @@ function displayVisibilityButtons($text, $instance, $altText="", $simple=0, $ico
 	if ($iconOpen and !$iconClose)
 		$iconClose = $iconOpen;
 	if (!$iconOpen)
-		$iconOpen = RELATIVEPATH."/image/icons/folder-open-$_SESSION[style_color].gif";
+		$iconOpen = RELATIVEPATH."/image/icons/folder-open-$_SESSION[icon_color].gif";
 	if (!$iconClose)
-		$iconClose = RELATIVEPATH."/image/icons/folder-close-$_SESSION[style_color].gif";
+		$iconClose = RELATIVEPATH."/image/icons/folder-close-$_SESSION[icon_color].gif";
 
 	$out = "<div id=\"plus".$instance."\" style=\"display:inline;\" class=\"$s plus\" $onm><nobr><a id=\"a" . @$arrSched['id'] . "\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '".$instance.urlencode(@$queryString)."');\" title=\"$altText\" ><img src=\"$iconClose\"></a>$sp<a id = \"a" . @$arrSched['id'] . "\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '".$instance.urlencode(@$queryString)."', '');\" title=\"$altText\" >$text</a></nobr></div><div id=\"minus".$instance."\" style=\"display:none; clear:both\" class=\"$s minus\" $onm><nobr><a id=\"b" . @$arrSched['id'] . "\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '', '".$instance.@$queryString."');\" title=\"$altText\"><img src=\"$iconOpen\"></a>$sp<a id=\"b" . @$arrSched['id'] . "\" href=\"javascript:void(0);\" onClick=\"javascript: ajax_send_scrollpos('".$requesturi."', '', '".$instance.@$queryString."');\" title=\"$altText\" >$text</a></nobr></div>";
 
@@ -1212,7 +1212,7 @@ function displayFields($sTable="", $sComingFrom='') {
 					//print_r($aRelations);
 					/*Kopfzeile*/
 					$sOutput .= "<tr class=\"table_head\">";
-					$sOutput .= "<td class=\"table_sidebar\"><a href=\"edit_fields.php?relation=ntom&id_table=".$value['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"n zu m Relation erstellen\"><img src=\"".RELATIVEPATH."/image/icons/add-folder-$_SESSION[style_color].gif\"></a></td><td class=\"table_sidebar\"></td><td class=\"table_sidebar\"></td>";
+					$sOutput .= "<td class=\"table_sidebar\"><a href=\"edit_fields.php?relation=ntom&id_table=".$value['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"n zu m Relation erstellen\"><img src=\"".RELATIVEPATH."/image/icons/add-folder-$_SESSION[icon_color].gif\"></a></td><td class=\"table_sidebar\"></td><td class=\"table_sidebar\"></td>";
 
 					foreach ($aRelations[0] as $key3 => $value3) {
 						if ($key3 != "id")
@@ -1236,10 +1236,10 @@ function displayFields($sTable="", $sComingFrom='') {
 
 							$sOutPutAssignTable = displayFields($aAssignTable[0]['id'], $value[name]."-".$value['id']);
 							$sOutput .= "<tr>
-							<td class=\"table_sidebar\"><a href=\"edit_fields.php?relation=ntom&editRelation=true&id_relation=" . $value2['id'] . "&id_table=" . $value['id'] . "\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"n zu m Relation bearbeiten\"><img src=\"".RELATIVEPATH."/image/icons/edit-page-" . $_SESSION['style_color'] . ".gif\"></a></td>
+							<td class=\"table_sidebar\"><a href=\"edit_fields.php?relation=ntom&editRelation=true&id_relation=" . $value2['id'] . "&id_table=" . $value['id'] . "\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"n zu m Relation bearbeiten\"><img src=\"".RELATIVEPATH."/image/icons/edit-page-" . $_SESSION['icon_color'] . ".gif\"></a></td>
 							
-							<td class=\"table_sidebar\"><a href=\"edit_fields.php?relation=ntom&id_relation=" . $value2['id'] . "&deleteRelation=true\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Relation entfernen\"><img src=\"".RELATIVEPATH."/image/icons/delete-page-" . $_SESSION['style_color'] . ".gif\"></a></td>
-							<td class=\"table_sidebar\"><a href=\"edit_fields.php?id=new&id_table=".$aAssignTable[0]['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Feld erstellen\"><img src=\"".RELATIVEPATH."/image/icons/add-page-" . $_SESSION['style_color'] . ".gif\"></a></td>";
+							<td class=\"table_sidebar\"><a href=\"edit_fields.php?relation=ntom&id_relation=" . $value2['id'] . "&deleteRelation=true\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Relation entfernen\"><img src=\"".RELATIVEPATH."/image/icons/delete-page-" . $_SESSION['icon_color'] . ".gif\"></a></td>
+							<td class=\"table_sidebar\"><a href=\"edit_fields.php?id=new&id_table=".$aAssignTable[0]['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Feld erstellen\"><img src=\"".RELATIVEPATH."/image/icons/add-page-" . $_SESSION['icon_color'] . ".gif\"></a></td>";
 							foreach ($value2 as $k => $v) {
 								if ($k == "table1" or $k == "table2") {
 									$t = getTableProperties($v);
@@ -1268,11 +1268,11 @@ function displayFields($sTable="", $sComingFrom='') {
 
 				if ($value['is_assign_table'] != "yes") {
 					$sOutput .= "<tr class=\"table_head\"><td colspan=\"5\" class=\"table_head\">";
-					$sOutput .= "<a href=\"edit_fields.php?id=new&id_table=".$value['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Feld erstellen\"><img src=\"".RELATIVEPATH."/image/icons/add-page-$_SESSION[style_color].gif\"></a>
+					$sOutput .= "<a href=\"edit_fields.php?id=new&id_table=".$value['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Feld erstellen\"><img src=\"".RELATIVEPATH."/image/icons/add-page-$_SESSION[icon_color].gif\"></a>
 					&nbsp;<a href=\"edit_fields.php?removeTable=true&id=".$value['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_self\" title=\"Tabelle l&ouml;schen\"><img src=\"".RELATIVEPATH."/image/icons/delete-page-red.gif\"></a>
-					&nbsp;<a href=\"edit_fields.php?editTable=true&id=".$value['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_self\" title=\"Tabelle &auml;ndern\"><img src=\"".RELATIVEPATH."/image/icons/edit-page-$_SESSION[style_color].gif\"></a>
-					&nbsp;<a href=\"edit_fields.php?duplicateTable=true&id=".$value['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_self\" title=\"Tabelle duplizieren\"><img src=\"".RELATIVEPATH."/image/icons/duplicate-$_SESSION[style_color].gif\"></a>
-					&nbsp;<a href=\"edit_fields.php?relation=ntom&id_table=".$value['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_self\" title=\"n zu m Relation erstellen\"><img src=\"".RELATIVEPATH."/image/icons/add-folder-$_SESSION[style_color].gif\"></a></td></tr>";
+					&nbsp;<a href=\"edit_fields.php?editTable=true&id=".$value['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_self\" title=\"Tabelle &auml;ndern\"><img src=\"".RELATIVEPATH."/image/icons/edit-page-$_SESSION[icon_color].gif\"></a>
+					&nbsp;<a href=\"edit_fields.php?duplicateTable=true&id=".$value['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_self\" title=\"Tabelle duplizieren\"><img src=\"".RELATIVEPATH."/image/icons/duplicate-$_SESSION[icon_color].gif\"></a>
+					&nbsp;<a href=\"edit_fields.php?relation=ntom&id_table=".$value['id']."\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_self\" title=\"n zu m Relation erstellen\"><img src=\"".RELATIVEPATH."/image/icons/add-folder-$_SESSION[icon_color].gif\"></a></td></tr>";
 				}
 				$sOutput .= "<tr class=\"table_head\">
 				<td></td>
@@ -1309,8 +1309,8 @@ function displayFields($sTable="", $sComingFrom='') {
 								$field_id = $fieldcontent;
 							}
 						}
-						$sOutput .= "<tr><td valign=top class=\"table_sidebar\"><a href=\"edit_fields.php?id=$field_id&id_table=" . $value['id'] . "\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Feld &auml;ndern\"><img src=\"".RELATIVEPATH."/image/icons/edit-$_SESSION[style_color].gif\"></a></td>
-						<td valign=\"top\" class=\"table_sidebar\"><a href=\"edit_fields.php?id=$field_id&delete=true&id_table=" . $value['id'] . "\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Feld l&ouml;schen\"><img src=\"".RELATIVEPATH."/image/icons/delete-page-$_SESSION[style_color].gif\"></a></td>
+						$sOutput .= "<tr><td valign=top class=\"table_sidebar\"><a href=\"edit_fields.php?id=$field_id&id_table=" . $value['id'] . "\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Feld &auml;ndern\"><img src=\"".RELATIVEPATH."/image/icons/edit-$_SESSION[icon_color].gif\"></a></td>
+						<td valign=\"top\" class=\"table_sidebar\"><a href=\"edit_fields.php?id=$field_id&delete=true&id_table=" . $value['id'] . "\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Feld l&ouml;schen\"><img src=\"".RELATIVEPATH."/image/icons/delete-page-$_SESSION[icon_color].gif\"></a></td>
 						".$sOutputContent."<td valign=top></td></tr>";
 					}
 				}
@@ -1701,7 +1701,7 @@ function deleteField() {
 	}
 }
 function backupMenu() {
-	echo "<a href=\"backup.php?action=save\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Backup der Datenbank erstellen\"><img src=\"".RELATIVEPATH."/image/icons/download-page-".$_SESSION['style_color'].".gif\"></a><br /><br />";
+	echo "<a href=\"backup.php?action=save\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\" title=\"Backup der Datenbank erstellen\"><img src=\"".RELATIVEPATH."/image/icons/download-page-".$_SESSION['icon_color'].".gif\"></a><br /><br />";
 	echo "<div><b>Datenbank Backup laden</b> alle Daten nach dem Datum der Sicherung gehen verloren.</div><br />";
 }
 function saveBackup($sButton="on") {

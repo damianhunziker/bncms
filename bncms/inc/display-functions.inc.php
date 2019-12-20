@@ -88,6 +88,8 @@ function displayTable(
     global $initialCallCounter;
     global $rootId;
 
+    pre($_SESSION[icon_color]);
+
 	// sBeforeAjaxQueryString wird nur gespeichert wenn nicht ajax-Datei ist oder leer ist
 	if ($sBeforeAjaxQueryString)  {
 		$GLOBALS['sBeforeAjaxQueryString'] = $sBeforeAjaxQueryString;
@@ -644,7 +646,7 @@ print_r($searchParams);
         if ($iMaxPages > 1) {
             if ($iMaxPages > 1 or $sessionsp) {
                 $op .= "<td colspan=1000 class=td_toppaging><div class=\"table_paging\">";
-                //$op .=  "<div style=\"position:absolute; left:-30px;\"><img src=\"".RELATIVEPATH."/image/icons/arrows-left-$_SESSION[style_color].gif\"></div>";
+                //$op .=  "<div style=\"position:absolute; left:-30px;\"><img src=\"".RELATIVEPATH."/image/icons/arrows-left-$_SESSION[icon_color].gif\"></div>";
                 if ($_SESSION[aActivePagesRelations][$place][$table . "-" . $tableId] == "0" or $_SESSION[aActivePagesRelations][$place][$table . "-" . $tableId] == "") {
                     $_SESSION[aActivePagesRelations][$place][$table . "-" . $tableId] = 1;
                 }
@@ -755,12 +757,12 @@ print_r($searchParams);
                 }
         }
         if (inSerializedArray($_SESSION[user], $aActualRelation[addors])) {
-            $op .= "<a onClick=\"opwin('edit_relation.php?action=new&idName=" . $_GET[id] . "&idValue=" . $origIdValue . "&sourceTable=$origTable&destTable=$table','EditRelation'); return false;\" href='#' title='Neue Referenz erstellen'><img src=\"" . RELATIVEPATH . "/image/icons/add-folder-$_SESSION[style_color].gif\"></a>";
+            $op .= "<a onClick=\"opwin('edit_relation.php?action=new&idName=" . $_GET[id] . "&idValue=" . $origIdValue . "&sourceTable=$origTable&destTable=$table','EditRelation'); return false;\" href='#' title='Neue Referenz erstellen'><img src=\"" . RELATIVEPATH . "/image/icons/add-folder-$_SESSION[icon_color].gif\"></a>";
             $sideBarActive = 1;
         }
     }
     if ($aTableProperties['actualize'] == 'on') {
-        $sOut .= "<a class=sidebar-item href='javascript:void(0);' onclick=\"ajax_submit('" . $ajaxExec . "','','" . RELATIVEPATHAJAX . "','" . RELATIVEPATHAPP . "');\" title=\"Aktualisieren\"><img src=\"" . RELATIVEPATH . "/image/icons/up-$_SESSION[style_color].gif\"></a>";
+        $sOut .= "<a class=sidebar-item href='javascript:void(0);' onclick=\"ajax_submit('" . $ajaxExec . "','','" . RELATIVEPATHAJAX . "','" . RELATIVEPATHAPP . "');\" title=\"Aktualisieren\"><img src=\"" . RELATIVEPATH . "/image/icons/up-$_SESSION[icon_color].gif\"></a>";
         $sideBarActive = 1;
     }
     if ($webuser)
@@ -770,7 +772,7 @@ print_r($searchParams);
 
     if ($isNToMDisplayEditEntry == "no" and $addable == "yes") {
 	        $sOut .= "<a class=sidebar-item href='#' onClick=\"ajax_send_scrollpos('" . $_SERVER['PHP_SELF'] . "');
-opwin('$ed.php?action=new&columnNameOfId=$columnNameOfId&table=$tableOrId','Edit'); return false;\" title=\"Neuen Eintrag erstellen\"><img src=\"" . RELATIVEPATH . "/image/icons/add-page-$_SESSION[style_color].gif\"></a>";
+opwin('$ed.php?action=new&columnNameOfId=$columnNameOfId&table=$tableOrId','Edit'); return false;\" title=\"Neuen Eintrag erstellen\"><img src=\"" . RELATIVEPATH . "/image/icons/add-page-$_SESSION[icon_color].gif\"></a>";
         $sideBarActive = 1;
     }
 
@@ -785,9 +787,9 @@ opwin('$ed.php?action=new&columnNameOfId=$columnNameOfId&table=$tableOrId','Edit
             if ($aRightsHidden[$tableOrId][$column['Field']] or (!$f and $tableId))
                 continue;
             if (@$sessionsp[order] == "" . $column['Field'] . "")
-                $oi = "<img src=\"" . RELATIVEPATH . "/image/icons/order-up-$_SESSION[style_color].gif\" style='vertical-align:baseline;margin-right:5px'>";
+                $oi = "<img src=\"" . RELATIVEPATH . "/image/icons/order-up-$_SESSION[icon_color].gif\" style='vertical-align:baseline;margin-right:5px'>";
             elseif (@$sessionsp[order] == "" . $column['Field'] . " DESC")
-                $oi = "<img src=\"" . RELATIVEPATH . "/image/icons/order-down-$_SESSION[style_color].gif\" style='vertical-align:baseline;margin-right:5px'>";
+                $oi = "<img src=\"" . RELATIVEPATH . "/image/icons/order-down-$_SESSION[icon_color].gif\" style='vertical-align:baseline;margin-right:5px'>";
             else
                 $oi = "";
 
@@ -1048,7 +1050,7 @@ jQuery(function() {
                 if ($isNToMDisplayEditEntry == "yes") {
                     if (inSerializedArray($_SESSION[user], $aActualRelation[deletors])) {
                         $op .= "<a class=sidebar-item href='#' onClick=\"ajax_send_scrollpos('" . $_SERVER['PHP_SELF'] . "');
-		opwin('index.php?id=" . $row[assign][getIdName($sAssignTable, $aManualFieldProperties)] . "&table=" . $sAssignTable . "&action=delete','Delete'); return false;\" title=\"Referenz l&ouml;schen\"><img src=\"" . RELATIVEPATH . "/image/icons/delete-page-$_SESSION[style_color].gif\"></a>";
+		opwin('index.php?id=" . $row[assign][getIdName($sAssignTable, $aManualFieldProperties)] . "&table=" . $sAssignTable . "&action=delete','Delete'); return false;\" title=\"Referenz l&ouml;schen\"><img src=\"" . RELATIVEPATH . "/image/icons/delete-page-$_SESSION[icon_color].gif\"></a>";
                         $sideBarActive = 1;
                     }
                 }
@@ -1059,15 +1061,15 @@ jQuery(function() {
                     } else {
                         $sWindowName = "Edit";
                     }
-                    $op .= "<a class=sidebar-item onClick=\"opwin('$ed.php?action=edit&id=$row[$columnNameOfId]&columnNameOfId=$columnNameOfId&table=$tableOrId&ajaxExec=$ajaxExec','" . $sWindowName . "'); return false;\" href=\"#\" title=\"Eintrag &auml;ndern\"><img src=\"" . RELATIVEPATH . "/image/icons/edit-page-$_SESSION[style_color].gif\"></a>";
+                    $op .= "<a class=sidebar-item onClick=\"opwin('$ed.php?action=edit&id=$row[$columnNameOfId]&columnNameOfId=$columnNameOfId&table=$tableOrId&ajaxExec=$ajaxExec','" . $sWindowName . "'); return false;\" href=\"#\" title=\"Eintrag &auml;ndern\"><img src=\"" . RELATIVEPATH . "/image/icons/edit-page-$_SESSION[icon_color].gif\"></a>";
                     $sideBarActive = 1;
                 }
                 if ($deletable == "yes") {
-                    $op .= "<a class=sidebar-item onClick=\"opwin('index.php?action=delete&id=$row[$columnNameOfId]&columnNameOfId=$columnNameOfId&table=$tableOrId','Delete'); return false;\" href=\"#\" title=\"Eintrag l&ouml;schen\"><img src=\"" . RELATIVEPATH . "/image/icons/delete-page-$_SESSION[style_color].gif\"></a>";
+                    $op .= "<a class=sidebar-item onClick=\"opwin('index.php?action=delete&id=$row[$columnNameOfId]&columnNameOfId=$columnNameOfId&table=$tableOrId','Delete'); return false;\" href=\"#\" title=\"Eintrag l&ouml;schen\"><img src=\"" . RELATIVEPATH . "/image/icons/delete-page-$_SESSION[icon_color].gif\"></a>";
                     $sideBarActive = 1;
                 }
                 if ($addable == "yes") {
-                    $op .= "<a class=sidebar-item onClick=\"opwin('$ed.php?duplicate=true&id=$row[$columnNameOfId]&columnNameOfId=$columnNameOfId&table=$tableOrId','Edit'); return false;\" href=\"#\" title=\"Eintrag duplizieren\"><img src=\"" . RELATIVEPATH . "/image/icons/duplicate-$_SESSION[style_color].gif\"></a>";
+                    $op .= "<a class=sidebar-item onClick=\"opwin('$ed.php?duplicate=true&id=$row[$columnNameOfId]&columnNameOfId=$columnNameOfId&table=$tableOrId','Edit'); return false;\" href=\"#\" title=\"Eintrag duplizieren\"><img src=\"" . RELATIVEPATH . "/image/icons/duplicate-$_SESSION[icon_color].gif\"></a>";
                     $sideBarActive = 1;
                 }
             }//if ($row[$columnNameOfId]) {

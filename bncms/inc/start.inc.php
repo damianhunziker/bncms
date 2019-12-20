@@ -50,18 +50,20 @@ AND b.id = a.id_site
 $aText = dbQuery($query);
 if (is_array($aText)) {
 	foreach ($aText as $key => $value) {
-		if ($value['place'] == "header") {
+	w	if ($value['place'] == "header") {
 			$sHeader = $value['html'];
 		}
 		if ($value['place'] == "footer") {
 			$sFooter = $value['html'];
 		}
 	}
-}*/
+}
+*/
+//if (!$_SESSION['style_color'])
+//	$_SESSION['style_color'] = "green";
+//if (!$_SESSION['icon_color'])
+//    $_SESSION['icon_color'] = "yellow";
 
-if (!$_SESSION['style_color'])
-	$_SESSION['style_color'] = "green";
-	
 include(PATH."/inc/save.inc.php");
 
 if ($_GET['action'] == "edit" or $_GET['action'] == "new") {

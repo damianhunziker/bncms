@@ -38,15 +38,15 @@ if (strpos($_SERVER['QUERY_STRING'], "etStructure=true") != "")
 else 
 	$sClassActive = "";
 ?>
-<a href="edit_fields.php?createTable=true" class="<?php echo $sClassActive ?>" title="Neue Tabelle"><img src="<?php echo RELATIVEPATH; ?>/image/icons/add-page-<?php echo $_SESSION['style_color'] ?>.gif" /></a>&nbsp;
-<a href="edit_fields.php?getStructure=true" class="<?php echo $sClassActive ?>" title="Struktur runterladen. Verwenden um die Test-Struktur zur&uuml;ckzusetzen zur Live-Struktur. Nur mySQL Eigenschaften betroffen."><img src="<?php echo RELATIVEPATH; ?>/image/icons/structure-save-<?php echo $_SESSION['style_color'] ?>.gif" /></a>&nbsp;
+<a href="edit_fields.php?createTable=true" class="<?php echo $sClassActive ?>" title="Neue Tabelle"><img src="<?php echo RELATIVEPATH; ?>/image/icons/add-page-<?php echo $_SESSION['icon_color'] ?>.gif" /></a>&nbsp;
+<a href="edit_fields.php?getStructure=true" class="<?php echo $sClassActive ?>" title="Struktur runterladen. Verwenden um die Test-Struktur zur&uuml;ckzusetzen zur Live-Struktur. Nur mySQL Eigenschaften betroffen."><img src="<?php echo RELATIVEPATH; ?>/image/icons/structure-save-<?php echo $_SESSION['icon_color'] ?>.gif" /></a>&nbsp;
 <?php 
 if (strpos($_SERVER['QUERY_STRING'], "riteStructure=true") != "") 
 	$sClassActive = "activeLink";
 else 
 	$sClassActive = "";
 ?>
-<a href="edit_fields.php?writeStructure=true" class="<?php echo $sClassActive ?>" title="Struktur hochladen. Verwenden um die Test-Struktur ins Live System einzutragen."><img src="<?php echo RELATIVEPATH; ?>/image/icons/structure-upload-<?php echo $_SESSION['style_color'] ?>.gif" /></a>&nbsp;
+<a href="edit_fields.php?writeStructure=true" class="<?php echo $sClassActive ?>" title="Struktur hochladen. Verwenden um die Test-Struktur ins Live System einzutragen."><img src="<?php echo RELATIVEPATH; ?>/image/icons/structure-upload-<?php echo $_SESSION['icon_color'] ?>.gif" /></a>&nbsp;
 <a href="edit_fields.php?relationVisibility=true" class="<?php echo $sClassActive ?>" title="Relationen-Sichtbarkeit. Konfiguration der Sichtbarkeit der Relationen"><img src="<?php echo RELATIVEPATH; ?>/image/icons/structure-visibility.gif" /></a>&nbsp;
 <br /><br />
 

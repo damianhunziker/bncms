@@ -161,7 +161,7 @@ alert(name);
 	<?php
 	die();
 } else {
-	
+
     if (isset($_GET['style_color']))
     {
         $_SESSION['style_color'] = $_GET['style_color'];
@@ -169,6 +169,15 @@ alert(name);
     else
     {
          $_SESSION['style_color'] = "green";
+    }
+
+    if (isset($_GET['icon_color']))
+    {
+        $_SESSION['icon_color'] = $_GET['icon_color'];
+    }
+    else
+    {
+        $_SESSION['icon_color'] = "green";
     }
 
     if (isset($_SESSION['errorMsg'])) {
