@@ -88,8 +88,6 @@ function displayTable(
     global $initialCallCounter;
     global $rootId;
 
-    pre($_SESSION[icon_color]);
-
 	// sBeforeAjaxQueryString wird nur gespeichert wenn nicht ajax-Datei ist oder leer ist
 	if ($sBeforeAjaxQueryString)  {
 		$GLOBALS['sBeforeAjaxQueryString'] = $sBeforeAjaxQueryString;
