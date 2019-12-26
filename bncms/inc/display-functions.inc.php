@@ -2044,8 +2044,8 @@ function generateField(
             if ($dateIncludeJsDone != 1) {
                 $fo .= '
 				
-				<link rel="stylesheet" type="text/css" href="/bncms/lib/datetimepicker-master/jquery.datetimepicker.css"/ >
-<script src="/bncms/lib/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
+				<link rel="stylesheet" type="text/css" href="/bncms/lib/datetimepicker/jquery.datetimepicker.css"/ >
+<script src="/bncms/lib/datetimepicker/build/jquery.datetimepicker.full.min.js"></script>
  
 				';
                 $dateIncludeJsDone = 1;
@@ -2292,8 +2292,8 @@ function generateSearchField($tableOrId, $fieldName, $ajaxExec, $sessionsp, $aMa
     } elseif ($fp['type'] == "date") {
         global $dateIncludeJsDone;
         if ($dateIncludeJsDone != 1) {
-            $o .= '<link rel="stylesheet" type="text/css" href="/bncms/lib/datetimepicker-master/jquery.datetimepicker.css"/ >
-<script src="/bncms/lib/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>';
+            $o .= '<link rel="stylesheet" type="text/css" href="/bncms/lib/datetimepicker/jquery.datetimepicker.css"/ >
+<script src="/bncms/lib/datetimepicker/build/jquery.datetimepicker.full.min.js"></script>';
             $dateIncludeJsDone = 1;
         }
         $o .= "<input placeholder='Von' type='text' value='" . @$sessionsp["search_" . $fieldName . "_bncmsfromdate"] . "' id='search_" . $fieldName . "_bncmsfromdate' class='display_table_paging_search c" . $ajaxExec . " search date' onChange=\"ajax_submit('" . $ajaxExec . "','','" . RELATIVEPATHAJAX . "','" . RELATIVEPATHAPP . "');\"><input type='text' placeholder='Bis' value='" . @$sessionsp["search_" . $fieldName . "_bncmstodate"] . "' id='search_" . $fieldName . "_bncmstodate' class='display_table_paging_search c" . $ajaxExec . " search date' onChange=\"ajax_submit('" . $ajaxExec . "','','" . RELATIVEPATHAJAX . "','" . RELATIVEPATHAPP . "');\"><script>
