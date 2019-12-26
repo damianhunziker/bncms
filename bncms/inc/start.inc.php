@@ -59,8 +59,10 @@ if (is_array($aText)) {
 	}
 }
 */
-//if (!$_SESSION['style_color'])
-//	$_SESSION['style_color'] = "green";
+if (!$_SESSION['style_color'])
+	$_SESSION['style_color'] = "green";
+if (!$_SESSION['icon_color'])
+    $_SESSION['icon_color'] = "green";
 //if (!$_SESSION['icon_color'])
 //    $_SESSION['icon_color'] = "yellow";
 
