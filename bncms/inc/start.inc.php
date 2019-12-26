@@ -22,61 +22,42 @@ if (!$DB)
 	exit("Datenbank Login Fehler");
 }
 
-
 mysqli_query($DB, "SET NAMES 'utf8'");
 include (PATH."/inc/db-functions.inc.php");
 include (PATH."/inc/functions.inc.php");
-
 include (PATH."/inc/editor-functions.inc.php");
 include (PATH."/inc/display-functions.inc.php");
 
 session_set_cookie_params(24*60*60, RELATIVEPATHAPP);
 session_start();
+
 include (PATH."/inc/configuration/table-rights.inc.php");
 include (PATH."/inc/configuration/table-relations.inc.php");
 include (PATH."/inc/configuration/table-properties.inc.php");
 
-
 if ($_SESSION[errorMsg]) {
 	$outErrormsg = "Fehlermeldung: $_SESSION[errorMsg]";
-	$_SESSION[errorMsg] = "";
+	$_SESSION['errorMsg'] = "";
 }
-
-/*$query="
-SELECT * FROM text as a, site as b 
-WHERE b.url = '".str_replace("/","",$_SERVER['PHP_SELF'])."'
-AND b.id = a.id_site
-";
-$aText = dbQuery($query);
-if (is_array($aText)) {
-	foreach ($aText as $key => $value) {
-		if ($value['place'] == "header") {
-			$sHeader = $value['html'];
-		}
-		if ($value['place'] == "footer") {
-			$sFooter = $value['html'];
-		}
-	}
-}*/
 
 if (!$_SESSION['style_color'])
 	$_SESSION['style_color'] = "green";
-	
+if (!$_SESSION['icon_color'])
+   $_SESSION['icon_color'] = "green";
+
 include(PATH."/inc/save.inc.php");
 
 if ($_GET['action'] == "edit" or $_GET['action'] == "new") {
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>DB-Editor</title>
 <link href="s.css" rel="stylesheet" type="text/css">
-
- <script type="text/javascript" src="bncms/jquery.js"></script>
- <script type="text/javascript" src="bncms/lib/jquery-visible-master/jquery.visible.js"></script>
-  <script type="text/javascript" src="bncms/frontend.inc.js"></script>
-  <script>RELATIVEPATH = '<?php echo RELATIVEPATHAJAX?>';</script>
+<script type="text/javascript" src="bncms/jquery.js"></script>
+<script type="text/javascript" src="bncms/lib/jquery-visible-master/jquery.visible.js"></script>
+<script type="text/javascript" src="bncms/frontend.inc.js"></script>
+<script>RELATIVEPATH = '<?php echo RELATIVEPATHAJAX?>';</script>
 <script>
 $(function() {
 	function split( val ) {
@@ -122,7 +103,6 @@ $(function() {
           return;
         }
 		var ntomid = this.element[0].id.replace('ntom_','');
-		//alert(RELATIVEPATH+"/ajax.php?ntomAjaxSearch="+ntomid+"&value="+term);
         jQuery.getJSON( RELATIVEPATH+"/ajax.php?ntomAjaxSearch="+ntomid+"&value="+term, {
             term: extractLast( request.term )
           }, function( data, status, xhr ) {
@@ -136,26 +116,22 @@ $(function() {
 <link rel="stylesheet" href="bncms/lib/jquery-ui/jquery-ui.min.css">
 <script src="bncms/lib/jquery-ui/jquery-ui.min.js"></script>
 <style>.ui-autocomplete-loading {padding-right:10px; background: url('<? echo RELATIVEPATH; ?>/image/loading.gif') right center no-repeat;background-size:20px 20px; background-origin: content-box;}</style>
-<!--<script type="text/javascript" src="vlaCalendar/jslib/mootools-1.2-core.js"></script>
-<script type="text/javascript" src="vlaCalendar/jslib/vlaCal-v2.1.js"></script>
-<link type="text/css" media="screen" href="vlaCalendar/styles/vlaCal-v2.1.css" rel="stylesheet" />
--->
 <title>Edit Entry</title>
 </head>
 
-<BODY onLoad="waitPreloadPage();">
+<body onload="waitPreloadPage();">
 <h1>Datensatz bearbeiten </h1>
 <?php
 if ($_GET['duplicate'] == true) {
-	$query="SELECT * FROM ".e($_GET[table])." WHERE id = '".e($_GET[id])."'";
+	$query="SELECT * FROM ".e($_GET['table'])." WHERE id = '".e($_GET['id'])."'";
 	$aDestId=dbQuery($query);
-	$query="SELECT id FROM conf_tables WHERE name = '".e($_GET[table])."'";
+	$query="SELECT id FROM conf_tables WHERE name = '".e($_GET['table'])."'";
 	$aTableId=dbQuery($query);
-	$query="SELECT * FROM conf_fields WHERE id_table = '".$aTableId[0][id]."' and type='image'";
+	$query="SELECT * FROM conf_fields WHERE id_table = '".$aTableId[0]['id']."' and type='image'";
 	$aImageFields = dbQuery($query);
 	$query="INSERT INTO ".e($_GET['table'])." SET ";
 	foreach ($aDestId[0] as $key => $value) {
-		//Abfrage f&uuml;r Bild Duplizierung
+		//Abfrage für Bild Duplizierung
 		foreach ($aImageFields as $keyField => $valueField) {
 				if ($valueField['name'] == $key) {
 					//todo formate, bildpfad

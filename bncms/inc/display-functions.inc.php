@@ -84,9 +84,12 @@ function displayTable(
     global $aPagingRecursivePath;
     global $webuser;
     global $countDisplayTablesOnPage;
+    global $containerId;
+    global $initialCallCounter;
+    global $rootId;
 
 	// sBeforeAjaxQueryString wird nur gespeichert wenn nicht ajax-Datei ist oder leer ist
-	if (strpos($sBeforeAjaxQueryString, "/ajax.php") == "" and $sBeforeAjaxQueryString)  {
+	if ($sBeforeAjaxQueryString)  {
 		$GLOBALS['sBeforeAjaxQueryString'] = $sBeforeAjaxQueryString;
 	}
 
@@ -95,28 +98,9 @@ function displayTable(
     //Muss Global machen damit überall verfügbar
     $GLOBALS['aManualFieldProperties'] = $aManualFieldProperties;
 
-    /*$aTableProperties = getTableProperties($tableOrId);
-	if (is_numeric($tableOrId)) {
-		$table = $aTableProperties[name];
-		$tableId = $aTableProperties[id];
-	} else {
-		$table = $tableOrId;
-		$tableId = "";
-	}*/
-    //if ($webuser) {
-    //echo $table,$condition;
-    //	$a = selectRec($table,$condition);
-    //	if (count($a) == 0) {
-    //echo "Kein Eintrag.";
-    //return;
-    //}
-    //}
-
     if ($aManualFieldProperties)
         if (is_array(unserialize($aManualFieldProperties)))
             $aManualFieldProperties = unserialize($aManualFieldProperties);
-    //if ($aManualFieldProperties)
-    //$aManualFieldProperties = unserialize($aManualFieldProperties);
 
     //ManualFieldProperties vorbereiten
     $aManualFieldProperties = prepareManualFieldProperties($aManualFieldProperties);
@@ -157,6 +141,21 @@ function displayTable(
             $lastRowIdNToM = $aGlobal['lastRowIdNToM'];
         if ($aGlobal['lastTableNameNToM'])
             $lastTableNameNToM = $aGlobal['lastTableNameNToM'];
+        if ($aGlobal['sBeforeAjaxQueryString'])
+            $sBeforeAjaxQueryString = $aGlobal['sBeforeAjaxQueryString'];
+        if ($aGlobal['rootId'])
+            $sBeforeAjaxQueryString = $aGlobal['rootId'];
+    }
+
+    // containerId festlegen wenn der displayTable Call initial ist
+    // rootId wird dann in Session geschrieben und bei ajax-calls daraus bezogen
+    // is initialCall of displayTable
+    if (!$sBeforeAjaxQueryString and !strpos($_SERVER['PHP_SELF'], "ajax.php")) {
+        $initialCallCounter++;
+        $rootId = md5($_SERVER['PHP_SELF']." ".$initialCallCounter);
+        $_SESSION['rootId'] = $rootId;
+    } else {
+        $rootId = $_SESSION['rootId'];
     }
 
     $p = func_get_args();
@@ -168,6 +167,9 @@ function displayTable(
             $p[$i] = "null";
     }
 
+
+
+
     if (!$ajaxExec) {
         $s = "";
         //$id = md5(rand(0,10000000000));
@@ -175,6 +177,7 @@ function displayTable(
         //$countDisplayTablesOnPage;
         $id = md5($_SERVER['PHP_SELF'] . $countDisplayTablesOnPage . md5(serialize($p)));
         $p[11] = $id; //ajaxExec
+
         if (strpos($_SERVER['REQUEST_URI'], "ajax.php")) {
             $p[24] = $sBeforeAjaxQueryString;
         } else {
@@ -234,9 +237,6 @@ function displayTable(
             $pn[11] = $p[11];
             if ($p[12] and $p[12] != null)
                 $pn[12] = $p[12];
-            //print_r($pn);
-            /*pre($_SESSION[ajaxParameter]);*/
-
             if ($pn[9] == "ntom" or $pn[9] == "nto1input" or $pn[9] == "nto1output" or $pn[9] == "noecho") {
                 call_user_func_array('displayTable', $pn);
             } else {
@@ -244,7 +244,8 @@ function displayTable(
             }
             exit();
         } else {
-            //pre($p);
+
+            //exit();
             //echo $_SESSION[ajaxParameter][$p[11]][0];
             $t = getTableProperties($_SESSION[ajaxParameter][$p[11]][0], $aManualFieldProperties);
             //print_r($t);
@@ -260,7 +261,8 @@ function displayTable(
 				print_r($t);*/
                 //exit();#
                 if (!$webuser) {
-                    echo "<script>window.location.reload();</script>";
+
+                    echo "<script>console.log('eventual logout -> reloading'); window.location.reload();</script>";
                     exit();
                 }
             }
@@ -302,9 +304,10 @@ function displayTable(
         }
     } else
         $aPagingRecursivePath = array();
-    //echo $ajaxExec." ";
-    $place = md5($ajaxExec . @implode("/", $aPagingRecursivePath));
-    //echo "<br>";
+        //echo $ajaxExec." ";
+
+        $place = md5($rootId . @implode("/", $aPagingRecursivePath));
+        //echo "<br>";
     if (strpos("a" . $table, "assign_") == 1) {
         $sIsAssignmentTable = "yes";
     } else {
@@ -319,6 +322,8 @@ function displayTable(
     if (is_array($table)) {
         return;
     }
+
+    //pre($_SESSION['aVisibleLayers']);
 
     $sDisplayTableRecursivePath++;
     $aDisplayTableRecursivePath[$sDisplayTableRecursivePath] = $sComingFrom;
@@ -594,7 +599,7 @@ print_r($searchParams);
     $arrTableContent = $arrNewTableContent;
     if (@$sessionsp[order])
         $ot = $sessionsp[order];
-    $op .= "<form method='post' action='' id='f_" . $ajaxExec . "'><input type=hidden value='" . $arg_list . "' id=arg_list_" . $ajaxExec . "><input type=hidden id=page_table value='$table-$tableId' class='c" . $ajaxExec . "'>
+    $op .= "<form method='post' action='' id='f_" . $ajaxExec . "' onsubmit='return false;'><input type=hidden value='" . $arg_list . "' id=arg_list_" . $ajaxExec . "><input type=hidden id=page_table value='$table-$tableId' class='c" . $ajaxExec . "'>
 			<input type=hidden id=order name=order value='$ot' class='c" . $ajaxExec . "'>
 			<input type=hidden id=place value=$place class='c" . $ajaxExec . "'>";
     if ($aTableProp[export_xls] or $aTableProp[export_csv]) {
@@ -639,7 +644,7 @@ print_r($searchParams);
         if ($iMaxPages > 1) {
             if ($iMaxPages > 1 or $sessionsp) {
                 $op .= "<td colspan=1000 class=td_toppaging><div class=\"table_paging\">";
-                //$op .=  "<div style=\"position:absolute; left:-30px;\"><img src=\"".RELATIVEPATH."/image/icons/arrows-left-$_SESSION[style_color].gif\"></div>";
+                //$op .=  "<div style=\"position:absolute; left:-30px;\"><img src=\"".RELATIVEPATH."/image/icons/arrows-left-$_SESSION[icon_color].gif\"></div>";
                 if ($_SESSION[aActivePagesRelations][$place][$table . "-" . $tableId] == "0" or $_SESSION[aActivePagesRelations][$place][$table . "-" . $tableId] == "") {
                     $_SESSION[aActivePagesRelations][$place][$table . "-" . $tableId] = 1;
                 }
@@ -750,12 +755,12 @@ print_r($searchParams);
                 }
         }
         if (inSerializedArray($_SESSION[user], $aActualRelation[addors])) {
-            $op .= "<a onClick=\"opwin('edit_relation.php?action=new&idName=" . $_GET[id] . "&idValue=" . $origIdValue . "&sourceTable=$origTable&destTable=$table','EditRelation'); return false;\" href='#' title='Neue Referenz erstellen'><img src=\"" . RELATIVEPATH . "/image/icons/add-folder-$_SESSION[style_color].gif\"></a>";
+            $op .= "<a onClick=\"opwin('edit_relation.php?action=new&idName=" . $_GET[id] . "&idValue=" . $origIdValue . "&sourceTable=$origTableId&destTable=$tableId','EditRelation'); return false;\" href='#' title='Neue Referenz erstellen'><img src=\"" . RELATIVEPATH . "/image/icons/add-folder-$_SESSION[icon_color].gif\"></a>";
             $sideBarActive = 1;
         }
     }
     if ($aTableProperties['actualize'] == 'on') {
-        $sOut .= "<a class=sidebar-item href='javascript:void(0);' onclick=\"ajax_submit('" . $ajaxExec . "','','" . RELATIVEPATHAJAX . "','" . RELATIVEPATHAPP . "');\" title=\"Aktualisieren\"><img src=\"" . RELATIVEPATH . "/image/icons/up-$_SESSION[style_color].gif\"></a>";
+        $sOut .= "<a class=sidebar-item href='javascript:void(0);' onclick=\"ajax_submit('" . $ajaxExec . "','','" . RELATIVEPATHAJAX . "','" . RELATIVEPATHAPP . "');\" title=\"Aktualisieren\"><img src=\"" . RELATIVEPATH . "/image/icons/up-$_SESSION[icon_color].gif\"></a>";
         $sideBarActive = 1;
     }
     if ($webuser)
@@ -765,7 +770,7 @@ print_r($searchParams);
 
     if ($isNToMDisplayEditEntry == "no" and $addable == "yes") {
 	        $sOut .= "<a class=sidebar-item href='#' onClick=\"ajax_send_scrollpos('" . $_SERVER['PHP_SELF'] . "');
-opwin('$ed.php?action=new&columnNameOfId=$columnNameOfId&table=$tableOrId','Edit'); return false;\" title=\"Neuen Eintrag erstellen\"><img src=\"" . RELATIVEPATH . "/image/icons/add-page-$_SESSION[style_color].gif\"></a>";
+opwin('$ed.php?action=new&columnNameOfId=$columnNameOfId&table=$tableOrId','Edit'); return false;\" title=\"Neuen Eintrag erstellen\"><img src=\"" . RELATIVEPATH . "/image/icons/add-page-$_SESSION[icon_color].gif\"></a>";
         $sideBarActive = 1;
     }
 
@@ -780,9 +785,9 @@ opwin('$ed.php?action=new&columnNameOfId=$columnNameOfId&table=$tableOrId','Edit
             if ($aRightsHidden[$tableOrId][$column['Field']] or (!$f and $tableId))
                 continue;
             if (@$sessionsp[order] == "" . $column['Field'] . "")
-                $oi = "<img src=\"" . RELATIVEPATH . "/image/icons/order-up-$_SESSION[style_color].gif\" style='vertical-align:baseline;margin-right:5px'>";
+                $oi = "<img src=\"" . RELATIVEPATH . "/image/icons/order-up-$_SESSION[icon_color].gif\" style='vertical-align:baseline;margin-right:5px'>";
             elseif (@$sessionsp[order] == "" . $column['Field'] . " DESC")
-                $oi = "<img src=\"" . RELATIVEPATH . "/image/icons/order-down-$_SESSION[style_color].gif\" style='vertical-align:baseline;margin-right:5px'>";
+                $oi = "<img src=\"" . RELATIVEPATH . "/image/icons/order-down-$_SESSION[icon_color].gif\" style='vertical-align:baseline;margin-right:5px'>";
             else
                 $oi = "";
 
@@ -975,11 +980,11 @@ jQuery(function() {
     if (is_array($arrTableContent)) {
         foreach ($arrTableContent as $key => $row) {
             if ($iZebra == 1) {
-                $sStyle = " td_zebra ";
-                $$iZebra = 0;
-            } else {
                 $sStyle = "";
-                $$iZebra = 1;
+                $iZebra = 0;
+            } else {
+                $sStyle = " td_zebra ";
+                $iZebra = 1;
             }
             $op .= "
 		<tr id=\"tr_" . $table . "-" . $tableId . "_" . $rowcount . "\" class=\"$sStyle tr_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "\" >";
@@ -1019,10 +1024,10 @@ jQuery(function() {
                 if (count($a)) {
                     foreach ($a as $k => $v) {
                         //pre($v);
-                        $op .= "<div class=sidebar-item id=\"icon_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_$ajaxExec\" class='td_$v[path]' style=\"display:none\">";
+                        $op .= "<div class=sidebar-item id=\"icon_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_$rootId\" class='td_$v[path]' style=\"display:none\">";
                         $op .= displayVisibilityButtons(
                             "",
-                            "div_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_" . $ajaxExec,
+                            "div_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_" . $rootId,
                             $v[title],
                             1,
                             $v[icon]
@@ -1032,10 +1037,10 @@ jQuery(function() {
                 }
                 if ($showRelations == "yes") {
                     //echo "icon_".$table."-".$tableId."_".$row[$columnNameOfId]."_relations_".$sDisplayTableRecursivePathOut."_$ajaxExec";
-                    $op .= "<div class='sidebar-item' id=\"icon_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_$ajaxExec\" style=\"display:none\">";
+                    $op .= "<div class='sidebar-item' id=\"icon_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_$rootId\" style=\"display:none\">";
                     $op .= displayVisibilityButtons(
                         "",
-                        "div_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $ajaxExec,
+                        "div_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $rootId,
                         "Relationen des Eintrags &ouml;ffnen",
                         1);
                     $op .= "</div>";
@@ -1043,7 +1048,7 @@ jQuery(function() {
                 if ($isNToMDisplayEditEntry == "yes") {
                     if (inSerializedArray($_SESSION[user], $aActualRelation[deletors])) {
                         $op .= "<a class=sidebar-item href='#' onClick=\"ajax_send_scrollpos('" . $_SERVER['PHP_SELF'] . "');
-		opwin('index.php?id=" . $row[assign][getIdName($sAssignTable, $aManualFieldProperties)] . "&table=" . $sAssignTable . "&action=delete','Delete'); return false;\" title=\"Referenz l&ouml;schen\"><img src=\"" . RELATIVEPATH . "/image/icons/delete-page-$_SESSION[style_color].gif\"></a>";
+		opwin('index.php?id=" . $row[assign][getIdName($sAssignTable, $aManualFieldProperties)] . "&table=" . $sAssignTable . "&action=delete','Delete'); return false;\" title=\"Referenz l&ouml;schen\"><img src=\"" . RELATIVEPATH . "/image/icons/delete-page-$_SESSION[icon_color].gif\"></a>";
                         $sideBarActive = 1;
                     }
                 }
@@ -1054,24 +1059,18 @@ jQuery(function() {
                     } else {
                         $sWindowName = "Edit";
                     }
-                    $op .= "<a class=sidebar-item onClick=\"opwin('$ed.php?action=edit&id=$row[$columnNameOfId]&columnNameOfId=$columnNameOfId&table=$tableOrId&ajaxExec=$ajaxExec','" . $sWindowName . "'); return false;\" href=\"#\" title=\"Eintrag &auml;ndern\"><img src=\"" . RELATIVEPATH . "/image/icons/edit-page-$_SESSION[style_color].gif\"></a>";
+                    $op .= "<a class=sidebar-item onClick=\"opwin('$ed.php?action=edit&id=$row[$columnNameOfId]&columnNameOfId=$columnNameOfId&table=$tableOrId&ajaxExec=$ajaxExec','" . $sWindowName . "'); return false;\" href=\"#\" title=\"Eintrag &auml;ndern\"><img src=\"" . RELATIVEPATH . "/image/icons/edit-page-$_SESSION[icon_color].gif\"></a>";
                     $sideBarActive = 1;
                 }
                 if ($deletable == "yes") {
-                    $op .= "<a class=sidebar-item onClick=\"opwin('index.php?action=delete&id=$row[$columnNameOfId]&columnNameOfId=$columnNameOfId&table=$tableOrId','Delete'); return false;\" href=\"#\" title=\"Eintrag l&ouml;schen\"><img src=\"" . RELATIVEPATH . "/image/icons/delete-page-$_SESSION[style_color].gif\"></a>";
+                    $op .= "<a class=sidebar-item onClick=\"opwin('index.php?action=delete&id=$row[$columnNameOfId]&columnNameOfId=$columnNameOfId&table=$tableOrId','Delete'); return false;\" href=\"#\" title=\"Eintrag l&ouml;schen\"><img src=\"" . RELATIVEPATH . "/image/icons/delete-page-$_SESSION[icon_color].gif\"></a>";
                     $sideBarActive = 1;
                 }
                 if ($addable == "yes") {
-                    $op .= "<a class=sidebar-item onClick=\"opwin('$ed.php?duplicate=true&id=$row[$columnNameOfId]&columnNameOfId=$columnNameOfId&table=$tableOrId','Edit'); return false;\" href=\"#\" title=\"Eintrag duplizieren\"><img src=\"" . RELATIVEPATH . "/image/icons/duplicate-$_SESSION[style_color].gif\"></a>";
+                    $op .= "<a class=sidebar-item onClick=\"opwin('$ed.php?duplicate=true&id=$row[$columnNameOfId]&columnNameOfId=$columnNameOfId&table=$tableOrId','Edit'); return false;\" href=\"#\" title=\"Eintrag duplizieren\"><img src=\"" . RELATIVEPATH . "/image/icons/duplicate-$_SESSION[icon_color].gif\"></a>";
                     $sideBarActive = 1;
                 }
             }//if ($row[$columnNameOfId]) {
-
-            $iZebra = $iZebra + 1;
-            if ($iZebra > 1) {
-                $iZebra = 0;
-            }
-            //pre($row);
 
             foreach ($row as $key => $field) {
                 $iNtoMFound = 0;
@@ -1085,7 +1084,6 @@ jQuery(function() {
 
                         if ($isNToMDisplayEditEntry != "yes") {
                             //echo $sComingFromRelations;
-                            print_r($field);
                             $op .= "<td class=sidebar valign=top>";
                             preg_match("/\-([0-9])+\-a$/", $sComingFromRelations, $t);
                             //$q = "SELECT * FROM conf_relations WHERE id = '$t[1]'";
@@ -1100,16 +1098,15 @@ jQuery(function() {
                             //anzeige relationen mit separaten icons
                             $q = "SELECT * FROM conf_relation_visibility WHERE path REGEXP '^$sComingFromRelations-[0-9]+$'  AND (showWithEditIcons = 'Separat' OR showWithEditIcons = 'Beides')";
                             $a = q($q, "", 1);
-                            //pre($a);
                             if (count($a)) {
                                 foreach ($a as $k => $v) {
                                     //pre($v);
 
                                     //$op .= "div_".$ar[name]."-".$b[0][id]."_".$field[$b[0][columnNameOfId]]."_relations_".$sDisplayTableRecursivePathOut."_".$v[path];
-                                    $op .= "<div class=sidebar-item id=\"icon_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_$ajaxExec\" style=\"display:none\">";
+                                    $op .= "<div class=sidebar-item id=\"icon_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_$rootId\" style=\"display:none\">";
                                     $op .= displayVisibilityButtons(
                                         "",
-                                        "div_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_" . $ajaxExec,
+                                        "div_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_" . $rootId,
                                         $v[title],
                                         1,
                                         $v[icon]
@@ -1118,10 +1115,10 @@ jQuery(function() {
                                 }
                             }
                             if ($showRelations == "yes") {
-                                $op .= "<div class=sidebar-item id=\"icon_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_$ajaxExec\" style=\"display:none\">";
+                                $op .= "<div class=sidebar-item id=\"icon_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_$rootId\" style=\"display:none\">";
                                 $op .= displayVisibilityButtons(
                                     "",
-                                    "div_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $ajaxExec,
+                                    "div_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $rootId,
                                     "Relationen des Eintrags &ouml;ffnen",
                                     1,
                                     "",
@@ -1380,6 +1377,9 @@ function displayAssignRow($columnNameOfId, $id, $table, $sourceTableName, $actio
     global $aRightsUnchangeable, $aRel, $aProp, $aTable, $lastRowIdNToM;
     $aTablesNToM = array($table, $sourceTableName);
 
+    $sSourceTable = getNameFromTableString($_GET['sourceTable']);
+    $sDestTable = getNameFromTableString($_GET['destTable']);
+
     //Tabellenname f&uuml;r Output bereitstellen
     foreach ($aTable as $key => $value) {
         if (in_array($value[name], $aTablesNToM)) {
@@ -1396,23 +1396,25 @@ function displayAssignRow($columnNameOfId, $id, $table, $sourceTableName, $actio
 </tr>
 	<td valign='top'><div>Tabellen</div>
 	</td>
-	<td valign='top'><div>$_GET[sourceTable], $_GET[destTable]</div>
+	<td valign='top'><div>$sSourceTable, $sDestTable</div>
 	</td>
 </tr>
 
 ";
-    $query = "SELECT * FROM ".e($_GET['sourceTable'])." WHERE id = '".e($_GET['idValue'])."'";
+
+
+    $query = "SELECT * FROM ".e($sSourceTable)." WHERE id = '".e($_GET['idValue'])."'";
     $aSourceData = dbQuery($query);
     foreach ($aSourceData[0] as $key => $content) {
         $sSourceData .= $content . ", ";
     }
-    $out .= "<tr><td>id_$_GET[sourceTable]<input type=\"hidden\" name=\"id_$_GET[sourceTable]\" value=\"" . $_GET["idValue"] . "\"></td><td>$sSourceData</td></tr>";
-    $query = "SELECT * FROM ".e($_GET['destTable']);
+    $out .= "<tr><td>id_$sSourceTable<input type=\"hidden\" name=\"id_$sSourceTable\" value=\"" . $_GET["idValue"] . "\"></td><td>$sSourceData</td></tr>";
+    $query = "SELECT * FROM ".$sDestTable;
     $aDestData = dbQuery($query);
-    $sDestData .= "<select name=\"id_$_GET[destTable]\">";
+    $sDestData .= "<select name=\"id_$sDestTable\">";
     foreach ($aDestData as $count => $content) {
         //print_r($content);
-        $i = getIdName($_GET['destTable'], $aManualFieldProperties);
+        $i = getIdName($sDestTable, $aManualFieldProperties);
         $sDestData .= "<option value=\"" . $content[$i] . "\">";
         foreach ($content as $countField => $contentField) {
             $sDestData .= $contentField . ", ";
@@ -1420,7 +1422,7 @@ function displayAssignRow($columnNameOfId, $id, $table, $sourceTableName, $actio
         $sDestData .= "</option>";
     }
     $sDestData .= "</select>";
-    $out .= "<tr><td>id_$_GET[destTable]</td><td>$sDestData</td></tr>";
+    $out .= "<tr><td>id_$sDestTable</td><td>$sDestData</td></tr>";
     if ($action == "new") {
         $out .= "<input type=\"hidden\" name=\"action\" value=\"new\">";
     }
@@ -2042,8 +2044,8 @@ function generateField(
             if ($dateIncludeJsDone != 1) {
                 $fo .= '
 				
-				<link rel="stylesheet" type="text/css" href="/bncms/lib/datetimepicker-master/jquery.datetimepicker.css"/ >
-<script src="/bncms/lib/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
+				<link rel="stylesheet" type="text/css" href="/bncms/lib/datetimepicker/jquery.datetimepicker.css"/ >
+<script src="/bncms/lib/datetimepicker/build/jquery.datetimepicker.full.min.js"></script>
  
 				';
                 $dateIncludeJsDone = 1;
@@ -2290,8 +2292,8 @@ function generateSearchField($tableOrId, $fieldName, $ajaxExec, $sessionsp, $aMa
     } elseif ($fp['type'] == "date") {
         global $dateIncludeJsDone;
         if ($dateIncludeJsDone != 1) {
-            $o .= '<link rel="stylesheet" type="text/css" href="/bncms/lib/datetimepicker-master/jquery.datetimepicker.css"/ >
-<script src="/bncms/lib/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>';
+            $o .= '<link rel="stylesheet" type="text/css" href="/bncms/lib/datetimepicker/jquery.datetimepicker.css"/ >
+<script src="/bncms/lib/datetimepicker/build/jquery.datetimepicker.full.min.js"></script>';
             $dateIncludeJsDone = 1;
         }
         $o .= "<input placeholder='Von' type='text' value='" . @$sessionsp["search_" . $fieldName . "_bncmsfromdate"] . "' id='search_" . $fieldName . "_bncmsfromdate' class='display_table_paging_search c" . $ajaxExec . " search date' onChange=\"ajax_submit('" . $ajaxExec . "','','" . RELATIVEPATHAJAX . "','" . RELATIVEPATHAPP . "');\"><input type='text' placeholder='Bis' value='" . @$sessionsp["search_" . $fieldName . "_bncmstodate"] . "' id='search_" . $fieldName . "_bncmstodate' class='display_table_paging_search c" . $ajaxExec . " search date' onChange=\"ajax_submit('" . $ajaxExec . "','','" . RELATIVEPATHAJAX . "','" . RELATIVEPATHAPP . "');\"><script>
@@ -2340,7 +2342,7 @@ function generateRelatedContent(
     $ajaxExec
 )
 {
-    global $aRel;
+    global $aRel, $rootId;
 
     $table = returnTableAndId($tableOrId, $aManualFieldProperties)[0];
     $tableId = returnTableAndId($tableOrId, $aManualFieldProperties)[1];
@@ -2352,7 +2354,7 @@ function generateRelatedContent(
     //pre($a);
     if (count($a)) {
         foreach ($a as $k => $v) {
-            $op .= "<div id=\"div_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_$ajaxExec\" style=\"display:none\"><table class=\"table_spacer table-responsiv\">";
+            $op .= "<div id=\"div_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_$rootId\" style=\"display:none\"><table class=\"table_spacer table-responsiv\">";
             $r = preg_match('/-([0-9]+)$/', $v[path], $t);
 
             //$q = "SELECT * FROM conf_relations WHERE id = '$t[1]'";
@@ -2363,13 +2365,36 @@ function generateRelatedContent(
             if ($aRelation[type] == "nto1") {
                 if ($aRelation[nto1TargetTable] == $tableId) {
                     //ist eingehend
-                    if ($t = displayNTo1InputRelation($aNTo1TablePath, $sComingFromRelations, $tableOrId, $row, $aRelation[nto1SourceField], $aRelation[nto1SourceTable], $columnNameOfId, 'Separat', $aManualFieldProperties)) {
+                    if ($t = displayNTo1InputRelation(
+                        $aNTo1TablePath,
+                        $sComingFromRelations,
+                        $tableOrId,
+                        $row,
+                        $aRelation[nto1SourceField],
+                        $aRelation[nto1SourceTable],
+                        $columnNameOfId,
+                        'Separat',
+                        $aManualFieldProperties,
+                        $ajaxExec
+                    )) {
                         $op .= $t;
                         $iSwitchInSeparat = 1;
                     }
                 } else {
                     //ist ausgehend
-                    if ($t = displayNTo1OutputRelation($row[$aRelation[nto1SourceField]], $aNTo1TablePath, $sComingFromRelations, $tableOrId, $row, $aRelation[nto1SourceField], $arrTableColumnNames, $columnNameOfId, 'Separat', $aManualFieldProperties)) {
+                    if ($t = displayNTo1OutputRelation(
+                        $row[$aRelation[nto1SourceField]],
+                        $aNTo1TablePath,
+                        $sComingFromRelations,
+                        $tableOrId,
+                        $row,
+                        $aRelation[nto1SourceField],
+                        $arrTableColumnNames,
+                        $columnNameOfId,
+                        'Separat',
+                        $aManualFieldProperties,
+                        $ajaxExec
+                    )) {
                         $op .= $t;
                         $iSwitchInSeparat = 1;
                     }
@@ -2382,7 +2407,16 @@ function generateRelatedContent(
                         $content = $v2;
                     }
                 }
-                if ($t = displayNToMRelation($content, $aNTo1TablePath, $sComingFromRelations, $tableOrId, $row, 'Separat', $aManualFieldProperties)) {
+                if ($t = displayNToMRelation(
+                    $content,
+                    $aNTo1TablePath,
+                    $sComingFromRelations,
+                    $tableOrId,
+                    $row,
+                    'Separat',
+                    $aManualFieldProperties,
+                    $ajaxExec
+                )) {
                     $op .= $t;
                     $iSwitchInSeparat = 1;
                 }
@@ -2391,7 +2425,7 @@ function generateRelatedContent(
             if ($iSwitchInSeparat) {
                 //<tr><td>'icon_".$table."-".$tableId."_".$row[$columnNameOfId]."_relations_".$sDisplayTableRecursivePathOut."_".$v[path]."'</td></tr>
 
-                $op .= "<script>jQuery('#icon_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_$ajaxExec').css('display','inline');</script>";
+                $op .= "<script>jQuery('#icon_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_$rootId').css('display','inline');</script>";
             }
             $op .= "</table>";
             $op .= "</div>";
@@ -2410,7 +2444,8 @@ function generateRelatedContent(
                 $tableOrId,
                 $row,
                 'Normal',
-                $aManualFieldProperties
+                $aManualFieldProperties,
+                $ajaxExec
             )) {
                 $opo .= $t;
                 $iSwitchInDot = 1;
@@ -2434,7 +2469,8 @@ function generateRelatedContent(
                 $arrTableColumnNames,
                 $columnNameOfId,
                 'Normal',
-                $aManualFieldProperties
+                $aManualFieldProperties,
+                $ajaxExec
             )) {
                 $opo .= $t;
                 $iSwitchInDot = 1;
@@ -2458,7 +2494,8 @@ function generateRelatedContent(
                         $linkingTable,
                         $columnNameOfId,
                         'Normal',
-                        $aManualFieldProperties
+                        $aManualFieldProperties,
+                        $ajaxExec
                     )) {
                         $opo .= $t;
                         //echo "$aNTo1TablePath, $sComingFromRelations, $table, $tableId, $row, $linkingField, $linkingTable, $columnNameOfId, 'Normal'";
@@ -2469,9 +2506,9 @@ function generateRelatedContent(
         }
     //pre($iSwitchInDot);
     if ($iSwitchInDot == 1) {
-
-        $op .= "<div id=\"div_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_$ajaxExec\" style=\"display:none\"><table class=\"table_spacer\">";
-        $op .= "<script>jQuery('#icon_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_$ajaxExec').css('display','inline');</script>";
+        //$op .= pre("div_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_$rootId",1);
+        $op .= "<div id=\"div_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_$rootId\" style=\"display:none\"><table class=\"table_spacer\">";
+        $op .= "<script>jQuery('#icon_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_$rootId').css('display','inline');</script>";
         $op .= "$opo</table></div>";
 
     }
@@ -2487,10 +2524,11 @@ function displayNTo1InputRelation(
     $linkingTable,
     $columnNameOfId,
     $showWithEditIcons,
-    $aManualFieldProperties = ""
+    $aManualFieldProperties = "",
+    $ajaxExec = ""
 )
 {
-    global $aTable;
+    global $aTable, $sBeforeAjaxQueryString;
 
     $table = returnTableAndId($tableOrId, $aManualFieldProperties)[0];
     $tableId = returnTableAndId($tableOrId, $aManualFieldProperties)[1];
@@ -2553,7 +2591,7 @@ function displayNTo1InputRelation(
                     "",
                     "",
                     "",
-                    "",
+                    $sBeforeAjaxQueryString,
                     $sComingFromRelations . "-" . $cr
                 );
 
@@ -2576,10 +2614,11 @@ function displayNTo1OutputRelation(
     $arrTableColumnNames,
     $columnNameOfId,
     $showWithEditIcons,
-    $aManualFieldProperties = ""
+    $aManualFieldProperties = "",
+    $ajaxExec = ""
 )
 {
-    global $aTable, $aRel;
+    global $aTable, $aRel, $sBeforeAjaxQueryString;
 
     $table = returnTableAndId($tableOrId, $aManualFieldProperties)[0];
     $tableId = returnTableAndId($tableOrId, $aManualFieldProperties)[1];
@@ -2644,7 +2683,7 @@ function displayNTo1OutputRelation(
                     "",
                     "",
                     "",
-                    "",
+                    $sBeforeAjaxQueryString,
                     $sComingFromRelations . "-" . $cr
                 );
                 $op .= "
@@ -2664,10 +2703,11 @@ function displayNToMRelation(
     $tableOrId,
     $row,
     $showWithEditIcons,
-    $aManualFieldProperties = ""
+    $aManualFieldProperties = "",
+    $ajaxExec = ""
 )
 {
-    global $aTable;
+    global $aTable, $sBeforeAjaxQueryString;
 
     $table = returnTableAndId($tableOrId, $aManualFieldProperties)[0];
     $tableId = returnTableAndId($tableOrId, $aManualFieldProperties)[1];
@@ -2743,7 +2783,7 @@ function displayNToMRelation(
                     "",
                     "",
                     "",
-                    "",
+                    $sBeforeAjaxQueryString,
                     $sComingFromRelations . "-" . $content[relationId] . "-a"
                 );
 
@@ -2776,5 +2816,35 @@ function buildLimit($place, $table, $tableId, $limit)
         $limitSql = "0," . $limit;
     $limitSql = preg_replace('/(\-[0-9]+),/', "0", $limitSql);
     return $limitSql;
+}
+
+function saveScrollpos() {
+    session_start();
+
+    if ($iPosParameters = strpos($_GET['phpSelf'], "?")) {
+        $_GET['phpSelf'] = substr($_GET['phpSelf'], 0, $iPosParameters);
+    }
+
+    $_SESSION['scrollPos'][$_GET['phpSelf']]['top'] = $_GET['scrollTop'];
+    $_SESSION['scrollPos'][$_GET['phpSelf']]['left'] = $_GET['scrollLeft'];
+    $aSessVisibleLayers = $_SESSION['aVisibleLayers'];
+    if ($_GET['an'] != "") {
+        if (!is_array($aSessVisibleLayers[$_GET['phpSelf']]))
+            $aSessVisibleLayers[$_GET['phpSelf']] = array();
+        array_push($aSessVisibleLayers[$_GET['phpSelf']], $_GET['an']);
+        $aSessVisibleLayers[$_GET['phpSelf']]=array_unique($aSessVisibleLayers[$_GET['phpSelf']]);
+    }
+
+    if ($_GET['aus'] != "") {
+        foreach ($aSessVisibleLayers[$_GET['phpSelf']] as $key => $value) {
+            if ($value != $_GET['aus']) {
+                if (!is_array($aTempSessVisibleLayers))
+                    $aTempSessVisibleLayers = array();
+                array_push($aTempSessVisibleLayers, $value);
+            }
+        }
+        $aSessVisibleLayers[$_GET['phpSelf']] = $aTempSessVisibleLayers;
+    }
+    $_SESSION['aVisibleLayers'] = $aSessVisibleLayers;
 }
 ?>

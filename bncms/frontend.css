@@ -572,6 +572,9 @@ div#admin_header_left {
 	background-size: 20px 20px;
 	background-origin: content-box;
 }
+.td_zebra {
+	background-color: rgba(232, 232, 232, 0.5);
+}
 /*custom checkboxes
 label {
 	display: inline-block;

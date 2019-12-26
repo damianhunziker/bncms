@@ -8,6 +8,7 @@ div {
 	text-transform: none;
 	color: #333333;
 }
+
 h1 {
 	font-family: Geneva, Arial, Helvetica, sans-serif;
 	font-size: 22px;
@@ -20,6 +21,7 @@ h1 {
 	padding: 0px 10px 10px 0px;
 	margin: 0px 10px 10px 0px;
 }
+
 input {
 	font-family: Geneva, Arial, Helvetica, sans-serif;
 	font-size: 14px;
@@ -32,16 +34,19 @@ input {
 	padding: 0px 0px 0px 0px;
 	margin: 0px 0px 0px 0px;
 }
-table{
+
+table {
 	border: solid 1px #000000;
 	padding: 5px 5px 5px 5px;
 	margin: 5px 5px 5px 5px;
 }
-td{
+
+td {
 	padding: 2px 2px 2px 2px;
 	margin: 2px 2px 2px 2px;
 }
-a, a:link, a:visited   {
+
+a, a:link, a:visited {
 	font-family: Geneva, Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	font-style: normal;
@@ -52,6 +57,7 @@ a, a:link, a:visited   {
 	text-transform: none;
 	color: #996633;
 }
+
 a:hover {
 	font-family: Geneva, Arial, Helvetica, sans-serif;
 	font-size: 12px;
@@ -63,5 +69,3 @@ a:hover {
 	font-decoration: underline;
 	color: #333333;
 }
-
-

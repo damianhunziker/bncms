@@ -327,7 +327,7 @@ if (@$_POST['savePost'] == "on") {
 			
 		}
 			
-		if ($_POST['action'] == "new" or !$_POST[id]) {
+		if (($_POST['action'] == "new" or !$_POST['id']) and !$_POST['table1'] and !$_POST['table2']) {
 			//if (!$_POST[id]) {
 				$_POST[id] = getNextAutoincrementValue($_POST[table]);
 			//}
@@ -397,22 +397,23 @@ if (@$_POST['savePost'] == "on") {
 				}
 			}
 		}
-		
-		
 		//eof Bildupload
+
 		if ($_POST[table1] != "") {
-			//echo "<pre>";
-			//print_r($_POST);
-			//exit();
-			//echo "getAssignmentTableName($_POST[table1], $_POST[table2])";
 			$sAssignmentTableName = getAssignmentTableName($_POST[table1], $_POST[table2]);
 			$aAssignmentFieldNames = getAssignmentFieldNames($_POST[table1], $_POST[table2]);
-	
-			if ($_POST[action] == "new") {
-				$query = "INSERT INTO $sAssignmentTableName SET $aAssignmentFieldNames[sourceFieldname] = '".e($_POST["id_".e($_POST['table1'])])."', $aAssignmentFieldNames[destFieldname] = '".e($_POST["id_".e($_POST['table2'])])."'";
+
+			$table1 = getNameFromTableString($_POST['table1']);
+            $table2 = getNameFromTableString($_POST['table2']);
+            
+            $sourceFieldname = e($_POST["id_".e($table1)]);
+            $destFieldname = e($_POST["id_".e($table2)]);
+
+			if ($_POST['action'] == "new") {
+				$query = "INSERT INTO $sAssignmentTableName SET $aAssignmentFieldNames[sourceFieldname] = '".$sourceFieldname."', $aAssignmentFieldNames[destFieldname] = '".$destFieldname."'";
 				dbQuery($query);
 			} else {
-				$query = "UPDATE $sAssignmentTableName SET SET $aAssignmentFieldNames[sourceFieldname] = '".e($_POST["id_".e($_POST['table1'])])."', $aAssignmentFieldNames[destFieldname] = '".e($_POST["id_".e($_POST['table2'])])."' WHERE id = '".e($_POST['id'])."'";
+				$query = "UPDATE $sAssignmentTableName SET $aAssignmentFieldNames[sourceFieldname] = '".$sourceFieldname."', $aAssignmentFieldNames[destFieldname] = '".$destFieldname."' WHERE id = '".e($_POST['id'])."'";
 				dbQuery($query);
 			}
 		} else {
