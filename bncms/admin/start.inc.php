@@ -56,12 +56,11 @@ if ($_POST['username'] and $_POST['password'] and !@$_POST['savePost'] and $_POS
     if (is_array($arr)) {
         $_SESSION['user_allowed'] = 1;
     }
-    
     echo "<script>window.location.href='index.php';</script>";
     exit;
 }
 if (@$_GET['logout'] == true) {
-    session_destroy();
+    $_SESSION = array();
 }
 
 if ($_SESSION['user_allowed'] != 1) {
@@ -162,7 +161,7 @@ alert(name);
 	<?php
 	die();
 } else {
-	
+
     if (isset($_GET['style_color']))
     {
         $_SESSION['style_color'] = $_GET['style_color'];
@@ -170,6 +169,15 @@ alert(name);
     else
     {
          $_SESSION['style_color'] = "green";
+    }
+
+    if (isset($_GET['icon_color']))
+    {
+        $_SESSION['icon_color'] = $_GET['icon_color'];
+    }
+    else
+    {
+        $_SESSION['icon_color'] = "green";
     }
 
     if (isset($_SESSION['errorMsg'])) {

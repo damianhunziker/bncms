@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `bncms_banned_ips` (
 ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
 ";
 
-mysqli_query($DB,$q);
+mysqli_query($DB,$q) or exit(mysqli_error($DB));
 
 $q = "
 CREATE TABLE IF NOT EXISTS `conf_tables` (
@@ -255,17 +255,17 @@ function selectRec ($table, $condition, $limit = "", $order = "") {
 	if ($limit != "") {
 		$condition .= " LIMIT ".$limit;
 	}
-	$query="SELECT * FROM $table $condition"; 
+	$query="SELECT * FROM $table $condition";
 	$RS=mysqli_query($DB, $query);
 	if (mysqli_error($DB)) {
 		echo "<red>Fehler in Anfrage: ".$query."<br>".mysqli_error($DB)."<br></red>";
 		exit();
 	}
 	if (mysqli_num_rows($RS) == 1) {
-		$arrOut[0]=mysqli_fetch_array($RS, MYSQL_ASSOC);
+		$arrOut[0]=mysqli_fetch_array($RS, MYSQLI_ASSOC);
 	}
 	if (mysqli_num_rows($RS) > 1) {
-		while ($arrTempOut=mysqli_fetch_array($RS, MYSQL_ASSOC)) {
+		while ($arrTempOut=mysqli_fetch_array($RS, MYSQLI_ASSOC)) {
 			array_push($arrOut, $arrTempOut);
 		}
 	}
