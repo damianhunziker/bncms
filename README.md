@@ -2,7 +2,7 @@ bncms delivers a set of standard functionality for often returning tasks in the 
 
 It is a PHP-based Content Management System for SQL-Databases and provides a universal adminarea that can be applied to any database. bncms was developed by Damian Hunziker.
 
-We search for helpers to extend the functionality and bring the system to new level.
+We search for helpers to extend the functionality and bring the system to a new level.
 
 -----
 

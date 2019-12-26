@@ -22,7 +22,6 @@ if (!$DB)
 	exit("Datenbank Login Fehler");
 }
 
-
 mysqli_query($DB, "SET NAMES 'utf8'");
 include (PATH."/inc/db-functions.inc.php");
 include (PATH."/inc/functions.inc.php");
