@@ -755,7 +755,7 @@ print_r($searchParams);
                 }
         }
         if (inSerializedArray($_SESSION[user], $aActualRelation[addors])) {
-            $op .= "<a onClick=\"opwin('edit_relation.php?action=new&idName=" . $_GET[id] . "&idValue=" . $origIdValue . "&sourceTable=$origTable&destTable=$table','EditRelation'); return false;\" href='#' title='Neue Referenz erstellen'><img src=\"" . RELATIVEPATH . "/image/icons/add-folder-$_SESSION[icon_color].gif\"></a>";
+            $op .= "<a onClick=\"opwin('edit_relation.php?action=new&idName=" . $_GET[id] . "&idValue=" . $origIdValue . "&sourceTable=$origTableId&destTable=$tableId','EditRelation'); return false;\" href='#' title='Neue Referenz erstellen'><img src=\"" . RELATIVEPATH . "/image/icons/add-folder-$_SESSION[icon_color].gif\"></a>";
             $sideBarActive = 1;
         }
     }
@@ -1084,7 +1084,6 @@ jQuery(function() {
 
                         if ($isNToMDisplayEditEntry != "yes") {
                             //echo $sComingFromRelations;
-                            print_r($field);
                             $op .= "<td class=sidebar valign=top>";
                             preg_match("/\-([0-9])+\-a$/", $sComingFromRelations, $t);
                             //$q = "SELECT * FROM conf_relations WHERE id = '$t[1]'";
@@ -1099,7 +1098,6 @@ jQuery(function() {
                             //anzeige relationen mit separaten icons
                             $q = "SELECT * FROM conf_relation_visibility WHERE path REGEXP '^$sComingFromRelations-[0-9]+$'  AND (showWithEditIcons = 'Separat' OR showWithEditIcons = 'Beides')";
                             $a = q($q, "", 1);
-                            //pre($a);
                             if (count($a)) {
                                 foreach ($a as $k => $v) {
                                     //pre($v);
@@ -1379,6 +1377,9 @@ function displayAssignRow($columnNameOfId, $id, $table, $sourceTableName, $actio
     global $aRightsUnchangeable, $aRel, $aProp, $aTable, $lastRowIdNToM;
     $aTablesNToM = array($table, $sourceTableName);
 
+    $sSourceTable = getNameFromTableString($_GET['sourceTable']);
+    $sDestTable = getNameFromTableString($_GET['destTable']);
+
     //Tabellenname f&uuml;r Output bereitstellen
     foreach ($aTable as $key => $value) {
         if (in_array($value[name], $aTablesNToM)) {
@@ -1395,23 +1396,25 @@ function displayAssignRow($columnNameOfId, $id, $table, $sourceTableName, $actio
 </tr>
 	<td valign='top'><div>Tabellen</div>
 	</td>
-	<td valign='top'><div>$_GET[sourceTable], $_GET[destTable]</div>
+	<td valign='top'><div>$sSourceTable, $sDestTable</div>
 	</td>
 </tr>
 
 ";
-    $query = "SELECT * FROM ".e($_GET['sourceTable'])." WHERE id = '".e($_GET['idValue'])."'";
+
+
+    $query = "SELECT * FROM ".e($sSourceTable)." WHERE id = '".e($_GET['idValue'])."'";
     $aSourceData = dbQuery($query);
     foreach ($aSourceData[0] as $key => $content) {
         $sSourceData .= $content . ", ";
     }
-    $out .= "<tr><td>id_$_GET[sourceTable]<input type=\"hidden\" name=\"id_$_GET[sourceTable]\" value=\"" . $_GET["idValue"] . "\"></td><td>$sSourceData</td></tr>";
-    $query = "SELECT * FROM ".e($_GET['destTable']);
+    $out .= "<tr><td>id_$sSourceTable<input type=\"hidden\" name=\"id_$sSourceTable\" value=\"" . $_GET["idValue"] . "\"></td><td>$sSourceData</td></tr>";
+    $query = "SELECT * FROM ".$sDestTable;
     $aDestData = dbQuery($query);
-    $sDestData .= "<select name=\"id_$_GET[destTable]\">";
+    $sDestData .= "<select name=\"id_$sDestTable\">";
     foreach ($aDestData as $count => $content) {
         //print_r($content);
-        $i = getIdName($_GET['destTable'], $aManualFieldProperties);
+        $i = getIdName($sDestTable, $aManualFieldProperties);
         $sDestData .= "<option value=\"" . $content[$i] . "\">";
         foreach ($content as $countField => $contentField) {
             $sDestData .= $contentField . ", ";
@@ -1419,7 +1422,7 @@ function displayAssignRow($columnNameOfId, $id, $table, $sourceTableName, $actio
         $sDestData .= "</option>";
     }
     $sDestData .= "</select>";
-    $out .= "<tr><td>id_$_GET[destTable]</td><td>$sDestData</td></tr>";
+    $out .= "<tr><td>id_$sDestTable</td><td>$sDestData</td></tr>";
     if ($action == "new") {
         $out .= "<input type=\"hidden\" name=\"action\" value=\"new\">";
     }
