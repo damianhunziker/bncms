@@ -1,17 +1,14 @@
 _notes/
-admin/backup/
-barcode.php
-file/
-/.buildpath
-/.project
+bncms/admin/backup/*
+bncms/file/*
 
-/.settings/
+bncms/inc/configuration/database-settings.inc.php
+bncms/inc/configuration/backend-config.inc.php
+bncms/inc/configuration/frontend-config.inc.php
+
+
+.settings/
+.idea/
 
 .buildpath
 .project
-.settings/
-
-inc/configuration/database-settings.inc.php
-inc/configuration/backend-config.inc.php
-inc/configuration/frontend-config.inc.php
-
