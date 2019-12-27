@@ -1,2 +1,2 @@
-$ cat .gitignore
-parse.php
+.idea
+node_modules
