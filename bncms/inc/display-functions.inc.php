@@ -169,9 +169,7 @@ function displayTable(
     }
 
     $p = func_get_args();
-    //echo "<pre>";
-    //print_r($p);
-    //echo "</pre>";
+
     for ($i = 0; $i < 24; $i++) {
         if (!$p[$i])
             $p[$i] = "null";
@@ -193,15 +191,10 @@ function displayTable(
         } else {
             $p[24] = $_SERVER['REQUEST_URI']; //sBeforeAjaxQueryString
         }
-        //pre($p);
-        //$arg_list = urlencode( serialize($p));
+
         //speicher parameter in session und gib dem ajax aufruf nur den md5 mit
         $_SESSION[ajaxParameter][$id] = $p;
-        /*echo "session vor ajax";
-		$_SESSION[test] ="test";
-		pre($_SESSION);
-		echo "cookie vor ajax";
-		print_r($_COOKIE);*/
+
         $par[id] = $id;
         //$par[sp] = serialize($searchParams);
         $arg_list = urlencode(serialize($par));
@@ -255,21 +248,12 @@ function displayTable(
             exit();
         } else {
 
-            //exit();
-            //echo $_SESSION[ajaxParameter][$p[11]][0];
             $t = getTableProperties($_SESSION[ajaxParameter][$p[11]][0], $aManualFieldProperties);
-            //print_r($t);
-            //$t = getTableProperties("sdasdasdaf");
             if ($t) {
                 $pn = $_SESSION[ajaxParameter][$p[11]];
                 $arg_list = urlencode(serialize($pn));
             } else {
                 //wurde wohl ausgeloggt, muss reloaden
-                /*print_r( $aManualFieldProperties);
-				pre($p);
-				pre($_SESSION[ajaxParameter]);
-				print_r($t);*/
-                //exit();#
                 if (!$webuser) {
 
                     echo "<script>console.log('eventual logout -> reloading'); window.location.reload();</script>";
@@ -279,8 +263,6 @@ function displayTable(
         }
     }
 
-    //echo "Hu";
-    //exit("hu");
     //Muss aManualFieldProperties in Sitzung schreiben damit in Edit-Form verfügbar
     $_SESSION[aManualFieldProperties][displayTable][$ajaxExec] = $aManualFieldProperties;
 
@@ -314,26 +296,18 @@ function displayTable(
         }
     } else
         $aPagingRecursivePath = array();
-        //echo $ajaxExec." ";
 
-        $place = md5($rootId . @implode("/", $aPagingRecursivePath));
-        //echo "<br>";
+    $place = md5($rootId . @implode("/", $aPagingRecursivePath));
+
     if (strpos("a" . $table, "assign_") == 1) {
         $sIsAssignmentTable = "yes";
     } else {
         $sIsAssignmentTable = "no";
     }
-    //echo "<pre>";
-    //print_r($aPagingRecursivePath);
-    //echo $sComingFrom;
-    //echo "<br>".$place;
-    //echo "</pre>";
-    //print_r($table);
+
     if (is_array($table)) {
         return;
     }
-
-    //pre($_SESSION['aVisibleLayers']);
 
     $sDisplayTableRecursivePath++;
     $aDisplayTableRecursivePath[$sDisplayTableRecursivePath] = $sComingFrom;
@@ -344,7 +318,6 @@ function displayTable(
     //paging
     //Seite auf null zur&uuml;cksetzen wenn Relationsfilter ausgef&uuml;hrt wird
 
-    //pre($searchParams);
     //Liest suchparameter in Sitzung
     if (is_array($searchParams)) {
         if ($searchParams['place'])
@@ -366,10 +339,6 @@ function displayTable(
                 $_SESSION[aActivePages][$_GET['page_table']] = $_GET['page'];
         }
         //erstellt Limit für Anfrage von Aktiven Seiten
-        //echo "<pre>";
-        //print_r($_SESSION[aActivePagesRelations]);
-        //print_r($_GET);
-        //echo "</pre>";
 
         $limitSql = buildLimit($place, $table, $tableId, $limit);
 
@@ -391,9 +360,7 @@ function displayTable(
     elseif ($aTableProp['mysql_condition'] and !$condition)
         $condition = $aTableProp['mysql_condition'];
 
-    //pre($_SESSION[aActiveSearchesRelations]);
     //Erstellt Suchfilter ab den aktiven Suchfeldern für Relationen
-    //pre($_SESSION[aActiveSearchesRelations]);
     if (is_array($_SESSION['aActiveSearchesRelations'])) {
         foreach ($_SESSION['aActiveSearchesRelations'] as $sPlace => $aActiveTable) {
             //echo "$sPlace == $place";
@@ -414,7 +381,6 @@ function displayTable(
                                 $orderSql = " $table." . e($sessionsp[order]) . " ";
                         }
                         if ($sessionsp) {
-                            //pre($sessionsp);
                             foreach ($sessionsp as $k => $v) {
                                 if (strpos($k, "earch_") == 1) {
                                     $fieldName = str_replace("search_", "", $k);
@@ -423,13 +389,8 @@ function displayTable(
                                     $fieldName = str_replace("_bncmstoint", "", $fieldName);
                                     $fieldName = str_replace("_bncmsfromint", "", $fieldName);
                                     $fieldExists = getFieldProperties($tableOrId, $fieldName, $aManualFieldProperties);
-                                    //echo "$table, $fieldName";
-                                    //pre($fieldExists);
-                                    //echo !count($fieldExists)." and ".strlen($queryOver2)." and ".strpos($selectPortion, $fieldName);
                                     //Hol aus queryover betreffende Funktion der Auswahlbezeichnung
                                     preg_match("/([\(\)a-zA-Z0-9_\.]+) *[as]{0,2} +$fieldName/", $selectPortion, $t);
-                                    //pre( $fieldExists);
-                                    //echo "$table, $fieldName";
                                     if (!count($fieldExists)
                                         and strlen($queryOver2)
                                         and strpos($selectPortion, $fieldName)) {
@@ -450,14 +411,11 @@ function displayTable(
                                                 $sc .= " AND $table." . e($fieldName) . " <= '" . mktime($att[0], $att[1], $att[2], $atd[1], $atd[0], $atd[2]) . "' ";
                                             }
                                         } elseif ($fieldExists[type] == "nto1" and $fieldExists[nto1DropdownTitleField]) {
-                                            //echo "hu";
                                             $av = explode(",", $v);
-                                            //pre($av);
                                             $aT = getTableProperties($fieldExists[nto1TargetTable], $aManualFieldProperties);
                                             $aF = getFieldProperties($fieldExists[nto1TargetTable], $fieldExists[nto1TargetField], $aManualFieldProperties);
                                             $sv = "";
                                             foreach ($av as $k1 => $v1) {
-                                                //$v1 = str_replace(" ","",$v1);
                                                 if ($v1)
                                                     $sv .= " '$v1' = (SELECT $aT[name].$fieldExists[nto1DropdownTitleField] FROM $aT[name] WHERE $aT[name].$aF[name] = $table." . e($fieldName) . ") OR";
                                             }
@@ -492,22 +450,9 @@ function displayTable(
         $orderSql = " $table.$aTableProp[sort_order] $aTableProp[sort_order_ascdesc] ";
     }
 
-    /*echo "<pre>";
-echo "$table-$tableId";
-echo "searchparams";
-print_r($searchParams);
-		print_r($_SESSION[aActiveSearchesRelations]);
-		echo "sessionsp";
-		print_r($sessionsp);
-		echo "sc";
-		print_r($sc);
-	echo "</pre>";*/
-    //echo "vor query";
     $sc = $sc . $sh;
     if ($queryOver2 != "") {
-        //echo "queryover";
         $arrTableCount = array();
-        //print_r($queryOver2);
         if ($limitSql)
             $ls = " LIMIT " . $limitSql;
         if ($orderSql)
@@ -526,11 +471,9 @@ print_r($searchParams);
             $queryOver2 = $queryOver2 . $sco;
 
         $q = $queryOver2 . $os . $ls;
-        //$op .=  $q;
         if (strpos($q, "ORDER"))
             $q = str_replace(strrchr($q, "ORDER"), "", $q);
         $q2 = "SELECT count(*) " . strstr($q, "FROM");
-        //$q2 = str_replace("SELECT", "SELECT count(*),", $q);
         $countAllEntries = dbQuery($q2, "", 1);
 
         if ($_SESSION[aActivePagesRelations][$place][$table . "-" . $tableId] * $limit > $countAllEntries[0]['count(*)']) {
@@ -541,12 +484,9 @@ print_r($searchParams);
             $q = $queryOver2 . $os . $ls;
             $query_export = $queryOver2 . $os;
         }
-        //echo $q;
         $arrTableContent = dbQuery($q);
 
-        //print_r($countAllEntries);
     } else {
-        //echo "normal";
         if ($_SESSION['NTo1Filter'][$table] != "") {
             $identifierNTo1 = getIdentifierFromSourceTableNTo1($table);
             $condition = $condition . " $identifierNTo1 = '" . $_SESSION[NTo1Filter][$table] . "' ";
@@ -569,7 +509,6 @@ print_r($searchParams);
             $limitSql = buildLimit($place, $table, $tableId, $limit);
         }
         //echo  "$table, $condition $sc, $limitSql, $orderSql";
-        //echo $condition." ".$sc;
         $arrTableContent = selectRec($table, $condition . " " . $sc, $limitSql, $orderSql);
         $query_export = "SELECT * FROM $table WHERE 1=1 AND $condition $sc";
         if ($orderSql)
@@ -579,8 +518,6 @@ print_r($searchParams);
     if ($countAllEntries[0]['count'] == 0 and $countAllEntries[0]['count(*)'] == 0) {
         $ke = "<tr><td colspan=100><center>Keine Einträge.</center></td></tr>";
     }
-    //pre($arrTableContent);
-    //$op .=  "</pre>";
     $arrDepth = ArrayDepth($arrTableContent);
     if ($arrDepth == 1) {
         $arrTemp[1] = $arrTableContent;
@@ -646,7 +583,6 @@ print_r($searchParams);
 <tr class=\"table_head\">";
     //Paging
     if ($paging == "yes" or ($sessionsp)) {
-        //print_r($countAllEntries[0]);
         if ($countAllEntries[0][count])
             $iMaxPages = ceil($countAllEntries[0]['count'] / $limit);
         else
@@ -654,7 +590,6 @@ print_r($searchParams);
         if ($iMaxPages > 1) {
             if ($iMaxPages > 1 or $sessionsp) {
                 $op .= "<td colspan=1000 class=td_toppaging><div class=\"table_paging\">";
-                //$op .=  "<div style=\"position:absolute; left:-30px;\"><img src=\"".RELATIVEPATH."/image/icons/arrows-left-$_SESSION[icon_color].gif\"></div>";
                 if ($_SESSION[aActivePagesRelations][$place][$table . "-" . $tableId] == "0" or $_SESSION[aActivePagesRelations][$place][$table . "-" . $tableId] == "") {
                     $_SESSION[aActivePagesRelations][$place][$table . "-" . $tableId] = 1;
                 }
@@ -743,7 +678,6 @@ print_r($searchParams);
     $sideBarActive = 0;
     if ($isNToMDisplayEditEntry == "yes" and $sIsAssignmentTable == "no") {
         $a = extractComingFrom($sComingFrom);
-        //print_r($a);
         $origTable = $a[0][0];
         $origTableId = $a[0][1];
 
@@ -938,32 +872,21 @@ jQuery(function() {
             }
         }
     }
-    //echo "hu";
     //Am ende des Tableheaders Zusatz Zelle f&uuml;r Ausdehnung der Tabelle nach rechts durch andere Tabellen
     if ($queryOver != "") {
         //todo muss Relationen mit IDs ansprechen nicht über Tabellennamen, weil so kann nur eine Relation pro Tabellenpaar haben
-        //echo $sComingFrom;
         $a = extractComingFrom($sComingFrom);
         //wenn id leer ist muss name nehmen
         if ($a[0][1])
             $tableOrId2 = $a[0][1];
         else
             $tableOrId2 = $a[0][0];
-        //echo "$tableOrId,$tableOrId2";
         $aIdentifierNToM = getIdentifierNToM($tableOrId, $tableOrId2);
-        //pre($aIdentifierNToM);
-        //echo "$tableId, ".$a[0][1];
         $sAssignTable = getAssignTableNToM($tableOrId, $tableOrId2);
         $aRelationProperties = getRelationProperties($sAssignTable, $aManualFieldProperties);
-        //echo "<pre>";
-        //print_r($aRelationProperties);
-        //echo "</pre>";
         $q = $queryOver . $sco . $os . $ls;
         $arrTableContentAss = dbQuery($q, "", 1);
-        //pre ($arrTableContentAss);
-        //$op .= $q;
-        //print_r($arrTableContentAss);
-        //exit();
+
         $arrDepth = ArrayDepth($arrTableContentAss);
         if ($arrDepth == 1) {
             $arrTemp[1] = $arrTableContentAss;
@@ -978,7 +901,6 @@ jQuery(function() {
         }
     }
 
-    //pre($arrTableContent);
     $op .= " </form></tr>";
     if ($isNToMDisplayEditEntry == "yes") {
         $op .= "
@@ -999,7 +921,6 @@ jQuery(function() {
             $op .= "
 		<tr id=\"tr_" . $table . "-" . $tableId . "_" . $rowcount . "\" class=\"$sStyle tr_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "\" >";
             $sDisplayTableRecursivePathOut = md5(implode($aDisplayTableRecursivePath));
-            //pre($row);
             if ($row[$columnNameOfId]) {
                 $op .= "<td class=sidebar valign=top><nobr>";
                 if ($checkable) {
@@ -1009,17 +930,6 @@ jQuery(function() {
                         $sideBarActive = 1;
                     }
                     if ($checkable == "radio") {
-
-                        //echo $checkableFunction = preg_replace('/\{([\w\]\[]+)\}/',"\$$1",$checkableFunction);
-                        /*preg_match_all('/\{([\$\'\w\]\[]+)\}/',$checkableFunction,$matches);
-						print_r($matches[1][0]);
-						if ( isset($matches[1][0])) {
-							$r = compact("row[id]");
-							print_r($r);
-							foreach ( $r as $var => $value ) {
-								$checkableFunction = str_replace('{$'.$var.'}',$value,$checkableFunction);
-							}
-						}*/
                         $cf = str_replace("{id}", $row[$columnNameOfId], $checkableFunction);
                         $op .= "<input type=radio name='$table-$tableId' value='" . $row[$columnNameOfId] . "' onclick=\"" . $cf . "\" id='radio_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "'><label for=\"radio_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "\"></label>";
                         $sideBarActive = 1;
@@ -1029,8 +939,6 @@ jQuery(function() {
                 //anzeige relationen mit separaten icons
                 $q = "SELECT * FROM conf_relation_visibility WHERE path REGEXP '^" . (preg_replace('/\-a$/', "", $sComingFromRelations)) . "-[0-9]+$'  AND (showWithEditIcons = 'Separat' OR showWithEditIcons = 'Beides')";
                 $a = q($q, "", 1);
-                //pre($a);
-                //echo $sDisplayTableRecursivePathOut;
                 if (count($a)) {
                     foreach ($a as $k => $v) {
                         //pre($v);
@@ -1046,7 +954,6 @@ jQuery(function() {
                     }
                 }
                 if ($showRelations == "yes") {
-                    //echo "icon_".$table."-".$tableId."_".$row[$columnNameOfId]."_relations_".$sDisplayTableRecursivePathOut."_$ajaxExec";
                     $op .= "<div class='sidebar-item' id=\"icon_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_$rootId\" style=\"display:none\">";
                     $op .= displayVisibilityButtons(
                         "",
@@ -1093,16 +1000,11 @@ jQuery(function() {
                     if (is_array($field)) {
 
                         if ($isNToMDisplayEditEntry != "yes") {
-                            //echo $sComingFromRelations;
                             $op .= "<td class=sidebar valign=top>";
                             preg_match("/\-([0-9])+\-a$/", $sComingFromRelations, $t);
-                            //$q = "SELECT * FROM conf_relations WHERE id = '$t[1]'";
-                            //$ar = q($q);
                             $ar = getRelationPropertiesById($t[1], $aManualFieldProperties);
-                            //pre($a);
                             $q = "SELECT * FROM conf_tables WHERE name = '$ar[name]'";
                             $b = q($q, "", 1);
-                            //pre($b);
                             //todo muss das auflösen, es gibt zwei konfigurierte Relationen die beide auf die selbe zuordnungstabelle zeigen, es ist daher nicht möglich tableId zuverlässig zu holen, man weiss eigentlich nicht zu welcher Relation die angezeigten Einträge gehören
 
                             //anzeige relationen mit separaten icons
@@ -1110,9 +1012,7 @@ jQuery(function() {
                             $a = q($q, "", 1);
                             if (count($a)) {
                                 foreach ($a as $k => $v) {
-                                    //pre($v);
 
-                                    //$op .= "div_".$ar[name]."-".$b[0][id]."_".$field[$b[0][columnNameOfId]]."_relations_".$sDisplayTableRecursivePathOut."_".$v[path];
                                     $op .= "<div class=sidebar-item id=\"icon_" . $ar[name] . "-" . $b[0][id] . "_" . $field[$b[0][columnNameOfId]] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_$rootId\" style=\"display:none\">";
                                     $op .= displayVisibilityButtons(
                                         "",
@@ -1142,7 +1042,6 @@ jQuery(function() {
 
 
                         $oa = generateRelatedContent($sComingFromRelations, $b[0][id], $field, $sDisplayTableRecursivePathOut, $aNTo1TablePath, $arrTableColumnNames, $b[0][columnNameOfId], $iSwitchInColumnSeparatAssignment, $aManualFieldProperties, $ajaxExec);
-                        //pre(htmlentities($oa[0]));
                         if ($oa) {
                             $sRelatedContentNToMAssignment = $oa;
                             $sideBarActive = 1;
@@ -1150,7 +1049,6 @@ jQuery(function() {
                         foreach ($field as $key2 => $value) {
 
                             if (@!in_array($key2, $aIdentifierNToM)) {
-                                //print_r($aRelationProperties);
 
                                 if ($aRelationProperties[seperateColumns] == "on") {
                                     $fp = getFieldProperties($sAssignTable, $key2, $aManualFieldProperties);
@@ -1166,15 +1064,8 @@ jQuery(function() {
                                     $kou = "";
                                     $display = 1;
                                 }
-                                //echo $isNToMDisplayEditEntry ;
                                 if ($isNToMDisplayEditEntry == "yes") {
                                     //Schreibrechte
-                                    //echo $sAssignTable;
-                                    //echo getIdName($sAssignTable,$aManualFieldProperties);
-                                    /*echo "<br>$key2 != 'id' and
-									".getIdName($sAssignTable,$aManualFieldProperties)." != $key2 and
-									$key2 != $aIdentifierNToM[0] and
-									$key2 != $aIdentifierNToM[1]";*/
                                     if ($key2 != 'id' and
                                         getIdName($sAssignTable, $aManualFieldProperties) != $key2 and
                                         $key2 != $aIdentifierNToM[0] and
@@ -1203,7 +1094,6 @@ jQuery(function() {
                                     }
                                 } else {
                                     //Leserechte
-                                    //echo $key2;
                                     if ($key2 != 'id' and
                                         getIdName($sAssignTable, $aManualFieldProperties) != $key2 and
                                         $key2 != $aIdentifierNToM[0] and
@@ -1274,9 +1164,6 @@ jQuery(function() {
             }
 
             //Am ende der Zeilen Zusatz Zelle f&uuml;r Ausdehnung der Tabelle nach rechts durch andere Tabellen
-            //$showRelations = 0;
-            //exit("hu");
-            //echo $showRelations."show";
 
             if ($showRelations == "yes") {
                 if ($isNToMDisplayEditEntry == "yes") {
@@ -1363,7 +1250,6 @@ jQuery(function() {
     $op .= "</tbody>
 </table></div></div>";
     //alle $sDisplayTableRecursivePathOut relationen ebenen einblenden nachdem durch ajax dargestellt wurde
-    //pre($_SESSION[aVisibleLayers][$sBeforeAjaxQueryString]);
     if (is_array($_SESSION[aVisibleLayers][$sBeforeAjaxQueryString])) {
         foreach ($_SESSION[aVisibleLayers][$sBeforeAjaxQueryString] as $key => $value) {
             if (strpos($value, $sDisplayTableRecursivePathOut))
@@ -1374,9 +1260,6 @@ jQuery(function() {
     }
     $aDisplayTableRecursivePath[$sDisplayTableRecursivePath] = "";
     $sDisplayTableRecursivePath = $sDisplayTableRecursivePath - 1;
-    //if ($ajaxExec != 0)
-    //	return $op;
-    //else
 
     echo $op;
 }
@@ -1423,7 +1306,6 @@ function displayAssignRow($columnNameOfId, $id, $table, $sourceTableName, $actio
     $aDestData = dbQuery($query);
     $sDestData .= "<select name=\"id_$sDestTable\">";
     foreach ($aDestData as $count => $content) {
-        //print_r($content);
         $i = getIdName($sDestTable, $aManualFieldProperties);
         $sDestData .= "<option value=\"" . $content[$i] . "\">";
         foreach ($content as $countField => $contentField) {
@@ -1436,113 +1318,7 @@ function displayAssignRow($columnNameOfId, $id, $table, $sourceTableName, $actio
     if ($action == "new") {
         $out .= "<input type=\"hidden\" name=\"action\" value=\"new\">";
     }
-    /*
 
-	$arrRowContent=selectRec($table,"id='$id'");
-	foreach ($arrRowContent[0] as $fieldName => $field) {
-	$out .= "
-<tr>
-	<td valign='top'><div>".ucfirst($fieldName)."</div>
-	</td>
-	<td valign='top'>";
-		//Ermitteln ob n:1 Relation vorhanden ist und Dropdown ausgeben
-		//echo "[$table][$fieldName]";
-		//print_r($aRel);
-		if ($aRel['NTo1'][$table][$fieldName] != "") {
-			$aRelTable=dbQuery("SELECT * FROM ".$aRel['NTo1'][$table][$fieldName]);
-			$out .= "<select name='$fieldName'><option></option>";
-			$arrDepth=ArrayDepth($aRelTable);
-			if ($arrDepth == 1) {
-				$arrTemp[1]=$aRelTable;
-				$aRelTable=$arrTemp;
-			}
-			foreach ($aRelTable as $key => $value) {
-				$selected = "";
-				if ($field == $value[id]) {
-					$selected = " selected ";
-				}
-				$out .= "<option value='$value[id]' $selected>";
-				foreach ($value as $key2 => $value2) {
-					if (is_numeric($value2)) {
-						if ($key2 == "id") {
-							$out .= $value2.", ";
-						}
-					} else {
-						if (strlen($value2) > 70) {
-							$value2 = substr($value2,0,70)."...";
-						} else {
-							$value2 = $value2;
-						}
-						if ($value[type] != "image")
-							$out .= $value2.", ";
-					}
-				}
-				$out .= "</option>";
-			}
-			$out .= "</select>";
-		}
-		//Ermitteln ob das Feld ein Unix-Timestamp beinhaltet
-		if ($aProp[$tableId][$fieldName] == "unixtimestamp") {
-			$field = date("d.m.Y H:i s", $field);
-		}
-		//Ermitteln ob n:m identifier editierbar ist (destination)
-		$aIdNamesNToM = getIdentifierNToM($sourceTableName);
-		$destTable=getOtherTableNToM($sourceTableName);
-		$iDisplayNToM = "on";
-
-		if (@in_array($fieldName, $aIdNamesNToM)) {
-			$iDisplayNToM = "off";
-			if ($fieldName != $aIdNamesNToM[0]) { //Ausschluss der source Identifier
-
-				$aRelTable=dbQuery("SELECT * FROM ".$destTable);
-				$out .= "<select name='$fieldName'><option></option>";
-				foreach ($aRelTable as $key => $value) {
-					$selected = "";
-					if ($field == $value[id]) {
-						$selected = " selected ";
-					}
-					$out .= "<option value='$value[id]' $selected>";
-					foreach ($value as $key2 => $value2) {
-						if (is_numeric($value2)) {
-							if ($key2 == "id") {
-								$out .= $value2.", ";
-							}
-						} else {
-							if (strlen($value2) > 70) {
-								$value2 = substr($value2,0,70)."...";
-							} else {
-								$value2 = $value2;
-							}
-							$out .= $value2.", ";
-						}
-					}
-					$out .= "</option>";
-				}
-				$out .= "</select>";
-			} else {
-			$out .= "
-<input type='text' value='$field' name='$fieldName' disabled>
-<input type='hidden' value='$field' name='$fieldName'>";
-			}
-		}
-
-		if ($iDisplayNToM == "off"){ //Ausschluss der n:m Identifier
-			$out ."";
-		} elseif (isset($aRel['NTo1'][$table][$fieldName])){ //Ausschluss der n:1 Identifier
-			$out ."";
-		} elseif (@in_array($fieldName,$aRightsUnchangeable[$tableId])) { //Leserechte
-			$out .= "
-<div>$field</div>";
-		} elseif ($aProp[$tableId][$fieldName] == "tinymce") { //Felder mit TinyMce
-			$out .= "<textarea id='elm1' name='$fieldName' rows='5' cols='80' style='padding:0px 0px 0px 0px'>$field</textarea>";
-		} else { //Schreibrechte
-			$out .= "
-<input type='text' name='$fieldName' value='$field'>";
-		}
-		$out .= "
-	</td>
-</tr>";
-	}*/
     $out .= "
 <input type='hidden' name='savePost' value='on'>	
 <input type='hidden' name='table1' value='$_GET[sourceTable]'>
@@ -1635,8 +1411,7 @@ function displayRow(
             $langTable = $value[lang];
         }
     }
-    //print_r($arrRowContent);
-//$fi = rand(1,10000).$table;
+
     $out = "<div class=\"display_row\"><div class=\"table_overall\">";
     if ($webuser) {
         $t = '';
@@ -1698,13 +1473,9 @@ $os
     }
 
     //wenn es eine ntom gibt mit Ajax
-    //print_r($aRel['NToM'][$tableId]);
-    //echo "$tableId";
     if (is_array($aRel['NToM'][$tableId])) {
-
         foreach ($aRel['NToM'][$tableId] as $k => $v) {
             if ($v[ntomDisplayType] == "ajax") {
-                //pre($v);
                 $aTargetTable = getTableProperties($v[destTable], $aManualFieldProperties);
                 $out .= "<tr class='tr_$table_$aTargetTable[name]'>";
                 $out .= "<td valign='top' align='right' class='td_$table_$aTargetTable[name]'><div class='b'>" . $aTargetTable[lang] . "</div></td>
@@ -1800,126 +1571,6 @@ $os
         $aManualFieldProperties,
         $ajaxExec
     );
-    /*
-	if ($id and $showRelations == "yes") {
-		//Ermittlen ob n:m vorhanden ist und Tabelle ausgeben
-		if (is_array($aRel['NToM'][$tableId])) {
-			//print_r($aRel['NToM'][$tableId]);
-			//echo $tableId;
-			foreach ($aRel['NToM'][$tableId] as $count => $content) {
-				///if ($content['destTable'] == $tableId) {
-
-					$assignTable=$content[assignTable];
-					$destTable=getNameFromTableString($content[destTable]);
-					$destTableId=getIdFromTableString($content[destTable]);
-					$identifier=$content[sourceFieldname];
-					$destIdentifier=$content[destFieldname];
-
-
-					$sQueryOver="SELECT $destTable.".getIdName($destTable,$aManualFieldProperties).", $assignTable.* FROM $table, $assignTable, $destTable
-					WHERE $table.".getIdName($table,$aManualFieldProperties)." = '$id'
-					AND $assignTable.$identifier = $table.".getIdName($table,$aManualFieldProperties)."
-					AND $assignTable.$destIdentifier = $destTable.".getIdName($destTable,$aManualFieldProperties)."";
-
-					$sQueryOver2="SELECT $destTable.*, $assignTable.".getIdName($destTable,$aManualFieldProperties)." as bncms_assign_id  FROM $table, $assignTable, $destTable
-					WHERE $table.id = '$id'
-					AND $assignTable.$identifier = $table.id
-					AND $assignTable.$destIdentifier = $destTable.id";
-					//Tabellenname f&uuml;r Output bereitstellen
-					foreach ($aTable as $key => $value) {
-						if ($value[name] == $destTable) {
-							$langTable = $value[lang];
-						}
-					}
-					$out .= "
-				<tr>
-					<td valign='top' colspan='".count($arrTableColumnNames)."'>";
-					$out .= "<div class=\"table_overall\">";
-					$out .= displayVisibilityButtons("Zuordnungen zu ".$langTable, $destTable."Edit","",1);
-					$out .= "<div id='".$destTable."Edit' style='display:none;'>";
-					$out .= displayTable(
-					$destTableId,
-					getIdName($destTable,$aManualFieldProperties),
-					"",
-					$sQueryOver,
-					$sQueryOver2,
-					"no",
-					c($table)."-".$tableId."_".$id,
-					"yes",
-					null,
-					"ntom",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					$aManualFieldProperties
-
-					);
-					$out .= "
-					</div></div>";
-					$out .= "
-					</td>
-					</tr>
-					";
-				//}
-			}
-		}
-
-		//Ermitten ob eingehende nzu1-Einträge hat
-		if (is_array($aRel))
-		foreach ($aRel[NTo1] as $k => $v) {
-			foreach ($v as $k2 => $v2) {
-				if ($v2 == $tableId) {
-					$aLinkingTable = getTableProperties($k, $aManualFieldProperties);
-					if ($aLinkingTable[lang])
-						$t = $aLinkingTable[lang];
-					else
-						$t = $aLinkingTable[name];
-					$out .= "
-				<tr>
-					<td valign='top' colspan='2'>";
-					$out .= "<div class=\"table_overall\">";
-					$out .= displayVisibilityButtons("Ausgehende Zuordnungen von ".$t, $aLinkingTable[id],"",1);
-					$out .= "<div id='".$aLinkingTable[id]."' style='display:none;'>";
-					$out .= displayTable(
-					$aLinkingTable[id],
-					getIdName($aLinkingTable[id],$aManualFieldProperties),
-					" $k2 = '$id' ",
-					"",
-					"",
-					"",
-					c($table)."-".$tableId."_".$id,
-					"no",
-					null,
-					"nto1output",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					"",
-					$aManualFieldProperties
-
-					);
-					$out .= "
-					</div></div>";
-					$out .= "
-					</td>
-					</tr>";
-				}
-			}
-		}
-		}*/
     $out .= "</table></div></div>
 	<script>
 		jQuery('#" . $fi . " input[type=text]').each(function() {
@@ -1937,7 +1588,6 @@ $os
 		});
 	</script>
 	";
-    //print_r($_SESSION[tempRights]);
     echo $out;
 }
 
@@ -1961,8 +1611,7 @@ function generateField(
     overwriteRights($aManualFieldProperties);
     $aTableProperties = getTableProperties($tableOrId, $aManualFieldProperties);
     $aFieldProperties = getFieldProperties($tableOrId, $fieldName, $aManualFieldProperties);
-    //pre($aFieldProperties);
-    //echo $tableOrId;
+
     if (is_numeric($tableOrId)) {
         $table = $aTableProperties[name];
         $tableId = $aTableProperties[id];
@@ -1975,7 +1624,6 @@ function generateField(
     if ($aFieldProperties['type'] != "tinymce")
         $field = @strip_tags($field);
 
-    //print_r($aManualFieldProperties);
     //typ überschreiben mit aManualFieldProperies
     /*if (@$aManualFieldProperties[$table."-".$tableId][$fieldName]['type']) {
 		$aProp[$tableId][$fieldName] = $aManualFieldProperties[$table."-".$tableId][$fieldName]['type'];
@@ -1993,9 +1641,6 @@ function generateField(
             if ($aFieldProperties[nto1DisplayType] == "radio" or !$aFieldProperties[nto1DisplayType]) {
                 //nzu1 Zuweisung
                 $fo .= "<input type=\"text\" id=\"" . $fi . "_" . $fieldName . "\" maxlength=\"" . $maxlength . "\"  name=\"$outputFieldname\" value=\"$field\" > <a href=\"javascript:void(0)\"onClick='show_lightbox(\"l_" . $fi . "_" . $fieldName . "\")'>Eintrag&nbsp;w&auml;hlen</a>";
-                //echo $aRel['NTo1'][$tableOrId][$fieldName];
-                //pre($aRel);
-                //pre($tableOrId);
                 $fo .= displayLightbox("l_" . $fi . "_" . $fieldName,
                     displayTable(
                         $aRel['NTo1'][$tableOrId][$fieldName],
@@ -2291,7 +1936,6 @@ jQuery(".bncms_ip_address").mask("099.099.099.099")';
 function generateSearchField($tableOrId, $fieldName, $ajaxExec, $sessionsp, $aManualFieldProperties)
 {
     $fp = getFieldProperties($tableOrId, $fieldName, $aManualFieldProperties);
-    //pre($aManualFieldProperties);
     if ($fp['type'] == "nto1" and $fp['nto1DropdownTitleField']) {
         $aT = getTableProperties($fp['nto1TargetTable'], $aManualFieldProperties);
         $aF = getFieldProperties($fp['nto1TargetTable'], $fp['nto1DropdownTitleField'], $aManualFieldProperties);
@@ -2360,17 +2004,12 @@ function generateRelatedContent(
     //Anzeige der Relationen mit separaten Icons
     $q = "SELECT * FROM conf_relation_visibility WHERE path REGEXP '^$sComingFromRelations-[0-9]+$'  AND (showWithEditIcons = 'Separat' OR showWithEditIcons = 'Beides')";
     $a = q($q, "", 1);
-    //getRelationVisibility($sComingFromRelations, $aManualFieldProperties);
-    //pre($a);
     if (count($a)) {
         foreach ($a as $k => $v) {
             $op .= "<div id=\"div_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_$rootId\" style=\"display:none\"><table class=\"table_spacer table-responsiv\">";
             $r = preg_match('/-([0-9]+)$/', $v[path], $t);
 
-            //$q = "SELECT * FROM conf_relations WHERE id = '$t[1]'";
-            //$aRelation = q($q);
             $aRelation = getRelationPropertiesById($t[1], $aManualFieldProperties);
-            //pre($aRelation);
             $iSwitchInSeparat = 0;
             if ($aRelation[type] == "nto1") {
                 if ($aRelation[nto1TargetTable] == $tableId) {
@@ -2410,8 +2049,6 @@ function generateRelatedContent(
                     }
                 }
             } else {
-                //pre($aRel[NToM][$tableId]);
-                //pre( $aRelation);
                 foreach ($aRel[NToM][$tableId] as $k2 => $v2) {
                     if ($v2[relationId] == $aRelation[id]) {
                         $content = $v2;
@@ -2431,10 +2068,7 @@ function generateRelatedContent(
                     $iSwitchInSeparat = 1;
                 }
             }
-            //$op .= pre($aRelation,1);
             if ($iSwitchInSeparat) {
-                //<tr><td>'icon_".$table."-".$tableId."_".$row[$columnNameOfId]."_relations_".$sDisplayTableRecursivePathOut."_".$v[path]."'</td></tr>
-
                 $op .= "<script>jQuery('#icon_" . $table . "-" . $tableId . "_" . $row[$columnNameOfId] . "_relations_" . $sDisplayTableRecursivePathOut . "_" . $v[path] . "_$rootId').css('display','inline');</script>";
             }
             $op .= "</table>";
@@ -2444,7 +2078,6 @@ function generateRelatedContent(
 
     //n:m Relation
     //Ermitteln ob n:m Relation vorhanden ist
-    //pre($aRel['NToM'][$tableOrId]);
     if (is_array($aRel['NToM'][$tableOrId])) {
         foreach ($aRel['NToM'][$tableOrId] as $count => $content) {
             if ($t = displayNToMRelation(
@@ -2464,7 +2097,6 @@ function generateRelatedContent(
     }
     //Ermitteln ob n:1 Relation vorhanden ist (Output
     //n:1 Relation
-    //pre($aRel);
     foreach ($row as $field => $content) {
         //Ermitteln ob n:1 Relation vorhanden ist
         if (isset($aRel[NTo1][$tableOrId][$field])) {
@@ -2491,7 +2123,6 @@ function generateRelatedContent(
     //n:1 Relation
     if (is_array($aRel))
         foreach ($aRel[NTo1] as $linkingTable => $value) {
-            //pre($value);
             foreach ($value as $linkingField => $targetTable) {
                 if ($targetTable == $tableOrId) {
 
@@ -2508,7 +2139,6 @@ function generateRelatedContent(
                         $ajaxExec
                     )) {
                         $opo .= $t;
-                        //echo "$aNTo1TablePath, $sComingFromRelations, $table, $tableId, $row, $linkingField, $linkingTable, $columnNameOfId, 'Normal'";
                         $iSwitchInDot = 1;
                     }
                 }
@@ -2550,19 +2180,13 @@ function displayNTo1InputRelation(
         //echo $q = "SELECT * FROM conf_relation_visibility WHERE path = '".$sComingFromRelations."-".$cr."'";
         $aVisibility = getRelationVisibility($sComingFromRelations . "-" . $cr, $aManualFieldProperties);
         //pre($row);
-        //$q = "SELECT * FROM conf_relations WHERE id = '$cr'";
-        //$aRelation = q($q);
         $aRelation = getRelationPropertiesById($cr, $aManualFieldProperties);
-        //pre($row);
         //pre($aRelation);
         $query = "SELECT " . getIdName(getNameFromTableString($linkingTable), $aManualFieldProperties) . " FROM " . getNameFromTableString($linkingTable) . " WHERE $linkingField = '" . $row[$aRelation['nto1TargetField']] . "'";
         $RS5 = dbQuery($query);
-        //echo pre($RS5,1);
         if (count($RS5) > 0) {
             $q = "SELECT name FROM conf_tables WHERE id = '$linkingTable'";
             $a = dbQuery($q);
-            //if (!in_array(c($a[0][name])."-".$linkingTable, $aNTo1TablePath)) {
-
             $langTable = formTableName($linkingTable, $aManualFieldProperties);
 
             if ($aVisibility[title])
@@ -2635,21 +2259,12 @@ function displayNTo1OutputRelation(
 
     $cr = getNTo1RelationId(getIdFromTableString($aRel['NTo1'][$tableOrId][$field]), $field, $tableOrId, $aManualFieldProperties);
     //echo "hu".checkRelationVisibility($sComingFromRelations."-".$cr,$showWithEditIcons,$aManualFieldProperties);
-    //pre($aManualFieldProperties);
-
     if (checkRelationVisibility($sComingFromRelations . "-" . $cr, $showWithEditIcons, $aManualFieldProperties)) {
 
         $aVisibility = getRelationVisibility($sComingFromRelations . "-" . $cr, $aManualFieldProperties);
 
-        /*foreach ($aTable as $key => $value) {
-			if ($value[id] == $aRel['NTo1'][$tableOrId][$field]) {
-				$langTable = $value[lang];
-			}
-		}*/
         $langTable = formTableName($aRel['NTo1'][$tableOrId][$field], $aManualFieldProperties);
 
-        /*if (!is_numeric($aRel['NTo1'][$tableOrId][$field]))
-			$langTable = $aRel['NTo1'][$tableOrId][$field];*/
         $aFieldProp = getFieldProperties($tableOrId, $field, $aManualFieldProperties);
         $aTargetField = getFieldProperties($aFieldProp[nto1TargetTable], $aFieldProp[nto1TargetField]);
 
@@ -2702,7 +2317,6 @@ function displayNTo1OutputRelation(
             }
         }
     }
-    //echo htmlentities($op);
     return $op;
 }
 
@@ -2730,12 +2344,7 @@ function displayNToMRelation(
     $destIdentifier = $content[destFieldname];
 
     if (!in_array(c($destTable) . "-" . $destTableId, $aNTo1TablePath)) {
-        //echo $sComingFromRelations."-".$content[relationId]."-a";
-        //echo "hu";
-        //pre($aManualFieldProperties);
         if (checkRelationVisibility($sComingFromRelations . "-" . $content[relationId] . "-a", $showWithEditIcons, $aManualFieldProperties)) {
-            //echo $q = "SELECT * FROM conf_relation_visibility WHERE path = '".$sComingFromRelations."-".$content[relationId]."-a'";
-            //$aVisibility = q($q);
             $aVisibility = getRelationVisibility($sComingFromRelations . "-" . $content[relationId] . "-a", $aManualFieldProperties);
             //pre($aVisibility);
             $sQueryOver = "SELECT $destTable." . getIdName($destTable, $aManualFieldProperties) . ", $assignTable.* FROM $table, $assignTable, $destTable
@@ -2746,12 +2355,7 @@ function displayNToMRelation(
 			WHERE $table." . getIdName($table, $aManualFieldProperties) . " = '" . $row[getIdName($table, $aManualFieldProperties)] . "'
 			AND $assignTable.$identifier = $table." . getIdName($table, $aManualFieldProperties) . "
 			AND $assignTable.$destIdentifier = $destTable." . getIdName($destTable, $aManualFieldProperties) . "";
-            //Tabellenname f&uuml;r Output bereitstellen
-            /*foreach ($aTable as $key => $value) {
-				if ($value[name]."-".$value[id] == $destTable."-".$destTableId) {
-					$langTable = $value[lang];
-				}
-			}*/
+
             if ($destTableId)
                 $destTableOrId = $destTableId;
             else

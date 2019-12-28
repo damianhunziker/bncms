@@ -9,7 +9,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-
 error_reporting('E_ALL & ~E_NOTICE');
 
 include ("configuration/frontend-config.inc.php");

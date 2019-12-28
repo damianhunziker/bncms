@@ -30,15 +30,9 @@ include (PATH."/inc/functions.inc.php");
 include (PATH."/inc/editor-functions.inc.php");
 include (PATH."/inc/display-functions.inc.php");
 
-// Vorher:
-//session_set_cookie_params(30*24*60*60, RELATIVEPATHAJAX);
-//session_start();
-
-// Nachher:
 session_start();
 $_SESSION['PHPSESSID'] = session_id();
 session_set_cookie_params(30*24*60*60, RELATIVEPATHAJAX);
-
 
 dbQuery("SET NAMES utf8");
 
