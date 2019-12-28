@@ -1,5 +1,14 @@
 <?php
 
+/** @license bncms
+ *
+ * Copyright (c) Damian Hunziker and other bncms contributors
+ * https://github.com/damianhunziker/bncms
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 $q = "SELECT gruppe FROM bncms_user WHERE username = '".e($_SESSION['user'])."'";
 $a = dbQuery($q);
 $q = "SELECT * FROM bncms_user_groups WHERE id = '$a[gruppe]'";

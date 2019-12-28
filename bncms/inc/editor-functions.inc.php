@@ -1,7 +1,16 @@
 <?php
+
+/** @license bncms
+ *
+ * Copyright (c) Damian Hunziker and other bncms contributors
+ * https://github.com/damianhunziker/bncms
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 //DB-Editor
 //Editor-Funktionen
-//copyright Damian Hunziker info@wide-design.ch
 
 function checkPermission($aPermission, $sUser, $sUserGroup="") {
     if (inSerializedArray($sUser, $aPermission) or inSerializedArray($sUserGroup, $aPermission))
@@ -564,6 +573,9 @@ function e($s) {
 	 //Um Benutzer-Variablen vor den Anfrage zu escapen
 	global $DB;
 	return mysqli_real_escape_string($DB,$s);
+}
+function s($s) {
+    return strip_tags($s);
 }
 function inSerializedArray($s, $a) {
 	if (is_array(unserialize($a)))

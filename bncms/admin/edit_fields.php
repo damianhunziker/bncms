@@ -1,5 +1,14 @@
 <?php
-//copyright Damian Hunziker info@wide-design.ch
+
+/** @license bncms
+ *
+ * Copyright (c) Damian Hunziker and other bncms contributors
+ * https://github.com/damianhunziker/bncms
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 include("start.inc.php");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

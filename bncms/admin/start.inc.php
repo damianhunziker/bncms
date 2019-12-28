@@ -1,14 +1,5 @@
 <?php
 
-// Vorher:
-// error_reporting(E_WARNING);
-
-// Nachher:
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-
-
 /** @license bncms
  *
  * Copyright (c) Damian Hunziker and other bncms contributors
@@ -17,6 +8,11 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
 
 include ("../inc/configuration/backend-config.inc.php");
 

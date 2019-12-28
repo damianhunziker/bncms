@@ -1,15 +1,21 @@
 <?php
-if ($webuser)
-{
+
+/** @license bncms
+ *
+ * Copyright (c) Damian Hunziker and other bncms contributors
+ * https://github.com/damianhunziker/bncms
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+if ($webuser) {
 	$s = $webuser;
-}
-else
-{
+} else {
 	$s = $_SESSION['user'];
 }
 
-if ($_SESSION['userGroup'])
-{
+if ($_SESSION['userGroup']) {
     $sQueryAdd =  " or hidden LIKE '%". $_SESSION['userGroup'] . "%'";
 }
 
@@ -24,8 +30,7 @@ if (is_array($aRightsHiddenTemp)) {
 	}
 }
 
-if ($_SESSION['userGroup'])
-{
+if ($_SESSION['userGroup']) {
     $sQueryAdd =  " or unchangeable LIKE '%$_SESSION[userGroup]%'";
 }
 
@@ -38,5 +43,4 @@ if (is_array($aRightsUnchangeableTemp)) {
 		$aRightsUnchangeable[$aTable[0]['id']][$value['name']] = 1;
 	}
 }
-
 ?>

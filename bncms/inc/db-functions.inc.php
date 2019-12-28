@@ -1,7 +1,16 @@
 <?php
+
+/** @license bncms
+ *
+ * Copyright (c) Damian Hunziker and other bncms contributors
+ * https://github.com/damianhunziker/bncms
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 //DB-Editor
 //Datenbank-Funktionen
-//copyright Damian Hunziker info@wide-design.ch
 
 $q = "
 CREATE TABLE IF NOT EXISTS `bncms_banned_ips` (
@@ -13,6 +22,7 @@ ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
 ";
 
 mysqli_query($DB,$q) or exit(mysqli_error($DB));
+
 
 $q = "
 CREATE TABLE IF NOT EXISTS `conf_tables` (
@@ -42,6 +52,8 @@ ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
 ";
 
 mysqli_query($DB,$q) or exit(mysqli_error($DB));
+
+
 $q = "
 CREATE TABLE IF NOT EXISTS `conf_fields` (
   `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -75,6 +87,7 @@ ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
 
 mysqli_query($DB,$q) or exit(mysqli_error($DB));
 
+
 $q = "
 CREATE TABLE IF NOT EXISTS `conf_relations` (
   `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -106,6 +119,7 @@ ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
 
 mysqli_query($DB,$q) or exit(mysqli_error($DB));
 
+
 $q = "
 CREATE TABLE IF NOT EXISTS `conf_relation_visibility` (
   `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -119,6 +133,7 @@ CREATE TABLE IF NOT EXISTS `conf_relation_visibility` (
 ";
 
 mysqli_query($DB,$q) or exit(mysqli_error($DB));
+
 
 $q = "
 CREATE TABLE IF NOT EXISTS `bncms_user_groups` (
@@ -144,7 +159,6 @@ CREATE TABLE IF NOT EXISTS `bncms_user` (
 ";
 
 mysqli_query($DB,$q) or exit(mysqli_error($DB));
-
 
 
 $q = "SELECT * FROM bncms_user WHERE username = 'admin';";
