@@ -517,10 +517,16 @@ function e($s) {
 	return mysqli_real_escape_string($DB,$s);
 }
 function t($s) {
-    return strip_tags($s);
+    return htmlspecialchars(strip_tags($s));
+}
+function h($s) {
+    return htmlspecialchars($s);
 }
 function et($s) {
     return e(t($s));
+}
+function eh($s) {
+    return e(h($s));
 }
 function inSerializedArray($s, $a) {
 	if (is_array(unserialize($a)))
