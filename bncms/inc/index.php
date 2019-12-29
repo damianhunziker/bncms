@@ -31,7 +31,7 @@ if (@$_POST['savePost'] == "on") {
 					dbQuery($query);
 				}
 			} else  {
-				echo "<br>Feldname $key nicht gefunden in Tabelle $_POST[table].";
+				echo "<br>Feldname $key nicht gefunden in Tabelle ".t($_POST['table']);
 			}
 			
 		}

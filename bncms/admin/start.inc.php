@@ -48,7 +48,7 @@ if (file_exists(PATH."/admin/project_config.php")) {
 if ($_POST['username'] and $_POST['password'] and !@$_POST['savePost'] and $_POST['username'] != "webuser") {
     $query="SELECT bncms_user.*,  bncms_user_groups.name FROM bncms_user, bncms_user_groups WHERE bncms_user.gruppe = bncms_user_groups.id AND BINARY bncms_user.username = '".e($_POST['username'])."' and BINARY bncms_user.password = '".md5($_POST['password'])."' and (bncms_user_groups.name = 'Administratoren' or bncms_user_groups.name  = 'Redakteure')";
     $arr = dbQuery($query);
-    $_SESSION['user'] = $_POST['username'];
+    $_SESSION['user'] = e(t($_POST['username']));
     $_SESSION['userGroup'] = $arr["name"];
     
     if (is_array($arr)) {

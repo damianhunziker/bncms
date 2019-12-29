@@ -516,8 +516,11 @@ function e($s) {
 	global $DB;
 	return mysqli_real_escape_string($DB,$s);
 }
-function s($s) {
+function t($s) {
     return strip_tags($s);
+}
+function et($s) {
+    return e(t($s));
 }
 function inSerializedArray($s, $a) {
 	if (is_array(unserialize($a)))
@@ -946,7 +949,9 @@ function resize($imgfile, $weite, $index="") {
 		$newheight = $height;
 		$newwidth = $width;
 	}
-	$thumb = ImageCreateTrueColor($newwidth,$newheight);
+    echo phpinfo();
+	$thumb = imagecreatetruecolor($newwidth,$newheight);
+
 	$fileFormat = strtolower(getFileFormat($imgfile));
 	if ($fileFormat == "jpg" or $fileFormat == "jpeg" ) {
 		$fileFormat = "jpeg";
@@ -979,7 +984,7 @@ function resizeRatio($imgfile, $ratio, $index="") {
 	if ($fileFormat == "jpg" or $fileFormat == "jpeg" ) {
 		$fileformat = "jpeg";
 	}
-	$thumb = ImageCreateTrueColor($newwidth,$newheight);
+	$thumb = imagecreatetruecolor($newwidth,$newheight);
 	$source = call_user_func_array( "imagecreatefrom".$fileFormat, array($imgfile));
 	imagecopyresampled($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $newwidth, $newheight);
 	call_user_func_array( "image".$fileFormat, array($thumb,$imgfile));
@@ -1185,7 +1190,7 @@ function editField() {
 			$sItems = str_replace("'","",$sItems);
 			$aItems = explode(",",$sItems);
 			if ($fieldname == "id_table") {
-				$sOutputContent .= "<input type=\"hidden\" name=\"id_table\" value=\"".$_POST[id_table]."\">";
+				$sOutputContent .= "<input type=\"hidden\" name=\"id_table\" value=\"".t($_POST[id_table])."\">";
 			} elseif ($fieldname == "hidden" or $fieldname == "unchangeable") {
 				$f = unserialize($fieldcontent);
 				$q = "SELECT * FROM bncms_user";
@@ -1433,7 +1438,7 @@ function editField() {
 	}
 	</script>
 	<table><tr>
-	<form action=\"edit_fields.php?id=$field_id&id_table=$_GET[id_table]\" method=\"post\">
+	<form action=\"edit_fields.php?id=$field_id&id_table=".t($_GET['id_table'])."\" method=\"post\">
 	".$sOutputContent."
 	<td valign=top colspan=2><br><input type='hidden' name='closeafter' id='closeafter' value='0'><input type=\"hidden\" name=\"field_id\" value=\"$field_id\">
 	<nobr><input type=\"Submit\" class='submit' value=\"Speichern\" onsubmit='
@@ -1454,10 +1459,10 @@ function saveField() {
 		$mysqlType .= "(".$a[1].")";
 	$_POST[save_mysqlType] = $mysqlType;
 	if ($_POST[save_type] == 'nto1') {
-		$id = getNTo1RelationId($_POST['save_nto1TargetTable'], $_POST['save_name'], $_POST['id_table']);
+		$id = getNTo1RelationId(t($_POST['save_nto1TargetTable']), t($_POST['save_name']), t($_POST['id_table']));
 		$q = "SELECT * FROM conf_relations WHERE id='$id'";
 		$a = q($q);
-		$aF = getFieldProperties($_POST['save_nto1TargetTable'], $_POST['save_nto1TargetField']);
+		$aF = getFieldProperties(t($_POST['save_nto1TargetTable']), t($_POST['save_nto1TargetField']));
 		if (count($a)) {
 		    $q = "UPDATE conf_relations SET type = 'nto1', 
 			nto1TargetTable = '".e($_POST['save_nto1TargetTable'])."', 
@@ -1500,7 +1505,7 @@ function deleteField() {
 			if (Check == false) {
 				window.close();
 			 } else {
-				window.location.href=\"edit_fields.php?confirmed=true&id=\"" . $_GET['id'] . ";
+				window.location.href=\"edit_fields.php?confirmed=true&id=\"" . t($_GET['id']) . ";
 			 }
 			</script>";
 	} else {
@@ -1531,11 +1536,11 @@ function loadBackup() {
 	if (@$_GET['loadfile'] != "") {
 		if ($_GET['confirmed'] != true) {
 			echo "<script type='text/javascript'>
-				Check = confirm('Wollen Sie wirklich die Sicherung ".$_GET[filename]." laden? Ein Backup des alten Stands wird erstellt.');
+				Check = confirm('Wollen Sie wirklich die Sicherung ".t($_GET[filename])." laden? Ein Backup des alten Stands wird erstellt.');
 				if (Check == false) {
 					window.close();
 				 } else {
-					window.location.href='backup.php?action=load&loadfile=".$_GET[loadfile]."&confirmed=true';
+					window.location.href='backup.php?action=load&loadfile=".t($_GET[loadfile])."&confirmed=true';
 				 }
 				</script>";
 		} else {
@@ -1601,8 +1606,8 @@ function editRelation() {
 			$targetTable = getTableProperties($aRel[0][table2]);
 			$query ="SELECT name, id FROM conf_tables WHERE is_assign_table != 'yes'";
 		} else {
-			$sourceTable = getTableProperties($_GET[id_table]);
-			$targetTable = getTableProperties($_GET[ntomTargetTable]);
+			$sourceTable = getTableProperties(t($_GET[id_table]));
+			$targetTable = getTableProperties(t($_GET[ntomTargetTable]));
 			$query ="SELECT name, id FROM conf_tables WHERE id != '".e($_GET['id_table'])."' and is_assign_table != 'yes'";
 		}
 		$aTables = dbQuery($query,'',1);
@@ -1610,12 +1615,12 @@ function editRelation() {
 		//ntom
 		$sOutputContent .= "<table width='100%'><tr>
 		
-		<form action=\"edit_fields.php?id_table=$_GET[id_table]&relation=$_GET[relation]&saveRelation=true\" method=\"post\">
+		<form action=\"edit_fields.php?id_table=".t($_GET['id_table'])."&relation=".t($_GET['relation'])."&saveRelation=true\" method=\"post\">
 		
-		<td><div><h2>n zu m Relation</h2> zwischen der Tabelle ".$sourceTable[name]."  und der Tabelle";
+		<td><div><h2>n zu m Relation</h2> zwischen der Tabelle ".$sourceTable['name']."  und der Tabelle";
 
 
-		$sOutputContent .= "<input type=\"hidden\" name=\"id_table\" value=\"$_GET[id_table]\">";
+		$sOutputContent .= "<input type=\"hidden\" name=\"id_table\" value=\"".t($_GET['id_table'])."\">";
 		$sOutputContent .= "<br /><select name=\"ntomTargetTable\" $d>";
 		$sOutputContent .= "<option value=\"\">Tabelle w&auml;hlen</option>";
 
@@ -1645,7 +1650,7 @@ function editRelation() {
 			if ($_GET[id_relation]) {
 				$aAssignColumns = getFieldProperties($aRel[0]['id']);
 			}
-			$sOutputContent .= "<br> Feld der Zuweisungstabelle $_GET[assign_table], das die Urspungstabelle <b>$sourceTable[name]</b> anlinkt. <br><select name='assign_nto1field_source' $d>";
+			$sOutputContent .= "<br> Feld der Zuweisungstabelle ".t($_GET['assign_table']).", das die Urspungstabelle <b>$sourceTable[name]</b> anlinkt. <br><select name='assign_nto1field_source' $d>";
 			$sOutputContent .= "<option value=\"\">Feld w&auml;hlen</option>";
 			if ($_GET[id_relation]) {
 				foreach ($aAssignColumns as $k => $v) {
@@ -1693,7 +1698,7 @@ function editRelation() {
         $sOutputContent .= generateUserDropdown("addors", $aRel[0][addors], "class='userDropdown'");
 
 		if ($_GET[id_relation]) {
-			$sOutputContent .= "<input type='hidden' name='id_relation' value='$_GET[id_relation]'>";
+			$sOutputContent .= "<input type='hidden' name='id_relation' value='".t($_GET['id_relation'])."'>";
 			if ($aRel[0][seperateColumns] == "on")
 				$c = "checked";
 		}
@@ -1830,8 +1835,8 @@ function saveRelation() {
 					$idOfTable = mysql_insert_id();
 
 					//Assignment Felder in Test-Struktur eintragen
-					$sourceTable = getTableProperties($_POST[id_table]);
-					$t = getMysqlType($_POST[assign_table], $_POST[assign_nto1field_source]);
+					$sourceTable = getTableProperties(t($_POST['id_table']));
+					$t = getMysqlType(t($_POST['assign_table']), t($_POST['assign_nto1field_source']));
 					//todo aufr&auml;umen der felder deren relation nicht mehr existiert
 					$query="INSERT INTO conf_fields SET 
 					mysqlType = '".e($t)."', 
@@ -1843,8 +1848,8 @@ function saveRelation() {
 					nto1TargetField = '".getIdName($sourceTable[name])."' ";
 					dbQuery($query);
 
-					$targetTable = getTableProperties($_POST[ntomTargetTable]);
-					$t = getMysqlType($_POST[assign_table], $_POST[assign_nto1field_target]);
+					$targetTable = getTableProperties(t($_POST[ntomTargetTable]));
+					$t = getMysqlType(t($_POST[assign_table]), t($_POST[assign_nto1field_target]));
 					$query="INSERT INTO conf_fields SET 
 					mysqlType = '".e($t)."', 
 					unchangeable = 'yes', 
@@ -1875,7 +1880,7 @@ function deleteRelation() {
 			if (Check == false) {
 				window.close();
 			 } else {
-				window.location.href='edit_fields.php?confirmed_relation=true&relation=ntom&id_relation=$_GET[id_relation]&deleteRelation=true';
+				window.location.href='edit_fields.php?confirmed_relation=true&relation=ntom&id_relation=".t($_GET['id_relation'])."&deleteRelation=true';
 			 }
 			</script>";
 	} else {
@@ -2507,7 +2512,7 @@ function generateUserDropdown($sNameSelect, $sSelectedUsers, $sAddToSelect="", $
 	else
         $aSelectedUsers = $sSelectedUsers;
 
-    if (in_array('webuser', $aSelectedUsers))
+    if (@in_array('webuser', $aSelectedUsers))
         $s = "selected";
     else
         $s = "";
@@ -2532,14 +2537,14 @@ function generateUserDropdown($sNameSelect, $sSelectedUsers, $sAddToSelect="", $
 		if (is_array($aDisplayedUsers) and in_array($vUserGroup['name'], $aDisplayedUsers)
 			or !is_array($aDisplayedUsers)
 			or $iActiveUserInGroup == 1) {
-            if (in_array($vUserGroup['name'], $aSelectedUsers))
+            if (@in_array($vUserGroup['name'], $aSelectedUsers))
                 $s = "selected";
             else
                 $s = "";
             $re .= "<option $s >$vUserGroup[name]</option>";
 
             foreach ($aAllUsers as $k => $vUser) {
-                if (in_array($vUser[username], $aSelectedUsers))
+                if (@in_array($vUser[username], $aSelectedUsers))
                     $s = "selected";
                 else
                     $s = "";
@@ -2643,10 +2648,10 @@ function cleanUserPermissionsSaveArray($a) {
 function saveTable() {
 	global $DB;
 
-	$_POST['table_users'] = cleanUserPermissionsSaveArray($_POST['table_users']);
-	$_POST['table_editors'] = cleanUserPermissionsSaveArray($_POST['table_editors']);
-	$_POST['table_addors'] = cleanUserPermissionsSaveArray($_POST['table_addors']);
-	$_POST['table_deletors'] = cleanUserPermissionsSaveArray($_POST['table_deletors']);
+	$_POST['table_users'] = cleanUserPermissionsSaveArray(t($_POST['table_users']));
+	$_POST['table_editors'] = cleanUserPermissionsSaveArray(t($_POST['table_editors']));
+	$_POST['table_addors'] = cleanUserPermissionsSaveArray(t($_POST['table_addors']));
+	$_POST['table_deletors'] = cleanUserPermissionsSaveArray(t($_POST['table_deletors']));
 
 	foreach ($_POST as $k => $v) {
 		if (strpos("a".$k, "table_") == 1) {
@@ -2680,7 +2685,7 @@ function removeTable() {
 			if (Check == false) {
 				window.close();
 			 } else {
-				window.location.href='edit_fields.php?removeTable=true&confirmed=true&id=" . $_GET['id']. "';
+				window.location.href='edit_fields.php?removeTable=true&confirmed=true&id=" . t($_GET['id']) . "';
 			 }
 			</script>";
 	} else {

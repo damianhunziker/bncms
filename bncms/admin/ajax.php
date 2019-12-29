@@ -68,9 +68,9 @@ if ($_GET['saveTitleIcon']) {
 		}
 	}
 	if (!$_GET['isStartEntry'])
-		echo showNextLayer($_GET['path'], $_GET['md5'], urlencode(serialize($aUsers)), $_GET['showPossibleRelations']);
+		echo showNextLayer(t($_GET['path']), t($_GET['md5']), urlencode(serialize($aUsers)), t($_GET['showPossibleRelations']));
 	else
-		echo showPossibleRelations($_GET['showPossibleRelations'], urlencode(serialize($aUsers)), $_GET['path']);
+		echo showPossibleRelations(t($_GET['showPossibleRelations']), urlencode(serialize($aUsers)), t($_GET['path']));
 } elseif ($_GET['ntomAjaxSearch']) {
 	$q = "SELECT * FROM conf_relations WHERE id = '".e($_GET['ntomAjaxSearch'])."'";
 	$a = dbQuery($q);
@@ -96,7 +96,7 @@ if ($_GET['saveTitleIcon']) {
 	if ($_POST['func'] == "dt")
 		$f = "displayTable";
 	$p = array();
-	$t = unserialize(urldecode($_POST['param']));
+	$t = unserialize(urldecode(t($_POST['param'])));
 	$p[0] = "e";
 	$p[1] = "e";
 	$p[2] = "";

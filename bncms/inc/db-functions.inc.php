@@ -39,14 +39,14 @@ CREATE TABLE IF NOT EXISTS `conf_tables` (
   `deletors` TEXT NOT NULL,
   `addors` TEXT NOT NULL,
   `is_assign_table` VARCHAR(5) NOT NULL DEFAULT '',
-  `id_relation` INT(11) NOT NULL,
+  `id_relation` INT(11) NOT NULL DEFAULT '0',
   `editable` VARCHAR(250) NOT NULL default '',
   `sort_order` VARCHAR(50) NOT NULL,
-  `sort_order_ascdesc`  SET('','asc','desc') NOT NULL,
+  `sort_order_ascdesc`  SET('','asc','desc') NOT NULL DEFAULT '',
   `entries_per_page` INT(11) NOT NULL DEFAULT '10',
-  `export_xls` SET('','on','off') NOT NULL,
-  `export_csv` SET('','on','off') NOT NULL,
-  `actualize` SET('','on','off') NOT NULL
+  `export_xls` SET('','on','off') NOT NULL DEFAULT '',
+  `export_csv` SET('','on','off') NOT NULL DEFAULT '',
+  `actualize` SET('','on','off') NOT NULL DEFAULT ''
 )
 ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
 ";
@@ -58,27 +58,27 @@ $q = "
 CREATE TABLE IF NOT EXISTS `conf_fields` (
   `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(255) NOT NULL DEFAULT '',
-  `title` VARCHAR(250) NOT NULL,
+  `title` VARCHAR(255) NOT NULL DEFAULT '',
   `type` VARCHAR(255) NOT NULL DEFAULT 'textfield',
   `mysql_order` DECIMAL(3,2) NOT NULL DEFAULT '0.00',
-  `unchangeable` VARCHAR(250) DEFAULT NULL,
-  `hidden` VARCHAR(250) DEFAULT NULL,
+  `unchangeable` VARCHAR(250) DEFAULT NULL DEFAULT '',
+  `hidden` VARCHAR(250) DEFAULT NULL DEFAULT '',
   `id_table` INT(11) NOT NULL,
   `mysqlType` VARCHAR(250) NOT NULL DEFAULT '0',
-  `mysql_type_bez` VARCHAR(250) NOT NULL,
-  `length_values` VARCHAR(250) NOT NULL,
-  `nto1TargetField` VARCHAR(15) NOT NULL,
-  `nto1TargetTable` VARCHAR(35) NOT NULL,
-  `validation_required` SET('','on','off') NOT NULL,
-  `validation_unique` SET('','on','off') NOT NULL,
-  `validation_min_length` INT(11) NOT NULL,
-  `nto1DisplayType` VARCHAR(20) NOT NULL,
-  `nto1DropdownTitleField` VARCHAR(50) NOT NULL,
-  `processing` VARCHAR(30) NOT NULL,
-  `min_height` INT(11) NOT NULL,
-  `min_width` INT(11) NOT NULL,
-  `max_height` INT(11) NOT NULL,
-  `max_width` INT(11) NOT NULL,
+  `mysql_type_bez` VARCHAR(250) NOT NULL DEFAULT '',
+  `length_values` VARCHAR(250) NOT NULL DEFAULT '',
+  `nto1TargetField` VARCHAR(15) NOT NULL DEFAULT '',
+  `nto1TargetTable` VARCHAR(35) NOT NULL DEFAULT '',
+  `validation_required` SET('','on','off') NOT NULL DEFAULT '',
+  `validation_unique` SET('','on','off') NOT NULL DEFAULT '',
+  `validation_min_length` INT(11) NOT NULL DEFAULT '0',
+  `nto1DisplayType` VARCHAR(20) NOT NULL DEFAULT '',
+  `nto1DropdownTitleField` VARCHAR(50) NOT NULL DEFAULT '',
+  `processing` VARCHAR(30) NOT NULL DEFAULT '',
+  `min_height` INT(11) NOT NULL DEFAULT '0',
+  `min_width` INT(11) NOT NULL DEFAULT '0',
+  `max_height` INT(11) NOT NULL DEFAULT '0',
+  `max_width` INT(11) NOT NULL DEFAULT '0',
   FOREIGN KEY (`id_table`) REFERENCES conf_tables(`id`)
     ON DELETE CASCADE 
 )
@@ -93,8 +93,8 @@ CREATE TABLE IF NOT EXISTS `conf_relations` (
   `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(255) NOT NULL DEFAULT '',
   `type` VARCHAR(10) NOT NULL DEFAULT '0',
-  `table1` INT(11) NOT NULL,
-  `table2` INT(11) NOT NULL,
+  `table1` INT(11) NOT NULL DEFAULT '0',
+  `table2` INT(11) NOT NULL DEFAULT '0',
   `ntomAssignFieldTable1` VARCHAR(255) NOT NULL DEFAULT '',
   `ntomAssignFieldTable2` VARCHAR(255) NOT NULL DEFAULT '',
   `seperateColumns` SET('','on','off') NOT NULL DEFAULT '',
@@ -102,13 +102,13 @@ CREATE TABLE IF NOT EXISTS `conf_relations` (
   `editors` TEXT NOT NULL,
   `deletors` TEXT NOT NULL,
   `addors` TEXT NOT NULL,
-  `ntomDisplayType` VARCHAR(20) NOT NULL,
-  `ntomAjaxDisplayTitleField` VARCHAR(50) NOT NULL,
-  `ntomAjaxDisplayMinSelections` INT(11) NOT NULL,
-  `nto1TargetField` VARCHAR(100) NOT NULL,
-  `nto1TargetTable` INT(11) NOT NULL,
-  `nto1SourceField` VARCHAR(100) NOT NULL,
-  `nto1SourceTable` INT(11) NOT NULL,
+  `ntomDisplayType` VARCHAR(20) NOT NULL DEFAULT '',
+  `ntomAjaxDisplayTitleField` VARCHAR(50) NOT NULL DEFAULT '',
+  `ntomAjaxDisplayMinSelections` INT(11) NOT NULL DEFAULT '0',
+  `nto1TargetField` VARCHAR(100) NOT NULL DEFAULT '',
+  `nto1TargetTable` INT(11) NOT NULL DEFAULT '0',
+  `nto1SourceField` VARCHAR(100) NOT NULL DEFAULT '',
+  `nto1SourceTable` INT(11) NOT NULL DEFAULT '0',
   FOREIGN KEY (`table1`) REFERENCES conf_tables(`id`)
     ON DELETE CASCADE,
   FOREIGN KEY (`table2`) REFERENCES conf_tables(`id`)
@@ -123,11 +123,11 @@ mysqli_query($DB,$q) or exit(mysqli_error($DB));
 $q = "
 CREATE TABLE IF NOT EXISTS `conf_relation_visibility` (
   `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `path` VARCHAR(255) NOT NULL,
-  `users` VARCHAR(100) NOT NULL,
-  `icon` VARCHAR(100) NOT NULL,
-  `title` VARCHAR(100) NOT NULL,
-  `showWithEditIcons` SET('Separat','Normal','Beides') NOT NULL,
+  `path` VARCHAR(255) NOT NULL DEFAULT '',
+  `users` VARCHAR(100) NOT NULL DEFAULT '',
+  `icon` VARCHAR(100) NOT NULL DEFAULT '',
+  `title` VARCHAR(100) NOT NULL DEFAULT '',
+  `showWithEditIcons` SET('Separat','Normal','Beides') NOT NULL DEFAULT '',
   UNIQUE KEY (`path`)
 ) ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
 ";
@@ -138,8 +138,8 @@ mysqli_query($DB,$q) or exit(mysqli_error($DB));
 $q = "
 CREATE TABLE IF NOT EXISTS `bncms_user_groups` (
   `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `name` VARCHAR(30) NOT NULL,
-  `permit_configuration` SET('', 'on', 'off') NOT NULL
+  `name` VARCHAR(30) NOT NULL DEFAULT '',
+  `permit_configuration` SET('', 'on', 'off') NOT NULL DEFAULT ''
 ) ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
 ";
 
@@ -152,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `bncms_user` (
   `username` VARCHAR(32) NOT NULL DEFAULT '',
   `password` VARCHAR(32) NOT NULL DEFAULT '',
   `notizen` TEXT NOT NULL,
-  `gruppe` INT(11),
+  `gruppe` INT(11) DEFAULT '0',
   UNIQUE KEY (`username`),
   FOREIGN KEY (`gruppe`) REFERENCES bncms_user_groups(`id`) ON DELETE RESTRICT
 ) ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
@@ -231,7 +231,7 @@ function dbQuery ($query, $limit="", $removeAssociativeKeys="") {
 	}
 	$RS=mysqli_query($DB,$query);
 	if (mysqli_error($DB)) {
-		echo "<red>Fehler in Anfrage: ".$query."<br>".mysqli_error($DB)."<br></red>"; 
+		echo "<red>Fehler in Anfrage: ".t($query)."<br>".mysqli_error($DB)."<br></red>";
 		exit();
 	}
 	if (@ mysqli_num_rows($RS) == 0) 

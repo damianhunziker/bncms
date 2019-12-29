@@ -10,8 +10,8 @@
  */
 
 include("start.inc.php");
-if ($_POST[notizen]) {
-	 $q = "UPDATE bncms_user SET notizen = '$_POST[notizen]' WHERE username='$_SESSION[user]'";
+if ($_POST['notizen']) {
+	 $q = "UPDATE bncms_user SET notizen = '".e($_POST['notizen'])."' WHERE username='$_SESSION[user]'";
 	mysqli_query($DB, $q);
 }
 ?>

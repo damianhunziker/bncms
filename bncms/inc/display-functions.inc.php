@@ -332,18 +332,15 @@ function displayTable(
         if ($_POST['execFilter'])
             $_GET['page'] = $table . "_page_0";
         if ($_GET['page'] != "") {
-            //$aPage=explode("_page_",$_GET['page']);
             if ($_GET[place])
-                $_SESSION[aActivePagesRelations][$_GET[place]][$_GET['page_table']] = $_GET['page'];
+                $_SESSION[aActivePagesRelations][t($_GET[place])][t($_GET['page_table'])] = t($_GET['page']);
             else
-                $_SESSION[aActivePages][$_GET['page_table']] = $_GET['page'];
+                $_SESSION[aActivePages][t($_GET['page_table'])] = t($_GET['page']);
         }
         //erstellt Limit für Anfrage von Aktiven Seiten
-
         $limitSql = buildLimit($place, $table, $tableId, $limit);
-
     }
-    //$op .= $limitSql;
+
     //Aktuelle Tabelle auf visible schalten
     if ($aPage[0] != "") {
         /*$op .=  "<script type='text/javascript'>
@@ -699,7 +696,7 @@ function displayTable(
                 }
         }
         if (inSerializedArray($_SESSION[user], $aActualRelation[addors])) {
-            $op .= "<a onClick=\"opwin('edit_relation.php?action=new&idName=" . $_GET[id] . "&idValue=" . $origIdValue . "&sourceTable=$origTableId&destTable=$tableId','EditRelation'); return false;\" href='#' title='Neue Referenz erstellen'><img src=\"" . RELATIVEPATH . "/image/icons/add-folder-$_SESSION[icon_color].gif\"></a>";
+            $op .= "<a onClick=\"opwin('edit_relation.php?action=new&idName=" . t($_GET['id']) . "&idValue=" . $origIdValue . "&sourceTable=$origTableId&destTable=$tableId','EditRelation'); return false;\" href='#' title='Neue Referenz erstellen'><img src=\"" . RELATIVEPATH . "/image/icons/add-folder-$_SESSION[icon_color].gif\"></a>";
             $sideBarActive = 1;
         }
     }
@@ -1178,7 +1175,7 @@ jQuery(function() {
                         $op .= displayTable(
                             $aAssignTable[0]['id'],
                             $aAssignTable[0]['columnNameOfId'],
-                            " id_$_GET[table] = '" . $_GET[id] . "' AND id_$table = '" . $row[$columnNameOfId] . "' ",
+                            " id_" . t($_GET['table']) . " = '" . t($_GET['id']) . "' AND id_$table = '" . $row[$columnNameOfId] . "' ",
                             "",
                             "",
                             "yes",
@@ -1270,8 +1267,8 @@ function displayAssignRow($columnNameOfId, $id, $table, $sourceTableName, $actio
     global $aRightsUnchangeable, $aRel, $aProp, $aTable, $lastRowIdNToM;
     $aTablesNToM = array($table, $sourceTableName);
 
-    $sSourceTable = getNameFromTableString($_GET['sourceTable']);
-    $sDestTable = getNameFromTableString($_GET['destTable']);
+    $sSourceTable = getNameFromTableString(t($_GET['sourceTable']));
+    $sDestTable = getNameFromTableString(t($_GET['destTable']));
 
     //Tabellenname f&uuml;r Output bereitstellen
     foreach ($aTable as $key => $value) {
@@ -1292,16 +1289,14 @@ function displayAssignRow($columnNameOfId, $id, $table, $sourceTableName, $actio
 	<td valign='top'><div>$sSourceTable, $sDestTable</div>
 	</td>
 </tr>
-
 ";
-
 
     $query = "SELECT * FROM ".e($sSourceTable)." WHERE id = '".e($_GET['idValue'])."'";
     $aSourceData = dbQuery($query);
     foreach ($aSourceData[0] as $key => $content) {
         $sSourceData .= $content . ", ";
     }
-    $out .= "<tr><td>id_$sSourceTable<input type=\"hidden\" name=\"id_$sSourceTable\" value=\"" . $_GET["idValue"] . "\"></td><td>$sSourceData</td></tr>";
+    $out .= "<tr><td>id_$sSourceTable<input type=\"hidden\" name=\"id_$sSourceTable\" value=\"" . t($_GET["idValue"]) . "\"></td><td>$sSourceData</td></tr>";
     $query = "SELECT * FROM ".$sDestTable;
     $aDestData = dbQuery($query);
     $sDestData .= "<select name=\"id_$sDestTable\">";
@@ -1321,8 +1316,8 @@ function displayAssignRow($columnNameOfId, $id, $table, $sourceTableName, $actio
 
     $out .= "
 <input type='hidden' name='savePost' value='on'>	
-<input type='hidden' name='table1' value='$_GET[sourceTable]'>
-<input type='hidden' name='table2' value='$_GET[destTable]'>
+<input type='hidden' name='table1' value='".t($_GET['sourceTable'])."'>
+<input type='hidden' name='table2' value='".t($_GET['destTable'])."'>
 <input type='hidden' name='columnNameOfId' value='id'>	
 <input type='hidden' name='id' value='$id'>	
 
@@ -1339,7 +1334,7 @@ function displayAssignRow($columnNameOfId, $id, $table, $sourceTableName, $actio
 function getNextAutoincrementValue($table)
 {
     global $aDatabase;
-    $q = "SHOW TABLE STATUS FROM `$aDatabase[dbname]` LIKE '$table'";
+    $q = "SHOW TABLE STATUS FROM `$aDatabase[dbname]` LIKE '".e($table)."'";
     $a = dbQuery($q);
     if ($a[0][AUTO_INCREMENT])
         return $a[0][AUTO_INCREMENT];
@@ -1366,16 +1361,14 @@ function displayRow(
 
     global $webuser, $aRightsUnchangeable, $aRightsHidden, $aRel, $aProp, $aTable, $lastRowIdNToM, $lastTableNameNToM, $aFormIds;
 
-
     //ManualFieldProperties vorbereiten
     $aManualFieldProperties = prepareManualFieldProperties($aManualFieldProperties);
     overwriteRights($aManualFieldProperties);
     overwriteRelations($aManualFieldProperties);
 
-    //pre($aManualFieldProperties);
     $aTableProperties = getTableProperties($tableOrId, $aManualFieldProperties);
     overwriteRights($aManualFieldProperties);
-    //pre($aTableProperties);
+
     if (is_numeric($tableOrId)) {
         $table = @$aTableProperties['name'];
         $tableId = @$aTableProperties['id'];
@@ -1440,15 +1433,14 @@ $os
 		</td>
 	</tr>";
 
-
     foreach ($arrRowContent[0] as $fieldName => $field) {
         if (!$aRightsHidden[$tableOrId][$fieldName]) {
             $aT = getFieldProperties($tableOrId, $fieldName, $aManualFieldProperties);
-            if ($aT[title])
+            if ($aT['title'])
                 if ($webuser)
-                    $f = $aT[title];
+                    $f = $aT['title'];
                 else
-                    $f = $aT[title] . " ($fieldName)";
+                    $f = $aT['title'] . " ($fieldName)";
             else
                 $f = $fieldName;
             $out .= "<tr class='tr_$table_$fieldName'>";
@@ -1475,8 +1467,8 @@ $os
     //wenn es eine ntom gibt mit Ajax
     if (is_array($aRel['NToM'][$tableId])) {
         foreach ($aRel['NToM'][$tableId] as $k => $v) {
-            if ($v[ntomDisplayType] == "ajax") {
-                $aTargetTable = getTableProperties($v[destTable], $aManualFieldProperties);
+            if ($v['ntomDisplayType'] == "ajax") {
+                $aTargetTable = getTableProperties($v['destTable'], $aManualFieldProperties);
                 $out .= "<tr class='tr_$table_$aTargetTable[name]'>";
                 $out .= "<td valign='top' align='right' class='td_$table_$aTargetTable[name]'><div class='b'>" . $aTargetTable[lang] . "</div></td>
 				<td valign='top' align='left' class='td_$table_$aTargetTable[name]'>";
@@ -1638,7 +1630,7 @@ function generateField(
         $maxlength = getLengthFromField($fieldName, $tableOrId, $aManualFieldProperties);
 
         if ($aFieldProperties['type'] == 'nto1') {
-            if ($aFieldProperties[nto1DisplayType] == "radio" or !$aFieldProperties[nto1DisplayType]) {
+            if ($aFieldProperties['nto1DisplayType'] == "radio" or !$aFieldProperties['nto1DisplayType']) {
                 //nzu1 Zuweisung
                 $fo .= "<input type=\"text\" id=\"" . $fi . "_" . $fieldName . "\" maxlength=\"" . $maxlength . "\"  name=\"$outputFieldname\" value=\"$field\" > <a href=\"javascript:void(0)\"onClick='show_lightbox(\"l_" . $fi . "_" . $fieldName . "\")'>Eintrag&nbsp;w&auml;hlen</a>";
                 $fo .= displayLightbox("l_" . $fi . "_" . $fieldName,
@@ -2439,8 +2431,8 @@ function saveScrollpos() {
         $_GET['phpSelf'] = substr($_GET['phpSelf'], 0, $iPosParameters);
     }
 
-    $_SESSION['scrollPos'][$_GET['phpSelf']]['top'] = $_GET['scrollTop'];
-    $_SESSION['scrollPos'][$_GET['phpSelf']]['left'] = $_GET['scrollLeft'];
+    $_SESSION['scrollPos'][t($_GET['phpSelf'])]['top'] = t($_GET['scrollTop']);
+    $_SESSION['scrollPos'][t($_GET['phpSelf'])]['left'] = t($_GET['scrollLeft']);
     $aSessVisibleLayers = $_SESSION['aVisibleLayers'];
     if ($_GET['an'] != "") {
         if (!is_array($aSessVisibleLayers[$_GET['phpSelf']]))

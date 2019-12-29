@@ -90,9 +90,7 @@ function opwin(url, name) {
 	wstat.focus();
 }
 </script>
-<script type="text/javascript" src="vlaCalendar/jslib/mootools-1.2-core.js"></script>
-<script type="text/javascript" src="vlaCalendar/jslib/vlaCal-v2.1.js"></script>
-<link type="text/css" media="screen" href="vlaCalendar/styles/vlaCal-v2.1.css" rel="stylesheet" />
+
 <link rel="stylesheet" href="../lib/jquery-ui/jquery-ui.min.css">
 <script src="../lib/jquery-ui/jquery-ui.min.js"></script>
 <style>
@@ -145,7 +143,7 @@ dbQuery($query);
 }*/
 
 $_SESSION[sWorkType]="edit";
-displayRow($_GET['id'], $_GET['columnNameOfId'], $_GET['table']); 
+displayRow(t($_GET['id']), t($_GET['columnNameOfId']), t($_GET['table']));
 ?>
 <?php include ("../inc/layer_visibility.inc.php"); ?>
 </body>

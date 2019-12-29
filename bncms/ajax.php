@@ -22,8 +22,8 @@ if ($_GET['ntomAjaxSearch']) {
 		array_push($r,$v['title']);
 	echo json_encode($r);
 } elseif ($_GET['nto1AjaxSearch']) {
-	$a = getRelationPropertiesById($_GET['nto1AjaxSearch'], $_SESSION['aManualFieldProperties']['displayTable'][$_GET['formid']]);
-	$tt = getTableProperties($a['nto1TargetTable'], $_SESSION['aManualFieldProperties'][displayTable][$_GET['formid']]);
+	$a = getRelationPropertiesById(t($_GET['nto1AjaxSearch']), $_SESSION['aManualFieldProperties']['displayTable'][$_GET['formid']]);
+	$tt = getTableProperties($a['nto1TargetTable'], $_SESSION['aManualFieldProperties']['displayTable'][$_GET['formid']]);
 	$sf = getFieldProperties($a['nto1SourceTable'], $a['nto1SourceField'], $_SESSION['aManualFieldProperties']['displayTable'][$_GET['formid']]);
 	$q = "SELECT ".$sf['nto1DropdownTitleField']." title FROM ".$tt['name']." WHERE ".$sf['nto1DropdownTitleField']." LIKE '%".e($_GET['value'])."%'  ORDER BY ".$sf['nto1DropdownTitleField']."";
 	$a = dbQuery($q);
@@ -35,10 +35,10 @@ if ($_GET['ntomAjaxSearch']) {
 	$va = unserialize(urldecode($_POST['userValues']));
 	foreach ($va as $k => $v) {
 		
-		$a = getTableProperties($_GET['validate'], $_SESSION['manualFieldProperties'][$_GET['formid']]);
+		$a = getTableProperties(t($_GET['validate']), $_SESSION['manualFieldProperties'][$_GET['formid']]);
 		$tid = $a['id'];
 		$a = getFieldProperties($a['id'], $k, $_SESSION['manualFieldProperties'][$_GET['formid']]);
-		$tp = getTableProperties($a[id_table], $_SESSION['manualFieldProperties'][$_GET['formid']]);
+		$tp = getTableProperties($a['id_table'], $_SESSION['manualFieldProperties'][$_GET['formid']]);
 		
 		$tn = $tp['name'];
 			$fp=getFieldProperties($a['id_table'], $k, $_SESSION['manualFieldProperties'][$_GET['formid']]);
@@ -111,7 +111,7 @@ if ($_GET['ntomAjaxSearch']) {
 	if ($_POST['func'] == "dt")
 		$f = "displayTable";
 	$p = array();
-	$t = unserialize(urldecode($_POST['param']));
+	$t = unserialize(urldecode(t($_POST['param'])));
 	$p[0] = "e";
 	$p[1] = "e";
 	$p[2] = "";

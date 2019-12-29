@@ -25,7 +25,7 @@ include("start.inc.php");
 <?php include("loading.inc.php");?>
 <div class="table_overall">
 <?php
-displayAssignRow($_GET['idName'], $_GET['idValue'], $_SESSION['assignTableName'], $_SESSION['sourceTableName'], $_GET['action']); 
+displayAssignRow(t($_GET['idName']), t($_GET['idValue']), $_SESSION['assignTableName'], $_SESSION['sourceTableName'], t($_GET['action']));
 ?>
 </div>
 </body>
