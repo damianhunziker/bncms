@@ -20,7 +20,7 @@ if ($_GET[t] == "xls")
 if ($_GET[t] == "csv")
 	$s = "CSV";
 header("Content-type: application/$s");
-header("Content-Disposition: attachment; filename=export.".t($_GET['t'])."); 
+header("Content-Disposition: attachment; filename=export." . t($_GET['t'])); 
 $a = q($q);
 $atp = getTableProperties($t,$m);
 if ($_GET[t] == "xls") {
