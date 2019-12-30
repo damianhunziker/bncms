@@ -244,7 +244,7 @@ td{
 	margin: 0px 0px 0px 0px;
 	margin: 0px !important;
 	min-width:15px;
-	max-width:220px;
+	max-width:100%;
 }
 a, a:link, a:visited   {
 	font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -638,4 +638,4 @@ input[type=checkbox]:checked + label:before {
     line-height: 12px;
 	border-radius:50%; 
 }
-ende customcheckbox*/ 
+ende customcheckbox*/

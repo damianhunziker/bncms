@@ -90,7 +90,7 @@ $_SESSION['sWorkType']="view";
 if (is_array($aTable))
 foreach ($aTable as $key => $value) {
     if (checkPermission($value['users'], $_SESSION['user'], $_SESSION['userGroup'])) {
-		echo displayVisibilityButtons($value['lang'], $value['id'], $value['name']." ".$value['id']);
+		echo displayVisibilityButtons(s($value['lang']), $value['id'], $value['name']." ".$value['id']);
 		echo "<div class='table_overall' id='".$value['id']."' style='display:none'>";
 			displayTable(
 			$value['id'], 

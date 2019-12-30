@@ -733,8 +733,8 @@ opwin('$ed.php?action=new&columnNameOfId=$columnNameOfId&table=$tableOrId','Edit
                 $oi = "";
 
             $o = "`" . $column['Field'] . "`";
-            if ($f[title])
-                $of = $f[title];
+            if ($f['title'])
+                $of = s($f['title']);
             else
                 $of = $column['Field'];
             $op .= "<td valign='top' class='td_sort $column[Field]'><a href='javascript:void(0);' onclick=\"
@@ -1613,8 +1613,9 @@ function generateField(
     }
 
     //sicherheit
-    if ($aFieldProperties['type'] != "tinymce")
-        $field = @strip_tags($field);
+//    if ($aFieldProperties['type'] != "tinymce")
+//        $field = @strip_tags($field);
+
 
     //typ überschreiben mit aManualFieldProperies
     /*if (@$aManualFieldProperties[$table."-".$tableId][$fieldName]['type']) {
@@ -1720,17 +1721,17 @@ function generateField(
         } elseif ($aFieldProperties['type'] == "tinymce") {
             //TinyMce
             if ($tinymceIncludeJsDone != 1) {
-                $fo .= '<script type="text/javascript" src="/bncms/lib/tinymce/tinymce.min.js"></script>
-	<script type="text/javascript">
-		tinymce.init({
-			selector: "#' . $fieldName . '",
-			plugins: "code"
-		});
-	</script>';
+                $fo .= '<script type="text/javascript" src="/bncms/lib/tinymce/tinymce.min.js"></script>';
                 $tinymceIncludeJsDone = 1;
             }
+            $fo .= '<script type="text/javascript">
+                tinymce.init({
+			        selector: "#' . $fieldName . '",
+			        plugins: "code"
+		        });
+	            </script>';
 
-            $fo .= "<textarea id='$fieldName' name='$outputFieldname' rows='5' cols='80' style='padding:0px 0px 0px 0px'>$field</textarea>";
+            $fo .= "<textarea id='$fieldName' name='$outputFieldname' rows='5' cols='80' style='padding:0px 0px 0px 0px'>$preHField</textarea>";
 
         } elseif ($aFieldProperties['type'] == "ip") {
             //Bild
@@ -1857,6 +1858,10 @@ jQuery(".bncms_ip_address").mask("099.099.099.099")';
 
     if ($viewtype == "view") {
 
+        // Sicherheit: Standart für alle Felder vor der Ausgabe ausnahme tinymce: htmlspecialchars
+        $preHField = $field;
+        $field = s($field);
+
         //Datum
         if ($aFieldProperties['type'] == "date")
             if ($field != "0")
@@ -1872,9 +1877,9 @@ jQuery(".bncms_ip_address").mask("099.099.099.099")';
         }
 		
 		//tinymce
-        if ($aFieldProperties['type'] == "tinymce")
-            if ($field != "")
-                $field = strip_tags($field);
+//        if ($aFieldProperties['type'] == "tinymce")
+//            if ($preHField != "")
+//                $field = strip_tags($preHField);
 
         //Datei
         if ($aFieldProperties['type'] == "url")
@@ -2182,9 +2187,9 @@ function displayNTo1InputRelation(
             $langTable = formTableName($linkingTable, $aManualFieldProperties);
 
             if ($aVisibility[title])
-                $sT = $aVisibility[title];
+                $sT = s($aVisibility[title]);
             else
-                $sT = "<= " . $langTable . " <span style='font-size:13px; font-weight:normal'>(" . formTableName($linkingTable, $aManualFieldProperties) . ": <b>" . formFieldName($linkingTable, $linkingField, $aManualFieldProperties) . "</b>)</span>";
+                $sT = "<= " . s($langTable) . " <span style='font-size:13px; font-weight:normal'>(" . s(formTableName($linkingTable, $aManualFieldProperties)) . ": <b>" . s(formFieldName($linkingTable, $linkingField, $aManualFieldProperties)) . "</b>)</span>";
             $op .= "
 				<tr>
 					<td valign=\"top\" colspan=\"" . (50) . "\"  class=\"table_relations\"><div class=\"table_overall leftborder\">";
@@ -2267,13 +2272,13 @@ function displayNTo1OutputRelation(
             if (!in_array(c(getNameFromTableString($aRel['NTo1'][$tableOrId][$field])) . "-" . $aRel['NTo1'][$tableOrId][$field], $aNTo1TablePath)) {
 
                 if ($aVisibility[title])
-                    $sT = $aVisibility[title];
+                    $sT = s($aVisibility[title]);
                 else
-                    $sT = "=> " . $langTable . " <span style='font-size:13px; font-weight:normal'>(" . formTableName($tableOrId, $aManualFieldProperties) . ": <b>" . formFieldName($tableOrId, $field, $aManualFieldProperties) . "</b>)</span>";
+                    $sT = "=> " . s($langTable) . " <span style='font-size:13px; font-weight:normal'>(" . s(formTableName($tableOrId, $aManualFieldProperties)) . ": <b>" . s(formFieldName($tableOrId, $field, $aManualFieldProperties)) . "</b>)</span>";
                 $op .= "
 				<tr>
 					<td valign=\"top\" colspan=\"" . (count($arrTableColumnNames) + 2) . "\"  class=\"table_relations\"><div class=\"table_overall leftborder\">";
-                $op .= "<h5>$sT</h5>";
+                $op .= "<h5>".$sT."</h5>";
 
                 $op .= displayTable(
                     getIdFromTableString($aRel['NTo1'][$tableOrId][$field]),
@@ -2356,13 +2361,13 @@ function displayNToMRelation(
             $RS = dbQuery($sQueryOver);
             if (count($RS) > 0) {
                 if ($aVisibility[title])
-                    $sT = $aVisibility[title];
+                    $sT = s($aVisibility[title]);
                 else
-                    $sT = "<=o=> " . $langTable . " <span style='font-size:13px;'>($assignTable)</span>";
+                    $sT = "<=o=> " . s($langTable) . " <span style='font-size:13px;'>(".s($assignTable).")</span>";
                 $op .= "
 				<tr>
 					<td valign=\"top\" colspan=\"" . (count($arrTableColumnNames) + 2) . "\"  class=\"table_relations\"><div class=\"table_overall leftborder\">";
-                $op .= "<h5>$sT</h5>";
+                $op .= "<h5>".$sT."</h5>";
 
                 $op .= displayTable(
                     $destTableId,

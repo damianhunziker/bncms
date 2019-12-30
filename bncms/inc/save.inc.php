@@ -293,8 +293,8 @@ if (@$_POST['savePost'] == "on") {
 					//Test ob feld existiert
 					$aF = getFieldProperties(t($_POST[tableId]),$key,$_SESSION[manualFieldProperties][$_POST[bncms_form]]);
 
-                    if ($aF['type'] != "tinymce")
-                        $value = t($value);
+//                    if ($aF['type'] != "tinymce")
+//                        $value = t($value);
 					if ($aF['type'] == "password")
 						$value = md5($value);
 					if ($aF['type'] == "date")

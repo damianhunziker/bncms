@@ -156,7 +156,7 @@ function editRelationVisibility() {
 		else
 			$s = "";
 		$of .= "</select><br><br><div id='$md5' class='$path'>".$s."</div>";
-		$o .= displayVisibilityButtons(formTableName($v['id']), $v['id'], $v[name]." ".$v['id']);
+		$o .= displayVisibilityButtons(s(formTableName($v['id'])), $v['id'], $v[name]." ".$v['id']);
 		$o .= "<div class=\"table_overall\" id='".$v['id']."' style='display:none;width:95%'>$of</div>";
 	}
 
@@ -306,7 +306,7 @@ function showPossibleRelations($tableId, $users, $path) {
 				$sT = formTableName($aT['id']);
 				$md5 = md5($tableId.rand(0,111111111111111111));
 
-				$om = "<tr><td valign=top><b>$sS <=o=> $sT (".formTableName($v[assignTable]).")</b>";
+				$om = "<tr><td valign=top><b>".s($sS)." <=o=> ".s($sT)." (".s(formTableName($v[assignTable])).")</b>";
 				$om .= "</td><td valign=top>";
 				$om .= showVisibilitySelect($aT['id'], $users, $path."-".$v[relationId]."-a", $md5);
 				$om .= "</tr>";
@@ -331,7 +331,7 @@ function showPossibleRelations($tableId, $users, $path) {
 			if (!strpos($path."-", "-".$sI."-")) { //Relation die in dieser Abfolge einmal gewählt wurde nicht wieder zur Auswahl anzeigen
 				$sT = formTableName($aT['id']);
 				$md5 = md5($tableId.rand(0,111111111111111111));
-				$oa .= "<tr><td valign=top><b>$sS: ".formFieldName($tableId, $assignmentField)." => $sT </b>";
+				$oa .= "<tr><td valign=top><b>".s($sS).": ".s(formFieldName($tableId, $assignmentField))." => ".s($sT)." </b>";
 				$oa .= "</td><td valign=top>";
 				$oa .= showVisibilitySelect($aT['id'], $users, $path."-".$sI, $md5);
 				$oa .= "</tr>";
@@ -351,7 +351,7 @@ function showPossibleRelations($tableId, $users, $path) {
 					if (!strpos($path."-", "-".$sI."-")) { //Relation die in dieser Abfolge einmal gewählt wurde nicht wieder zur Auswahl anzeigen
 						$sT = formTableName($aT['id']);
 						$md5 = md5($tableId.rand(0,111111111111111111));
-						$oi .= "<tr><td valign=top><b>$sS <= $sT: ".formFieldName($targetTable, $assignmentField)."</b>";
+						$oi .= "<tr><td valign=top><b>".s($sS)." <= ".s($sT).": ".s(formFieldName($targetTable, $assignmentField))."</b>";
 						$oi .= "</td><td valign=top>";
 						$oi .= showVisibilitySelect($aT['id'], $users, $path."-".$sI, $md5);
 						$oi .= "</tr>";
@@ -519,14 +519,14 @@ function e($s) {
 function t($s) {
     return htmlspecialchars(strip_tags($s));
 }
-function h($s) {
+function s($s) {
     return htmlspecialchars($s);
 }
 function et($s) {
     return e(t($s));
 }
-function eh($s) {
-    return e(h($s));
+function es($s) {
+    return e(s($s));
 }
 function inSerializedArray($s, $a) {
 	if (is_array(unserialize($a)))
@@ -625,9 +625,10 @@ function getFieldProperties($tableOrId,$field="",$aManualFieldProperties="") {
 			$a = dbQuery($q,"",1);
 			//Überschreiben der Feldeigenschaften
 			foreach ($a as $k => $v) {
-				foreach ($aManualFieldProperties[$tableOrId]["fields"][$k] as $kManual => $vManual) {
-					$a[$k][$kManual] = $vManual;
-				}
+			    if (is_array($aManualFieldProperties[$tableOrId]))
+                    foreach ($aManualFieldProperties[$tableOrId]["fields"][$k] as $kManual => $vManual) {
+                        $a[$k][$kManual] = $vManual;
+                    }
 			}
 			return $a;
 		}
@@ -1028,15 +1029,7 @@ function displayFields($sTable="", $sComingFrom='') {
 		$sQueryAdd = " WHERE id = '$sTable' ";
 	}
 
-	error_reporting(0);
-	ini_set('display_errors', 0);
-	ini_set('display_startup_errors', 0);
-
 	$query= "SELECT * FROM conf_tables ".$sQueryAdd." ORDER BY orderkey";
-
-	error_reporting(E_ALL & ~E_NOTICE && ~E_WARNING);
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
 
 	$aTables = dbQuery($query,"",1);
 	if (is_array($aTables)) {
@@ -1051,15 +1044,7 @@ function displayFields($sTable="", $sComingFrom='') {
 					$ol = $value['name'];
 				}
 
-				error_reporting(0);
-				ini_set('display_errors', 0);
-				ini_set('display_startup_errors', 0);
-
-				$sOutput .= displayVisibilityButtons($ol,"onoff_".$value['id']."_".$sComingFrom);
-
-				error_reporting(E_ALL & ~E_NOTICE && ~E_WARNING);
-				ini_set('display_errors', 1);
-				ini_set('display_startup_errors', 1);
+				$sOutput .= displayVisibilityButtons(s($ol),"onoff_".$value['id']."_".$sComingFrom);
 
 				$sOutput .= "<div class='table_overall conf_editor' id='onoff_".$value['id']."_".$sComingFrom."' style='display:none;'>";
 
@@ -1131,7 +1116,7 @@ function displayFields($sTable="", $sComingFrom='') {
 				if (is_array($aFields[0])) {
 					foreach ($aFields[0] as $key3 => $value3) {
 						if ($key3 != "id")
-							$sOutput .= "<td valign=\"top\">$key3</td>";
+							$sOutput .= "<td valign=\"top\">".s($key3)."</td>";
 					}
 				}
 
@@ -1143,6 +1128,7 @@ function displayFields($sTable="", $sComingFrom='') {
 						$sOutputHeader = "";
 						if (is_numeric($id))
 						foreach ($fields as $fieldname => $fieldcontent) {
+						    $fieldcontent = s($fieldcontent);
 							if ($fieldname != "id") {
 
 								if ($fieldname == "id_table") {
@@ -1186,6 +1172,8 @@ function editField() {
 	$q = "SELECT * FROM conf_fields WHERE id = '" . e($_GET['id']) . "'";
 	$aFields= dbQuery($q);
 
+    echo "<h2>Feld Eigenschaften</h2>";
+
 	foreach ($aFields[0] as $fieldname => $fieldcontent) {
 		$query="SHOW Columns FROM conf_fields LIKE '$fieldname' ";
 		$aColumn = dbQuery($query);
@@ -1222,7 +1210,7 @@ function editField() {
                     return "selected";
             }
 			$sOutputContent .= "<td valign=\"top\" class=\"b\">".$fieldname."</td></tr><tr>";
-			$sOutputContent .= '<td valign=top>'.$fieldcontent.'
+			$sOutputContent .= '<td valign=top>'.s($fieldcontent).'
 				<select name="save_mysql_type_bez" id="mysql_type_bez" >
 					<option></option>
 					<option value="INT" '.checkSelected('INT',$fieldcontent).'>INT</option>
@@ -1623,7 +1611,7 @@ function editRelation() {
 		
 		<form action=\"edit_fields.php?id_table=".t($_GET['id_table'])."&relation=".t($_GET['relation'])."&saveRelation=true\" method=\"post\">
 		
-		<td><div><h2>n zu m Relation</h2> zwischen der Tabelle ".$sourceTable['name']."  und der Tabelle";
+		<td><div><h2>n zu m Relation</h2> zwischen der Tabelle ".s($sourceTable['name'])."  und der Tabelle";
 
 
 		$sOutputContent .= "<input type=\"hidden\" name=\"id_table\" value=\"".t($_GET['id_table'])."\">";
@@ -1913,6 +1901,7 @@ function cleanUpDB() {
 
 function writeDatabaseStructure() {
 	global $aDatabase,$DB;
+
 	echo "<h2>Struktur schreiben</h2>";
 	//aufr&auml;umen
 	cleanUpDB();
@@ -1933,7 +1922,7 @@ function writeDatabaseStructure() {
 		} else {
 			if ($value[name]) {
 			echo $query = "
-CREATE TABLE `".$aDatabase['dbname']."`.`$value[name]` (
+CREATE TABLE `".$aDatabase['dbname']."`.`".et($value[name])."` (
 `".getIdName($value[name])."` INT( 20 ) NOT NULL AUTO_INCREMENT PRIMARY KEY
 ) ENGINE = MYISAM ;";
 			q($query);
@@ -2189,7 +2178,7 @@ CREATE TABLE `".$aDatabase['dbname']."`.`$value[name]` (
 		foreach ($aQueryStack as $key => $value) {
 			$sQueryStack .= $value."<br />";
 		}
-		echo "<br><a href=\"edit_fields.php?sendQuerystack=true\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\">Backup und Querystack abschicken</a><br /><br /><pre>".$sQueryStack."</pre>";
+		echo "<br><a href=\"edit_fields.php?sendQuerystack=true\" onClick=\"javascript: ajax_send_scrollpos('".$_SERVER['PHP_SELF']."');\" target=\"_blank\">Backup und Querystack abschicken</a><br /><br /><pre>".s($sQueryStack)."</pre>";
 	} else {
 		echo "<br /><br />Querystack ist leer.<br />";
 	}
@@ -2569,7 +2558,11 @@ function generateUserDropdown($sNameSelect, $sSelectedUsers, $sAddToSelect="", $
 function editTable() {
 	$query="SELECT * FROM conf_tables WHERE id = '" . e($_GET['id']) . "'";
 	$aTableConf=dbQuery($query);
-	echo "<h2>Tabellen Eigenschaften ".$aTableConf[0][name]."</h2>";
+
+	if ($aTableConf[0][orderkey] == "")
+        $aTableConf[0][orderkey] = "0.00";
+
+	echo "<h2>Tabellen Eigenschaften ".s($aTableConf[0]['name'])."</h2>";
 	echo "<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">";
 	echo "<div>mySQL Tabellenname: <input type=\"text\" name=\"table_name\" value=\"".$aTableConf[0][name]."\">";
 	echo "<br />Angezeigter Name: <input type=\"text\" name=\"table_lang\" value=\"".$aTableConf[0][lang]."\">";
@@ -2654,10 +2647,10 @@ function cleanUserPermissionsSaveArray($a) {
 function saveTable() {
 	global $DB;
 
-	$_POST['table_users'] = cleanUserPermissionsSaveArray(t($_POST['table_users']));
-	$_POST['table_editors'] = cleanUserPermissionsSaveArray(t($_POST['table_editors']));
-	$_POST['table_addors'] = cleanUserPermissionsSaveArray(t($_POST['table_addors']));
-	$_POST['table_deletors'] = cleanUserPermissionsSaveArray(t($_POST['table_deletors']));
+	$_POST['table_users'] = cleanUserPermissionsSaveArray(c($_POST['table_users']));
+	$_POST['table_editors'] = cleanUserPermissionsSaveArray(c($_POST['table_editors']));
+	$_POST['table_addors'] = cleanUserPermissionsSaveArray(c($_POST['table_addors']));
+	$_POST['table_deletors'] = cleanUserPermissionsSaveArray(c($_POST['table_deletors']));
 
 	foreach ($_POST as $k => $v) {
 		if (strpos("a".$k, "table_") == 1) {
