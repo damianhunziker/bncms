@@ -66,7 +66,7 @@ if ($_GET['ntomAjaxSearch']) {
 			$av = array_unique($av);
 			foreach ($av as $k2 => $v2) {
 				if ($v2) {
-					$q = "SELECT * FROM ".$aT['name']." WHERE ".$aRP[0]['ntomAjaxDisplayTitleField']." LIKE '$v2'";
+					$q = "SELECT * FROM ".$aT['name']." WHERE ".$aRP[0]['ntomAjaxDisplayTitleField']." LIKE '".e($v2)."'";
 					$aNT = dbQuery($q);
 					if  (count($aNT)) {
 						$c++;
@@ -91,13 +91,13 @@ if ($_GET['ntomAjaxSearch']) {
 			$er[$k] .= "Bitte mindestens ".$val_min_length." Zeichen verwenden. "; 
 		}
 		if ($a['validation_unique'] == "on") {
-			$q = "SELECT * FROM ".e($_GET['validate'])." WHERE $k = '$v'";
+			$q = "SELECT * FROM ".e($_GET['validate'])." WHERE ".e($k)." = '".e($v)."'";
 			$r = mysqli_query($DB, $q);
 			if (mysqli_num_rows($r) > 0)
 				$er[$k] .= "Wert ist bereits vorhanden. "; 
 		}
 		if (is_numeric($a['length_values']) and strlen($v) > $a['length_values']) {
-			$q = "SELECT * FROM ".e($_GET['validate'])." WHERE $k = '$v'";
+			$q = "SELECT * FROM ".e($_GET['validate'])." WHERE ".e($k)." = '".e($v)."'";
 			$r = mysqli_query($DB, $q);
 			if (mysqli_num_rows($r) > 0)
 			$er[$k] .= "Max. ".$a['length_values']." Zeichen ";

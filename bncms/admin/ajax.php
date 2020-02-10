@@ -52,16 +52,16 @@ if ($_GET['saveTitleIcon']) {
 			$q = "SELECT id FROM conf_relation_visibility WHERE path = '".e($_GET['path'])."'";
 			$a = q($q);
 			if (count($a)) {
-				$q = "UPDATE conf_relation_visibility SET users = '".$aUsers[0]."' WHERE path = '".e($_GET['path'])."'";
+				$q = "UPDATE conf_relation_visibility SET users = '".e($aUsers[0])."' WHERE path = '".e($_GET['path'])."'";
 			} else {
-				$q = "INSERT INTO conf_relation_visibility SET users = '".$aUsers[0]."', path = '".e($_GET['path'])."'";
+				$q = "INSERT INTO conf_relation_visibility SET users = '".e($aUsers[0])."', path = '".e($_GET['path'])."'";
 			}
 		}
 		q($q);
 	} else {
-		$q = "UPDATE conf_tables SET users = '".$aUsers[0]."' WHERE id='".e($_GET['showPossibleRelations'])."'";
+		$q = "UPDATE conf_tables SET users = '".e($aUsers[0])."' WHERE id='".e($_GET['showPossibleRelations'])."'";
 		q($q);
-        $q = "UPDATE conf_relation_visibility SET users = '".$aUsers[0]."' WHERE path = '".e($_GET['showPossibleRelations'])."-'";
+        $q = "UPDATE conf_relation_visibility SET users = '".e($aUsers[0])."' WHERE path = '".e($_GET['showPossibleRelations'])."-'";
         q($q);
 		if (!is_array($aUsers)) {
 			exit();
