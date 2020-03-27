@@ -1575,7 +1575,7 @@ $os
 				var w = jQuery(this).textWidth(o);
 				if (w > jQuery(document).width()*0.7)
 					w = jQuery(document).width()*0.7;
-				jQuery(this).css('width',w);
+				jQuery(this).css('max-width',w);
 			}
 		});
 	</script>
