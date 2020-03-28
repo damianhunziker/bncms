@@ -1470,7 +1470,7 @@ $os
             if ($v['ntomDisplayType'] == "ajax") {
                 $aTargetTable = getTableProperties($v['destTable'], $aManualFieldProperties);
                 $out .= "<tr class='tr_$table_$aTargetTable[name]'>";
-                $out .= "<td valign='top' align='right' class='td_$table_$aTargetTable[name]'><div class='b'>" . $aTargetTable[lang] . "</div></td>
+                $out .= "<td valign='top' align='right' class='td_$table_$aTargetTable[name] label'><div class='b'>" . $aTargetTable[lang] . "</div></td>
 				<td valign='top' align='left' class='td_$table_$aTargetTable[name]'>";
 
                 $q = "SELECT * FROM $v[assignTable] WHERE $v[sourceFieldname] = '$id'";
