@@ -109,7 +109,8 @@ function displayTable(
 
     //Suchparameter durch ajax
     if ($searchParams and $searchParams != 's:1:"0";' and $searchParams != 's:0:"";') {
-        $searchParams = unserialize($searchParams);
+        if (!is_array($searchParams))
+            $searchParams = unserialize($searchParams);
         foreach ($searchParams as $k => $v)
             if ($k != "page" and $k != "" and $k != "page_table" and $k != "place")
                 $comparationSP[$k] = $v;
@@ -269,6 +270,8 @@ function displayTable(
         }
     }
 
+    //ini_set("display_errors",1);
+    
     //echo "Hu";
     //exit("hu");
     //Muss aManualFieldProperties in Sitzung schreiben damit in Edit-Form verfügbar
@@ -2211,12 +2214,12 @@ jQuery(".bncms_ip_address").mask("099.099.099.099")';
     if ($viewtype == "view") {
 
         //Datum
-        if ($aFieldProperties['type'] == "date")
+        if ($aFieldProperties['type'] === "date")
             if ($field != "0")
                 $field = date("d.m.Y H:i s", $field);
 
         //Länge beschneiden
-        $fieldOld = $field;
+        $fieldOld = $field; 
 
         if (strlen($field) > 70) {
             $field = substr($field, 0, 70) . "...";
@@ -2290,7 +2293,7 @@ function generateSearchField($tableOrId, $fieldName, $ajaxExec, $sessionsp, $aMa
         $o .= "<input type='text' name='nto1_" . $rid . "' value='" . @$sessionsp["search_" . $fieldName] . "' id='search_" . $fieldName . "' value='" . $r . "' autocomplete='off' class='nto1_autocomplete display_table_paging_search c" . $ajaxExec . " search nto1' onChange=\"ajax_submit('" . $ajaxExec . "','','" . RELATIVEPATHAJAX . "','" . RELATIVEPATHAPP . "');\">$val
 		";
     } elseif ($fp['type'] == "date") {
-        global $dateIncludeJsDone;
+        /*global $dateIncludeJsDone;
         if ($dateIncludeJsDone != 1) {
             $o .= '<link rel="stylesheet" type="text/css" href="/bncms/lib/datetimepicker/jquery.datetimepicker.css"/ >
 <script src="/bncms/lib/datetimepicker/build/jquery.datetimepicker.full.min.js"></script>';
@@ -2303,7 +2306,7 @@ function generateSearchField($tableOrId, $fieldName, $ajaxExec, $sessionsp, $aMa
 		}).on('change', function(){
 			jQuery('.xdsoft_datetimepicker').hide();
 		});
-		</script>";
+		</script>";*/
     } elseif (strtolower($fp['mysql_type_bez']) == "set") {
         $lv = explode(",", $fp['length_values']);
         $o = "<select id='search_$fieldName' class='display_table_paging_search c" . $ajaxExec . " search' onChange=\"ajax_submit('" . $ajaxExec . "','','" . RELATIVEPATHAJAX . "','" . RELATIVEPATHAPP . "');\"><option></option>";

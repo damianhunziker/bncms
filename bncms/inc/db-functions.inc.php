@@ -8,8 +8,7 @@ CREATE TABLE IF NOT EXISTS `bncms_banned_ips` (
   `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `ip` CHAR(45) NOT NULL,
   UNIQUE KEY(`ip`)
-)
-ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
+) ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
 ";
 
 mysqli_query($DB,$q) or exit(mysqli_error($DB));
@@ -37,8 +36,7 @@ CREATE TABLE IF NOT EXISTS `conf_tables` (
   `export_xls` SET('','on','off') NOT NULL,
   `export_csv` SET('','on','off') NOT NULL,
   `actualize` SET('','on','off') NOT NULL
-)
-ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
+) ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
 ";
 
 mysqli_query($DB,$q) or exit(mysqli_error($DB));
@@ -66,11 +64,8 @@ CREATE TABLE IF NOT EXISTS `conf_fields` (
   `min_height` INT(11) NOT NULL,
   `min_width` INT(11) NOT NULL,
   `max_height` INT(11) NOT NULL,
-  `max_width` INT(11) NOT NULL,
-  FOREIGN KEY (`id_table`) REFERENCES conf_tables(`id`)
-    ON DELETE CASCADE 
-)
-ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
+  `max_width` INT(11) NOT NULL
+) ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
 ";
 
 mysqli_query($DB,$q) or exit(mysqli_error($DB));
@@ -95,13 +90,8 @@ CREATE TABLE IF NOT EXISTS `conf_relations` (
   `nto1TargetField` VARCHAR(100) NOT NULL,
   `nto1TargetTable` INT(11) NOT NULL,
   `nto1SourceField` VARCHAR(100) NOT NULL,
-  `nto1SourceTable` INT(11) NOT NULL,
-  FOREIGN KEY (`table1`) REFERENCES conf_tables(`id`)
-    ON DELETE CASCADE,
-  FOREIGN KEY (`table2`) REFERENCES conf_tables(`id`)
-    ON DELETE CASCADE
-)
-ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
+  `nto1SourceTable` INT(11) NOT NULL
+) ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
 ";
 
 mysqli_query($DB,$q) or exit(mysqli_error($DB));
@@ -138,8 +128,7 @@ CREATE TABLE IF NOT EXISTS `bncms_user` (
   `password` VARCHAR(32) NOT NULL DEFAULT '',
   `notizen` TEXT NOT NULL,
   `gruppe` INT(11),
-  UNIQUE KEY (`username`),
-  FOREIGN KEY (`gruppe`) REFERENCES bncms_user_groups(`id`) ON DELETE RESTRICT
+  UNIQUE KEY (`username`)
 ) ENGINE=INNODB CHARACTER SET UTF8 COLLATE UTF8_UNICODE_CI AUTO_INCREMENT = 1;
 ";
 
